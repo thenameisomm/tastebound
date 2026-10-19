@@ -84,7 +84,7 @@ def create_app() -> FastAPI:
         llm_payload = {
             "provider": provider.name if provider else settings.llm_provider,
             "model": provider.model if provider else settings.ollama_model,
-            "tools_ok": provider is not None,
+            "tools_ok": provider is not None and settings.llm_tool_calling,
         }
         return HealthResponse(
             status="ok" if db_status == "ok" else "degraded",

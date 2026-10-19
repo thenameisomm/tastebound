@@ -20,6 +20,7 @@ from tastebound_api.db.tables import (
     MarketScore,
     ProfileEntity,
     ProfileTag,
+    QlooCall,
     Run,
     RunEvent,
     RunMarket,
@@ -68,6 +69,7 @@ async def seed_demo() -> bool:
     async with session_factory() as session:
         run_scoped: list[Any] = [
             RunEvent,
+            QlooCall,
             MarketScore,
             MarketAudience,
             MarketAngle,
@@ -134,8 +136,42 @@ async def seed_demo() -> bool:
             session.add(_row(Brief, row_data, {"workspace_id": DEMO_WORKSPACE_ID}))
         for row_data in payload.get("allocations", []):
             session.add(_row(Allocation, row_data, {"workspace_id": DEMO_WORKSPACE_ID}))
+        demo_call_ids: list[str] = []
+        for event_data in payload.get("run_events", []):
+            event_payload = event_data.get("payload") or {}
+            if event_data.get("type") == "qloo_call" and event_payload.get("call_id"):
+                demo_call_ids.append(str(event_payload["call_id"]))
+        if demo_call_ids:
+            await session.execute(delete(QlooCall).where(QlooCall.id.in_(demo_call_ids)))
         for row_data in payload.get("run_events", []):
             session.add(_row(RunEvent, row_data, {}))
+            if row_data.get("type") != "qloo_call":
+                continue
+            call = row_data.get("payload") or {}
+            call_id = call.get("call_id")
+            if not call_id:
+                continue
+            raw_at = row_data.get("created_at")
+            try:
+                created_at = datetime.fromisoformat(raw_at) if isinstance(raw_at, str) else utcnow()
+            except ValueError:
+                created_at = utcnow()
+            session.add(
+                QlooCall(
+                    id=str(call_id),
+                    run_id=run_id,
+                    step=str(call.get("step") or ""),
+                    endpoint=str(call.get("endpoint") or ""),
+                    params={},
+                    cache_key=str(call_id)[:64],
+                    cache_hit=bool(call.get("cache_hit")),
+                    status=call.get("status"),
+                    duration_ms=call.get("duration_ms"),
+                    result_count=call.get("result_count"),
+                    warnings=[],
+                    created_at=created_at,
+                )
+            )
         await session.commit()
     DEMO_ACTIVE_PATH.parent.mkdir(parents=True, exist_ok=True)
     DEMO_ACTIVE_PATH.write_text(json.dumps({"run_id": run_id}), encoding="utf-8")

@@ -194,7 +194,7 @@ class ArrivalsResponse(BaseModel):
 
 class RunCreateRequest(StrictModel):
     destination_id: str
-    market_ids: list[str] = Field(min_length=3, max_length=68)
+    market_ids: list[str] = Field(min_length=3, max_length=40)
     arrivals_dataset_id: str | None = None
 
 

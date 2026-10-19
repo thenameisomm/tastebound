@@ -3815,7 +3815,7 @@
        "type": "string"
       },
       "type": "array",
-      "maxItems": 68,
+      "maxItems": 40,
       "minItems": 3,
       "title": "Market Ids"
      },

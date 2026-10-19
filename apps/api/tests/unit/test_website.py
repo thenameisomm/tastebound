@@ -118,6 +118,16 @@ async def test_follows_one_redirect() -> None:
     assert "Welcome" in site.text
 
 
+@respx.mock
+async def test_redirect_to_private_host_is_blocked() -> None:
+    respx.get(f"{BASE}/robots.txt").mock(return_value=httpx.Response(404))
+    respx.get(url__eq=BASE).mock(
+        return_value=httpx.Response(302, headers={"location": "http://127.0.0.1/secret"})
+    )
+    with pytest.raises(UrlNotAllowed):
+        await read_website(BASE)
+
+
 async def test_private_and_non_http_hosts_are_blocked() -> None:
     for url in ("http://127.0.0.1/", "http://localhost/", "ftp://example.com/", "http://10.0.0.5/"):
         with pytest.raises(UrlNotAllowed):

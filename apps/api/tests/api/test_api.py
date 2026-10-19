@@ -157,6 +157,31 @@ async def test_run_fails_closed_without_qloo_key(client: httpx.AsyncClient) -> N
     assert payload["counters"]["qloo_live"] == 0
 
 
+async def test_run_rejects_more_than_forty_markets(client: httpx.AsyncClient) -> None:
+    token = await _token(client)
+    headers = {"X-Workspace-Token": token}
+    created = await client.post(
+        "/v1/destinations",
+        headers=headers,
+        json={
+            "name": "Porto",
+            "country_code": "PT",
+            "items": [{"name": "Livraria Lello", "kind": "landmark", "origin": "user"}],
+        },
+    )
+    destination_id = created.json()["destination_id"]
+    run = await client.post(
+        "/v1/runs",
+        headers=headers,
+        json={
+            "destination_id": destination_id,
+            "market_ids": [f"xx-market-{index}" for index in range(41)],
+        },
+    )
+    assert run.status_code == 422, run.text
+    assert run.json()["code"] == "validation_error"
+
+
 async def test_demo_is_public_and_read_only(client: httpx.AsyncClient) -> None:
     demo = await client.get("/v1/demo")
     assert demo.status_code == 200
@@ -174,6 +199,13 @@ async def test_demo_is_public_and_read_only(client: httpx.AsyncClient) -> None:
     briefs = await client.get("/v1/runs/demo-e5b2b8fd/briefs", headers=headers)
     assert briefs.status_code == 200
     assert len(briefs.json()) == 6
+
+    trace = await client.get("/v1/runs/demo-e5b2b8fd/trace", headers=headers)
+    assert trace.status_code == 200
+    items = trace.json()["items"]
+    qloo_ids = {item["detail"]["call_id"] for item in items if item["kind"] == "qloo"}
+    assert len(qloo_ids) == 252
+    assert {item["kind"] for item in items} == {"qloo", "tool"}
 
     patch = await client.patch(
         "/v1/briefs/demo-3123cce6",

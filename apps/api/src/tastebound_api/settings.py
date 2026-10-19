@@ -50,6 +50,7 @@ class Settings(BaseSettings):
     llm_temperature_writing: float = 0.7
     llm_max_steps_per_phase: int = 12
     llm_max_calls_per_run: int = 40
+    llm_tool_calling: bool = False
 
     website_fetch_timeout_seconds: float = 12.0
 

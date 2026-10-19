@@ -159,6 +159,8 @@ async def create_run(
         limit=settings.public_runs_per_ip_per_day,
         window_seconds=86400,
     )
+    if len(payload.market_ids) > settings.max_markets_per_run:
+        raise ValidationProblem(f"Select at most {settings.max_markets_per_run} markets per run")
     session_factory = get_session_factory()
     async with session_factory() as session:
         destination = await session.get(Destination, payload.destination_id)
