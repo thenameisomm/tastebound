@@ -1,1031 +1,1053 @@
 {
-  "source": "Coordinates and population bands compiled by hand from public city/metro population references (2024); bands are 1=<1.5M, 2=1.5-4M, 3=4-8M, 4=8-15M, 5=>15M metro.",
-  "presets": {
-    "europe20": "Europe top 20",
-    "na15": "North America top 15",
-    "apac15": "Asia-Pacific top 15",
-    "me8": "Middle East top 8",
-    "latam10": "Latin America top 10"
-  },
-  "markets": [
-    {
-      "id": "gb-london",
-      "city": "London",
-      "country_code": "GB",
-      "country_name": "United Kingdom",
-      "region": "Europe",
-      "lat": 51.5074,
-      "lon": -0.1278,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "fr-paris",
-      "city": "Paris",
-      "country_code": "FR",
-      "country_name": "France",
-      "region": "Europe",
-      "lat": 48.8566,
-      "lon": 2.3522,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "de-berlin",
-      "city": "Berlin",
-      "country_code": "DE",
-      "country_name": "Germany",
-      "region": "Europe",
-      "lat": 52.52,
-      "lon": 13.405,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "es-madrid",
-      "city": "Madrid",
-      "country_code": "ES",
-      "country_name": "Spain",
-      "region": "Europe",
-      "lat": 40.4168,
-      "lon": -3.7038,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "it-rome",
-      "city": "Rome",
-      "country_code": "IT",
-      "country_name": "Italy",
-      "region": "Europe",
-      "lat": 41.9028,
-      "lon": 12.4964,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "nl-amsterdam",
-      "city": "Amsterdam",
-      "country_code": "NL",
-      "country_name": "Netherlands",
-      "region": "Europe",
-      "lat": 52.3676,
-      "lon": 4.9041,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "es-barcelona",
-      "city": "Barcelona",
-      "country_code": "ES",
-      "country_name": "Spain",
-      "region": "Europe",
-      "lat": 41.3874,
-      "lon": 2.1686,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "at-vienna",
-      "city": "Vienna",
-      "country_code": "AT",
-      "country_name": "Austria",
-      "region": "Europe",
-      "lat": 48.2082,
-      "lon": 16.3738,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "it-milan",
-      "city": "Milan",
-      "country_code": "IT",
-      "country_name": "Italy",
-      "region": "Europe",
-      "lat": 45.4642,
-      "lon": 9.19,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "de-munich",
-      "city": "Munich",
-      "country_code": "DE",
-      "country_name": "Germany",
-      "region": "Europe",
-      "lat": 48.1351,
-      "lon": 11.582,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "ie-dublin",
-      "city": "Dublin",
-      "country_code": "IE",
-      "country_name": "Ireland",
-      "region": "Europe",
-      "lat": 53.3498,
-      "lon": -6.2603,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "pt-lisbon",
-      "city": "Lisbon",
-      "country_code": "PT",
-      "country_name": "Portugal",
-      "region": "Europe",
-      "lat": 38.7223,
-      "lon": -9.1393,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "dk-copenhagen",
-      "city": "Copenhagen",
-      "country_code": "DK",
-      "country_name": "Denmark",
-      "region": "Europe",
-      "lat": 55.6761,
-      "lon": 12.5683,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "se-stockholm",
-      "city": "Stockholm",
-      "country_code": "SE",
-      "country_name": "Sweden",
-      "region": "Europe",
-      "lat": 59.3293,
-      "lon": 18.0686,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "no-oslo",
-      "city": "Oslo",
-      "country_code": "NO",
-      "country_name": "Norway",
-      "region": "Europe",
-      "lat": 59.9139,
-      "lon": 10.7522,
-      "radius_km": 40,
-      "population_band": 1,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "ch-zurich",
-      "city": "Zurich",
-      "country_code": "CH",
-      "country_name": "Switzerland",
-      "region": "Europe",
-      "lat": 47.3769,
-      "lon": 8.5417,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "be-brussels",
-      "city": "Brussels",
-      "country_code": "BE",
-      "country_name": "Belgium",
-      "region": "Europe",
-      "lat": 50.8503,
-      "lon": 4.3517,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "cz-prague",
-      "city": "Prague",
-      "country_code": "CZ",
-      "country_name": "Czechia",
-      "region": "Europe",
-      "lat": 50.0755,
-      "lon": 14.4378,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "pl-warsaw",
-      "city": "Warsaw",
-      "country_code": "PL",
-      "country_name": "Poland",
-      "region": "Europe",
-      "lat": 52.2297,
-      "lon": 21.0122,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "gr-athens",
-      "city": "Athens",
-      "country_code": "GR",
-      "country_name": "Greece",
-      "region": "Europe",
-      "lat": 37.9838,
-      "lon": 23.7275,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "europe20"
-      ]
-    },
-    {
-      "id": "us-new-york",
-      "city": "New York",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 40.7128,
-      "lon": -74.006,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-los-angeles",
-      "city": "Los Angeles",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 34.0522,
-      "lon": -118.2437,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-chicago",
-      "city": "Chicago",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 41.8781,
-      "lon": -87.6298,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-miami",
-      "city": "Miami",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 25.7617,
-      "lon": -80.1918,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-san-francisco",
-      "city": "San Francisco",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 37.7749,
-      "lon": -122.4194,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-boston",
-      "city": "Boston",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 42.3601,
-      "lon": -71.0589,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-washington",
-      "city": "Washington",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 38.9072,
-      "lon": -77.0369,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-seattle",
-      "city": "Seattle",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 47.6062,
-      "lon": -122.3321,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-austin",
-      "city": "Austin",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 30.2672,
-      "lon": -97.7431,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "ca-toronto",
-      "city": "Toronto",
-      "country_code": "CA",
-      "country_name": "Canada",
-      "region": "North America",
-      "lat": 43.6532,
-      "lon": -79.3832,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "ca-vancouver",
-      "city": "Vancouver",
-      "country_code": "CA",
-      "country_name": "Canada",
-      "region": "North America",
-      "lat": 49.2827,
-      "lon": -123.1207,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "ca-montreal",
-      "city": "Montreal",
-      "country_code": "CA",
-      "country_name": "Canada",
-      "region": "North America",
-      "lat": 45.5019,
-      "lon": -73.5674,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "mx-mexico-city",
-      "city": "Mexico City",
-      "country_code": "MX",
-      "country_name": "Mexico",
-      "region": "North America",
-      "lat": 19.4326,
-      "lon": -99.1332,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "na15",
-        "latam10"
-      ]
-    },
-    {
-      "id": "mx-cancun",
-      "city": "Cancún",
-      "country_code": "MX",
-      "country_name": "Mexico",
-      "region": "North America",
-      "lat": 21.1619,
-      "lon": -86.8515,
-      "radius_km": 40,
-      "population_band": 1,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "us-san-diego",
-      "city": "San Diego",
-      "country_code": "US",
-      "country_name": "United States",
-      "region": "North America",
-      "lat": 32.7157,
-      "lon": -117.1611,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "na15"
-      ]
-    },
-    {
-      "id": "jp-tokyo",
-      "city": "Tokyo",
-      "country_code": "JP",
-      "country_name": "Japan",
-      "region": "Asia-Pacific",
-      "lat": 35.6762,
-      "lon": 139.6503,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "jp-osaka",
-      "city": "Osaka",
-      "country_code": "JP",
-      "country_name": "Japan",
-      "region": "Asia-Pacific",
-      "lat": 34.6937,
-      "lon": 135.5023,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "kr-seoul",
-      "city": "Seoul",
-      "country_code": "KR",
-      "country_name": "South Korea",
-      "region": "Asia-Pacific",
-      "lat": 37.5665,
-      "lon": 126.978,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "sg-singapore",
-      "city": "Singapore",
-      "country_code": "SG",
-      "country_name": "Singapore",
-      "region": "Asia-Pacific",
-      "lat": 1.3521,
-      "lon": 103.8198,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "hk-hong-kong",
-      "city": "Hong Kong",
-      "country_code": "HK",
-      "country_name": "Hong Kong",
-      "region": "Asia-Pacific",
-      "lat": 22.3193,
-      "lon": 114.1694,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "au-sydney",
-      "city": "Sydney",
-      "country_code": "AU",
-      "country_name": "Australia",
-      "region": "Asia-Pacific",
-      "lat": -33.8688,
-      "lon": 151.2093,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "au-melbourne",
-      "city": "Melbourne",
-      "country_code": "AU",
-      "country_name": "Australia",
-      "region": "Asia-Pacific",
-      "lat": -37.8136,
-      "lon": 144.9631,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "nz-auckland",
-      "city": "Auckland",
-      "country_code": "NZ",
-      "country_name": "New Zealand",
-      "region": "Asia-Pacific",
-      "lat": -36.8509,
-      "lon": 174.7645,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "th-bangkok",
-      "city": "Bangkok",
-      "country_code": "TH",
-      "country_name": "Thailand",
-      "region": "Asia-Pacific",
-      "lat": 13.7563,
-      "lon": 100.5018,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "my-kuala-lumpur",
-      "city": "Kuala Lumpur",
-      "country_code": "MY",
-      "country_name": "Malaysia",
-      "region": "Asia-Pacific",
-      "lat": 3.139,
-      "lon": 101.6869,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "cn-shanghai",
-      "city": "Shanghai",
-      "country_code": "CN",
-      "country_name": "China",
-      "region": "Asia-Pacific",
-      "lat": 31.2304,
-      "lon": 121.4737,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "cn-beijing",
-      "city": "Beijing",
-      "country_code": "CN",
-      "country_name": "China",
-      "region": "Asia-Pacific",
-      "lat": 39.9042,
-      "lon": 116.4074,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "tw-taipei",
-      "city": "Taipei",
-      "country_code": "TW",
-      "country_name": "Taiwan",
-      "region": "Asia-Pacific",
-      "lat": 25.033,
-      "lon": 121.5654,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "in-mumbai",
-      "city": "Mumbai",
-      "country_code": "IN",
-      "country_name": "India",
-      "region": "Asia-Pacific",
-      "lat": 19.076,
-      "lon": 72.8777,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "in-delhi",
-      "city": "Delhi",
-      "country_code": "IN",
-      "country_name": "India",
-      "region": "Asia-Pacific",
-      "lat": 28.6139,
-      "lon": 77.209,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "apac15"
-      ]
-    },
-    {
-      "id": "ae-dubai",
-      "city": "Dubai",
-      "country_code": "AE",
-      "country_name": "United Arab Emirates",
-      "region": "Middle East",
-      "lat": 25.2048,
-      "lon": 55.2708,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "ae-abu-dhabi",
-      "city": "Abu Dhabi",
-      "country_code": "AE",
-      "country_name": "United Arab Emirates",
-      "region": "Middle East",
-      "lat": 24.4539,
-      "lon": 54.3773,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "qa-doha",
-      "city": "Doha",
-      "country_code": "QA",
-      "country_name": "Qatar",
-      "region": "Middle East",
-      "lat": 25.2854,
-      "lon": 51.531,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "sa-riyadh",
-      "city": "Riyadh",
-      "country_code": "SA",
-      "country_name": "Saudi Arabia",
-      "region": "Middle East",
-      "lat": 24.7136,
-      "lon": 46.6753,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "sa-jeddah",
-      "city": "Jeddah",
-      "country_code": "SA",
-      "country_name": "Saudi Arabia",
-      "region": "Middle East",
-      "lat": 21.4858,
-      "lon": 39.1925,
-      "radius_km": 40,
-      "population_band": 3,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "il-tel-aviv",
-      "city": "Tel Aviv",
-      "country_code": "IL",
-      "country_name": "Israel",
-      "region": "Middle East",
-      "lat": 32.0853,
-      "lon": 34.7818,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "tr-istanbul",
-      "city": "Istanbul",
-      "country_code": "TR",
-      "country_name": "Türkiye",
-      "region": "Middle East",
-      "lat": 41.0082,
-      "lon": 28.9784,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "om-muscat",
-      "city": "Muscat",
-      "country_code": "OM",
-      "country_name": "Oman",
-      "region": "Middle East",
-      "lat": 23.588,
-      "lon": 58.3829,
-      "radius_km": 40,
-      "population_band": 1,
-      "active": true,
-      "presets": [
-        "me8"
-      ]
-    },
-    {
-      "id": "br-sao-paulo",
-      "city": "São Paulo",
-      "country_code": "BR",
-      "country_name": "Brazil",
-      "region": "Latin America",
-      "lat": -23.5505,
-      "lon": -46.6333,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "br-rio",
-      "city": "Rio de Janeiro",
-      "country_code": "BR",
-      "country_name": "Brazil",
-      "region": "Latin America",
-      "lat": -22.9068,
-      "lon": -43.1729,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "ar-buenos-aires",
-      "city": "Buenos Aires",
-      "country_code": "AR",
-      "country_name": "Argentina",
-      "region": "Latin America",
-      "lat": -34.6037,
-      "lon": -58.3816,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "cl-santiago",
-      "city": "Santiago",
-      "country_code": "CL",
-      "country_name": "Chile",
-      "region": "Latin America",
-      "lat": -33.4489,
-      "lon": -70.6693,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "co-bogota",
-      "city": "Bogotá",
-      "country_code": "CO",
-      "country_name": "Colombia",
-      "region": "Latin America",
-      "lat": 4.711,
-      "lon": -74.0721,
-      "radius_km": 40,
-      "population_band": 5,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "pe-lima",
-      "city": "Lima",
-      "country_code": "PE",
-      "country_name": "Peru",
-      "region": "Latin America",
-      "lat": -12.0464,
-      "lon": -77.0428,
-      "radius_km": 40,
-      "population_band": 4,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "pa-panama-city",
-      "city": "Panama City",
-      "country_code": "PA",
-      "country_name": "Panama",
-      "region": "Latin America",
-      "lat": 8.9824,
-      "lon": -79.5199,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "uy-montevideo",
-      "city": "Montevideo",
-      "country_code": "UY",
-      "country_name": "Uruguay",
-      "region": "Latin America",
-      "lat": -34.9011,
-      "lon": -56.1645,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "ec-quito",
-      "city": "Quito",
-      "country_code": "EC",
-      "country_name": "Ecuador",
-      "region": "Latin America",
-      "lat": -0.1807,
-      "lon": -78.4678,
-      "radius_km": 40,
-      "population_band": 2,
-      "active": true,
-      "presets": [
-        "latam10"
-      ]
-    },
-    {
-      "id": "co-cartagena",
-      "city": "Cartagena",
-      "country_code": "CO",
-      "country_name": "Colombia",
-      "region": "Latin America",
-      "lat": 10.391,
-      "lon": -75.4794,
-      "radius_km": 40,
-      "population_band": 1,
-      "active": true,
-      "presets": []
-    }
-  ]
+    "source": "Coordinates and population bands compiled by hand from public city/metro population references (2024); bands are 1=<1.5M, 2=1.5-4M, 3=4-8M, 4=8-15M, 5=>15M metro.",
+    "presets": {
+        "europe20": "Europe top 20",
+        "na15": "North America top 15",
+        "apac15": "Asia-Pacific top 15",
+        "me8": "Middle East top 8",
+        "latam10": "Latin America top 10",
+        "us10": "US Domestic top 10",
+        "us20": "US Domestic top 20"
+    },
+    "markets": [
+        {
+            "id": "gb-london",
+            "city": "London",
+            "country_code": "GB",
+            "country_name": "United Kingdom",
+            "region": "Europe",
+            "lat": 51.5074,
+            "lon": -0.1278,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "fr-paris",
+            "city": "Paris",
+            "country_code": "FR",
+            "country_name": "France",
+            "region": "Europe",
+            "lat": 48.8566,
+            "lon": 2.3522,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "de-berlin",
+            "city": "Berlin",
+            "country_code": "DE",
+            "country_name": "Germany",
+            "region": "Europe",
+            "lat": 52.52,
+            "lon": 13.405,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "es-madrid",
+            "city": "Madrid",
+            "country_code": "ES",
+            "country_name": "Spain",
+            "region": "Europe",
+            "lat": 40.4168,
+            "lon": -3.7038,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "it-rome",
+            "city": "Rome",
+            "country_code": "IT",
+            "country_name": "Italy",
+            "region": "Europe",
+            "lat": 41.9028,
+            "lon": 12.4964,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "nl-amsterdam",
+            "city": "Amsterdam",
+            "country_code": "NL",
+            "country_name": "Netherlands",
+            "region": "Europe",
+            "lat": 52.3676,
+            "lon": 4.9041,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "es-barcelona",
+            "city": "Barcelona",
+            "country_code": "ES",
+            "country_name": "Spain",
+            "region": "Europe",
+            "lat": 41.3874,
+            "lon": 2.1686,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "at-vienna",
+            "city": "Vienna",
+            "country_code": "AT",
+            "country_name": "Austria",
+            "region": "Europe",
+            "lat": 48.2082,
+            "lon": 16.3738,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "it-milan",
+            "city": "Milan",
+            "country_code": "IT",
+            "country_name": "Italy",
+            "region": "Europe",
+            "lat": 45.4642,
+            "lon": 9.19,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "de-munich",
+            "city": "Munich",
+            "country_code": "DE",
+            "country_name": "Germany",
+            "region": "Europe",
+            "lat": 48.1351,
+            "lon": 11.582,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "ie-dublin",
+            "city": "Dublin",
+            "country_code": "IE",
+            "country_name": "Ireland",
+            "region": "Europe",
+            "lat": 53.3498,
+            "lon": -6.2603,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "pt-lisbon",
+            "city": "Lisbon",
+            "country_code": "PT",
+            "country_name": "Portugal",
+            "region": "Europe",
+            "lat": 38.7223,
+            "lon": -9.1393,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "dk-copenhagen",
+            "city": "Copenhagen",
+            "country_code": "DK",
+            "country_name": "Denmark",
+            "region": "Europe",
+            "lat": 55.6761,
+            "lon": 12.5683,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "se-stockholm",
+            "city": "Stockholm",
+            "country_code": "SE",
+            "country_name": "Sweden",
+            "region": "Europe",
+            "lat": 59.3293,
+            "lon": 18.0686,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "no-oslo",
+            "city": "Oslo",
+            "country_code": "NO",
+            "country_name": "Norway",
+            "region": "Europe",
+            "lat": 59.9139,
+            "lon": 10.7522,
+            "radius_km": 40,
+            "population_band": 1,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "ch-zurich",
+            "city": "Zurich",
+            "country_code": "CH",
+            "country_name": "Switzerland",
+            "region": "Europe",
+            "lat": 47.3769,
+            "lon": 8.5417,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "be-brussels",
+            "city": "Brussels",
+            "country_code": "BE",
+            "country_name": "Belgium",
+            "region": "Europe",
+            "lat": 50.8503,
+            "lon": 4.3517,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "cz-prague",
+            "city": "Prague",
+            "country_code": "CZ",
+            "country_name": "Czechia",
+            "region": "Europe",
+            "lat": 50.0755,
+            "lon": 14.4378,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "pl-warsaw",
+            "city": "Warsaw",
+            "country_code": "PL",
+            "country_name": "Poland",
+            "region": "Europe",
+            "lat": 52.2297,
+            "lon": 21.0122,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "gr-athens",
+            "city": "Athens",
+            "country_code": "GR",
+            "country_name": "Greece",
+            "region": "Europe",
+            "lat": 37.9838,
+            "lon": 23.7275,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "europe20"
+            ]
+        },
+        {
+            "id": "us-new-york",
+            "city": "New York",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 40.7128,
+            "lon": -74.006,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-los-angeles",
+            "city": "Los Angeles",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 34.0522,
+            "lon": -118.2437,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-chicago",
+            "city": "Chicago",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 41.8781,
+            "lon": -87.6298,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-miami",
+            "city": "Miami",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 25.7617,
+            "lon": -80.1918,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-san-francisco",
+            "city": "San Francisco",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 37.7749,
+            "lon": -122.4194,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-boston",
+            "city": "Boston",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 42.3601,
+            "lon": -71.0589,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-washington",
+            "city": "Washington",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 38.9072,
+            "lon": -77.0369,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-seattle",
+            "city": "Seattle",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 47.6062,
+            "lon": -122.3321,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "us-austin",
+            "city": "Austin",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 30.2672,
+            "lon": -97.7431,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "ca-toronto",
+            "city": "Toronto",
+            "country_code": "CA",
+            "country_name": "Canada",
+            "region": "North America",
+            "lat": 43.6532,
+            "lon": -79.3832,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "na15"
+            ]
+        },
+        {
+            "id": "ca-vancouver",
+            "city": "Vancouver",
+            "country_code": "CA",
+            "country_name": "Canada",
+            "region": "North America",
+            "lat": 49.2827,
+            "lon": -123.1207,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15"
+            ]
+        },
+        {
+            "id": "ca-montreal",
+            "city": "Montreal",
+            "country_code": "CA",
+            "country_name": "Canada",
+            "region": "North America",
+            "lat": 45.5019,
+            "lon": -73.5674,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15"
+            ]
+        },
+        {
+            "id": "mx-mexico-city",
+            "city": "Mexico City",
+            "country_code": "MX",
+            "country_name": "Mexico",
+            "region": "North America",
+            "lat": 19.4326,
+            "lon": -99.1332,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "na15",
+                "latam10"
+            ]
+        },
+        {
+            "id": "mx-cancun",
+            "city": "Canc\u00fan",
+            "country_code": "MX",
+            "country_name": "Mexico",
+            "region": "North America",
+            "lat": 21.1619,
+            "lon": -86.8515,
+            "radius_km": 40,
+            "population_band": 1,
+            "active": true,
+            "presets": [
+                "na15"
+            ]
+        },
+        {
+            "id": "us-san-diego",
+            "city": "San Diego",
+            "country_code": "US",
+            "country_name": "United States",
+            "region": "North America",
+            "lat": 32.7157,
+            "lon": -117.1611,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "na15",
+                "us10",
+                "us20"
+            ]
+        },
+        {
+            "id": "jp-tokyo",
+            "city": "Tokyo",
+            "country_code": "JP",
+            "country_name": "Japan",
+            "region": "Asia-Pacific",
+            "lat": 35.6762,
+            "lon": 139.6503,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "jp-osaka",
+            "city": "Osaka",
+            "country_code": "JP",
+            "country_name": "Japan",
+            "region": "Asia-Pacific",
+            "lat": 34.6937,
+            "lon": 135.5023,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "kr-seoul",
+            "city": "Seoul",
+            "country_code": "KR",
+            "country_name": "South Korea",
+            "region": "Asia-Pacific",
+            "lat": 37.5665,
+            "lon": 126.978,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "sg-singapore",
+            "city": "Singapore",
+            "country_code": "SG",
+            "country_name": "Singapore",
+            "region": "Asia-Pacific",
+            "lat": 1.3521,
+            "lon": 103.8198,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "hk-hong-kong",
+            "city": "Hong Kong",
+            "country_code": "HK",
+            "country_name": "Hong Kong",
+            "region": "Asia-Pacific",
+            "lat": 22.3193,
+            "lon": 114.1694,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "au-sydney",
+            "city": "Sydney",
+            "country_code": "AU",
+            "country_name": "Australia",
+            "region": "Asia-Pacific",
+            "lat": -33.8688,
+            "lon": 151.2093,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "au-melbourne",
+            "city": "Melbourne",
+            "country_code": "AU",
+            "country_name": "Australia",
+            "region": "Asia-Pacific",
+            "lat": -37.8136,
+            "lon": 144.9631,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "nz-auckland",
+            "city": "Auckland",
+            "country_code": "NZ",
+            "country_name": "New Zealand",
+            "region": "Asia-Pacific",
+            "lat": -36.8509,
+            "lon": 174.7645,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "th-bangkok",
+            "city": "Bangkok",
+            "country_code": "TH",
+            "country_name": "Thailand",
+            "region": "Asia-Pacific",
+            "lat": 13.7563,
+            "lon": 100.5018,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "my-kuala-lumpur",
+            "city": "Kuala Lumpur",
+            "country_code": "MY",
+            "country_name": "Malaysia",
+            "region": "Asia-Pacific",
+            "lat": 3.139,
+            "lon": 101.6869,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "cn-shanghai",
+            "city": "Shanghai",
+            "country_code": "CN",
+            "country_name": "China",
+            "region": "Asia-Pacific",
+            "lat": 31.2304,
+            "lon": 121.4737,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "cn-beijing",
+            "city": "Beijing",
+            "country_code": "CN",
+            "country_name": "China",
+            "region": "Asia-Pacific",
+            "lat": 39.9042,
+            "lon": 116.4074,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "tw-taipei",
+            "city": "Taipei",
+            "country_code": "TW",
+            "country_name": "Taiwan",
+            "region": "Asia-Pacific",
+            "lat": 25.033,
+            "lon": 121.5654,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "in-mumbai",
+            "city": "Mumbai",
+            "country_code": "IN",
+            "country_name": "India",
+            "region": "Asia-Pacific",
+            "lat": 19.076,
+            "lon": 72.8777,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "in-delhi",
+            "city": "Delhi",
+            "country_code": "IN",
+            "country_name": "India",
+            "region": "Asia-Pacific",
+            "lat": 28.6139,
+            "lon": 77.209,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "apac15"
+            ]
+        },
+        {
+            "id": "ae-dubai",
+            "city": "Dubai",
+            "country_code": "AE",
+            "country_name": "United Arab Emirates",
+            "region": "Middle East",
+            "lat": 25.2048,
+            "lon": 55.2708,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "ae-abu-dhabi",
+            "city": "Abu Dhabi",
+            "country_code": "AE",
+            "country_name": "United Arab Emirates",
+            "region": "Middle East",
+            "lat": 24.4539,
+            "lon": 54.3773,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "qa-doha",
+            "city": "Doha",
+            "country_code": "QA",
+            "country_name": "Qatar",
+            "region": "Middle East",
+            "lat": 25.2854,
+            "lon": 51.531,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "sa-riyadh",
+            "city": "Riyadh",
+            "country_code": "SA",
+            "country_name": "Saudi Arabia",
+            "region": "Middle East",
+            "lat": 24.7136,
+            "lon": 46.6753,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "sa-jeddah",
+            "city": "Jeddah",
+            "country_code": "SA",
+            "country_name": "Saudi Arabia",
+            "region": "Middle East",
+            "lat": 21.4858,
+            "lon": 39.1925,
+            "radius_km": 40,
+            "population_band": 3,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "il-tel-aviv",
+            "city": "Tel Aviv",
+            "country_code": "IL",
+            "country_name": "Israel",
+            "region": "Middle East",
+            "lat": 32.0853,
+            "lon": 34.7818,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "tr-istanbul",
+            "city": "Istanbul",
+            "country_code": "TR",
+            "country_name": "T\u00fcrkiye",
+            "region": "Middle East",
+            "lat": 41.0082,
+            "lon": 28.9784,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "om-muscat",
+            "city": "Muscat",
+            "country_code": "OM",
+            "country_name": "Oman",
+            "region": "Middle East",
+            "lat": 23.588,
+            "lon": 58.3829,
+            "radius_km": 40,
+            "population_band": 1,
+            "active": true,
+            "presets": [
+                "me8"
+            ]
+        },
+        {
+            "id": "br-sao-paulo",
+            "city": "S\u00e3o Paulo",
+            "country_code": "BR",
+            "country_name": "Brazil",
+            "region": "Latin America",
+            "lat": -23.5505,
+            "lon": -46.6333,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "br-rio",
+            "city": "Rio de Janeiro",
+            "country_code": "BR",
+            "country_name": "Brazil",
+            "region": "Latin America",
+            "lat": -22.9068,
+            "lon": -43.1729,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "ar-buenos-aires",
+            "city": "Buenos Aires",
+            "country_code": "AR",
+            "country_name": "Argentina",
+            "region": "Latin America",
+            "lat": -34.6037,
+            "lon": -58.3816,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "cl-santiago",
+            "city": "Santiago",
+            "country_code": "CL",
+            "country_name": "Chile",
+            "region": "Latin America",
+            "lat": -33.4489,
+            "lon": -70.6693,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "co-bogota",
+            "city": "Bogot\u00e1",
+            "country_code": "CO",
+            "country_name": "Colombia",
+            "region": "Latin America",
+            "lat": 4.711,
+            "lon": -74.0721,
+            "radius_km": 40,
+            "population_band": 5,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "pe-lima",
+            "city": "Lima",
+            "country_code": "PE",
+            "country_name": "Peru",
+            "region": "Latin America",
+            "lat": -12.0464,
+            "lon": -77.0428,
+            "radius_km": 40,
+            "population_band": 4,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "pa-panama-city",
+            "city": "Panama City",
+            "country_code": "PA",
+            "country_name": "Panama",
+            "region": "Latin America",
+            "lat": 8.9824,
+            "lon": -79.5199,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "uy-montevideo",
+            "city": "Montevideo",
+            "country_code": "UY",
+            "country_name": "Uruguay",
+            "region": "Latin America",
+            "lat": -34.9011,
+            "lon": -56.1645,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "ec-quito",
+            "city": "Quito",
+            "country_code": "EC",
+            "country_name": "Ecuador",
+            "region": "Latin America",
+            "lat": -0.1807,
+            "lon": -78.4678,
+            "radius_km": 40,
+            "population_band": 2,
+            "active": true,
+            "presets": [
+                "latam10"
+            ]
+        },
+        {
+            "id": "co-cartagena",
+            "city": "Cartagena",
+            "country_code": "CO",
+            "country_name": "Colombia",
+            "region": "Latin America",
+            "lat": 10.391,
+            "lon": -75.4794,
+            "radius_km": 40,
+            "population_band": 1,
+            "active": true,
+            "presets": []
+        }
+    ]
 }
