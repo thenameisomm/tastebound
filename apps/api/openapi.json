@@ -2451,16 +2451,23 @@
    },
    "Body_upload_arrivals_v1_arrivals_post": {
     "properties": {
-     "file": {
-      "type": "string",
-      "contentMediaType": "application/octet-stream",
-      "title": "File"
-     },
      "source_note": {
       "type": "string",
       "maxLength": 500,
       "minLength": 3,
       "title": "Source Note"
+     },
+     "file": {
+      "anyOf": [
+       {
+        "type": "string",
+        "contentMediaType": "application/octet-stream"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "File"
      },
      "name": {
       "anyOf": [
@@ -2498,7 +2505,6 @@
     },
     "type": "object",
     "required": [
-     "file",
      "source_note"
     ],
     "title": "Body_upload_arrivals_v1_arrivals_post"

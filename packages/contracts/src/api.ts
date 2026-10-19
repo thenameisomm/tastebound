@@ -592,10 +592,10 @@ export interface components {
         };
         /** Body_upload_arrivals_v1_arrivals_post */
         Body_upload_arrivals_v1_arrivals_post: {
-            /** File */
-            file: string;
             /** Source Note */
             source_note: string;
+            /** File */
+            file?: string | null;
             /** Name */
             name?: string | null;
             /** Destination Id */

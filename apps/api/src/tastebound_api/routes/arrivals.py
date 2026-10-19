@@ -71,8 +71,8 @@ async def list_samples(workspace_id: WorkspaceId) -> list[ArrivalsSampleOut]:
 async def upload_arrivals(
     workspace_id: WorkspaceId,
     request: Request,
-    file: Annotated[UploadFile, File()],
     source_note: Annotated[str, Form(min_length=3, max_length=500)],
+    file: Annotated[UploadFile | None, File()] = None,
     name: Annotated[str | None, Form()] = None,
     destination_id: Annotated[str | None, Form()] = None,
     sample_id: Annotated[str | None, Form()] = None,
@@ -83,9 +83,19 @@ async def upload_arrivals(
         limit=20,
         window_seconds=3600,
     )
-    content = await file.read()
-    if len(content) > MAX_UPLOAD_BYTES:
-        raise ArrivalsInvalid("The file is larger than the 1 MB limit.")
+    filename = file.filename if file is not None else None
+    if file is not None:
+        content = await file.read()
+        if len(content) > MAX_UPLOAD_BYTES:
+            raise ArrivalsInvalid("The file is larger than the 1 MB limit.")
+    elif sample_id:
+        sample_path = SAMPLES_DIR / f"{sample_id}.csv"
+        if not sample_path.exists() or sample_path.resolve().parent != SAMPLES_DIR.resolve():
+            raise ArrivalsInvalid("Unknown sample dataset.")
+        content = sample_path.read_bytes()
+        filename = sample_path.name
+    else:
+        raise ArrivalsInvalid("Attach a CSV file or pick a bundled sample.")
     parsed = parse_arrivals_csv(content)
 
     session_factory = get_session_factory()
@@ -98,7 +108,7 @@ async def upload_arrivals(
             id=str(uuid.uuid4()),
             workspace_id=workspace_id,
             destination_id=destination_id,
-            name=name or (file.filename or "Uploaded arrivals"),
+            name=name or (filename or "Uploaded arrivals"),
             year=max((row.year or 0 for row in parsed.rows), default=0) or None,
             level="city" if not matched.by_country else "mixed",
             source_note=source_note,
@@ -119,7 +129,7 @@ async def upload_arrivals(
 
     response = ArrivalsResponse(
         dataset_id=dataset_id,
-        name=name or (file.filename or "Uploaded arrivals"),
+        name=name or (filename or "Uploaded arrivals"),
         level="city" if not matched.by_country else "mixed",
         source_note=source_note,
         is_sample=bool(sample_id),

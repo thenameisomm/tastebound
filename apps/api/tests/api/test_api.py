@@ -101,6 +101,24 @@ async def test_arrivals_upload_matches_sample(client: httpx.AsyncClient) -> None
     assert len(payload["unmatched"]) == 1
 
 
+async def test_arrivals_bundled_sample_upload(client: httpx.AsyncClient) -> None:
+    token = await _token(client)
+    samples = await client.get("/v1/arrivals/samples", headers={"X-Workspace-Token": token})
+    assert samples.status_code == 200
+    sample_id = samples.json()[0]["id"]
+
+    response = await client.post(
+        "/v1/arrivals",
+        headers={"X-Workspace-Token": token},
+        data={"source_note": "Bundled sample", "sample_id": sample_id},
+    )
+    assert response.status_code == 201, response.text
+    payload = response.json()
+    assert payload["is_sample"] is True
+    assert payload["rows"] >= 15
+    assert payload["matched_markets"] >= 20
+
+
 async def test_run_fails_closed_without_qloo_key(client: httpx.AsyncClient) -> None:
     token = await _token(client)
     headers = {"X-Workspace-Token": token}
