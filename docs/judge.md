@@ -34,7 +34,7 @@ Re-read the live pages before judging, because rules can change: `https://qloo.d
 3. **Link to a functional demo application.**
 4. **Public repository** (GitHub, GitLab or Bitbucket) with an **open-source licence file**.
 5. **Text description** of features and functionality.
-6. **Demo video** (English, or with an English translation).
+6. Demo video: **not required** (live Devpost page, re-checked Oct 19, 2026); the demo must instead be hosted externally and fully published.
 7. The project is **available free of charge and without restriction** for judges to test.
 8. It **functions as depicted** in the video and text. Judges may judge on the text, images and video alone.
 9. New work, or a significant update made during the submission period, explained in the submission.

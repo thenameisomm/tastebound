@@ -4,7 +4,7 @@
 
 - **Theme:** "Agents, but with taste." Build an agentic tool, an agent-powered app, or wire Qloo into an existing agent. *"If your submission would work the same without Qloo, you're building the wrong thing."*
 - **Must:** working software integrating the Qloo API that (a) functions as an agentic tool, (b) is built with an agent framework, or (c) integrates Qloo into an existing agent.
-- **Submit:** functional demo link; public repo (GitHub/GitLab/Bitbucket) with an open-source licence file; text description; demo video (English). Free, unrestricted testing for judges. Judges may judge on text, images and video alone; the project must work as shown.
+- **Submit (re-checked against https://qloo.devpost.com on Oct 19, 2026):** a functional demo application, **hosted externally and fully published** (local-only or private access does not qualify); a public repo (GitHub/GitLab/Bitbucket) with an open-source licence file **visible in the About section**; a text description. **Demo videos are NOT required.** Free, unrestricted testing for judges; judges can use the app directly.
 - **Stage 1:** pass/fail viability. **Stage 2 (equal weight):** Technological Implementation ("How thoroughly and skillfully does the project use Qloo?"), Design ("complete, coherent product experience, not just a technical proof of concept"), Potential Impact ("credible, specific case for solving a real problem for a real audience"), Quality of the Idea ("creative, non-obvious use of Qloo and does the team demonstrate genuine understanding"). **Tie-break:** Technological Implementation first.
 - **Prizes:** $15,000 / $6,000 / $4,000; Jason Calacanis invests $25,000 in his favourite entry. The judging panel is business- and investor-heavy.
 
@@ -43,7 +43,7 @@ Placement estimate: **plausible top 3 if executed very well**; around 13 if the 
 | "Where's the agent?" | Gemma 4 on Ollama Cloud proposes the profile items and writes the briefs; tool orchestration is deterministic on purpose so Qloo decides, and every run records which path ran. The tool-choice loop is disabled until live tool calling is verified. |
 | "Different from GeoTaste?" | GeoTaste analyses a location for a business. We start from a destination and find which origin markets to target, then add arrivals gaps, audiences, angles and partners. |
 
-## Demo video (about 3 minutes)
+## Demo run-through (video not required; use as a script if recording anyway)
 
 | Time | Beat |
 |---|---|

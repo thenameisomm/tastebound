@@ -38,6 +38,6 @@ Updated 2026-10-19. Phases per `docs/11-plan.md`.
 
 ## Next
 
-1. User-side submission items: push the repo to a public remote, deploy the demo URL, record the English video, file the Devpost entry.
+1. User-side submission items: push the repo to a public remote, deploy the demo URL (external hosting required), file the Devpost entry; video is not required by the rules.
 2. Re-run `docs/14-checks.md`, then smoke + axe against the deployed URL.
 3. If an Ollama Cloud key with quota is available: verify tool calling, then (only then) enable `LLM_TOOL_CALLING` and claim it.

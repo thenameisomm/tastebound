@@ -1,10 +1,10 @@
 # Judging report: TasteBound (2026-10-19)
 
-Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Development/TasteBound`, README, `docs/`, running local stack (API `:8020`, web `:3000`). Live demo URL and video URL were **not provided** — recorded as Stage 1 findings. Independent J5 (impact/novelty) and J6 (engineering/trust) audits were run in parallel; J1, J2, J3, J4 and J7 were run by the lead judge. No team code was modified by the judging sub-agents; fixes listed in section 9 were made by the team after the findings.
+Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Development/TasteBound`, README, `docs/`, running local stack (API `:8020`, web `:3000`). Updated against the live Devpost page (fetched Oct 19, 2026): a hosted demo is required, a video is **not**; neither URL exists yet — recorded as Stage 1 findings. Independent J5 (impact/novelty) and J6 (engineering/trust) audits were run in parallel; J1, J2, J3, J4 and J7 were run by the lead judge. No team code was modified by the judging sub-agents; fixes listed in section 9 were made by the team after the findings.
 
 ## Verdict
 
-**Stage 1: AT RISK.** The Qloo integration, licence and working app pass; the public repo remote, deployed demo link and English video do not exist yet. The agentic criterion is met only as a deterministic tool pipeline with an LLM in the loop for item proposals and grounded briefs — not as an LLM tool-choice loop, and the copy now says so.
+**Stage 1: AT RISK.** The Qloo integration, licence and working app pass; the public repo remote and the externally hosted demo do not exist yet (video: not required). The agentic criterion is met only as a deterministic tool pipeline with an LLM in the loop for item proposals and grounded briefs — not as an LLM tool-choice loop, and the copy now says so.
 
 **Scores: C1 4/5 · C2 4/5 · C3 4/5 · C4 4/5 · Total 16/20**
 
@@ -16,12 +16,12 @@ Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Dev
 |---|---|---|---|
 | 1 | Working software integrating the Qloo API | **PASS** | Live Lisbon run (68 markets, 252 Qloo calls in fixture); live Kyoto run `f29c1697…` done with 80 live + 13 cached calls; `apps/api/src/tastebound_api/qloo/` |
 | 2 | (a) agentic tool, (b) agent framework, or (c) existing-agent integration | **AT RISK (a)** | Phase executor calls guarded tools, records orchestration, falls back deterministically (`agent/executor.py:376-397`); LLM proposes items (`routes/destinations.py:128`) and writes grounded briefs (`executor.py:1215,1244`). No LLM tool-choice loop and no agent framework; `LLM_TOOL_CALLING=false`; copy corrected to match |
-| 3 | Functional demo link | **FAIL (not yet)** | Local app works end to end; no deployment URL. Team action required |
-| 4 | Public repo with open-source licence | **AT RISK** | `LICENSE` (MIT, Om Badgujar) present; `git remote -v` empty — repo not published |
+| 3 | Hosted, fully published demo (external hosting required; local-only does not qualify) | **FAIL (not yet)** | Local app works end to end; no deployment URL. Team action required |
+| 4 | Public repo with open-source licence | **AT RISK** | `LICENSE` (MIT, Om Badgujar) present; `git remote -v` empty — repo not published. Licence must be visible in the About section |
 | 5 | Text description | **PASS** | `README.md`; `docs/` pack; Devpost text skeleton in `docs/17-judging.md` |
-| 6 | Demo video (English) | **FAIL (not yet)** | Script exists (`docs/17-judging.md`), corrected for honest agent claims; not recorded |
+| 6 | Demo video | **N/A — not required** | Live Devpost page (Oct 19, 2026): "Demo videos are *not* required." Run-through script remains in `docs/17-judging.md` |
 | 7 | Free, unrestricted testing for judges | **PASS locally** | No login; keyless read-only `/sample` spends no Qloo quota (`test_api.py::test_demo_is_public_and_read_only`); must be re-verified on the deployment |
-| 8 | Functions as depicted | **AT RISK** | README/docs overclaims found and corrected during judging (section 9); video must follow the corrected script |
+| 8 | Functions as depicted | **AT RISK** | README/docs overclaims found and corrected during judging (section 9); description must match the deployed demo |
 | 9 | New work / significant update in period | **PASS** | Built 2026-10-19; 15 commits |
 
 ## What Qloo wants vs what this project provides
@@ -104,7 +104,7 @@ Novelty verdict: genuinely non-obvious B2B direction with a clear differentiator
 
 1. **Deploy the demo** to a public URL (Fly/Render/Vercel + API host, SQLite volume) and verify the keyless `/sample` and a live run there. Stage 1 blocker; 2–4 h.
 2. **Publish the repo** to a public GitHub remote; confirm LICENSE renders and no `.env` is tracked. Stage 1 blocker; 15 min.
-3. **Record the 3-minute video** using the corrected `docs/17-judging.md` script: no "agent chooses tools" claim; show the trace failure→fix story and the kill switch. Stage 1 blocker; 2–3 h.
+3. **Rehearse the run-through on the deployed URL** (sample logged out, one live run, kill switch); record it only if you want a video for the Devpost gallery. Optional; 1–2 h.
 4. **Get an Ollama Cloud key with quota, verify tool calling, then enable `LLM_TOOL_CALLING`** and only then claim LLM tool choice. Raises the theme fit (C1) and removes the biggest honesty risk; 4–8 h plus key.
 5. **Run one small validation** (blind review with 3 DMO-style judges or a holdout on one market) and quote it; otherwise keep every evaluation statement as a plan. Raises C3/C4 confidence; 4–6 h.
 6. **Devpost text** with the two sourced statistics, the chain diagram and the limits section; 1 h.
@@ -121,6 +121,6 @@ Novelty verdict: genuinely non-obvious B2B direction with a clear differentiator
 |---|---|---|---|
 | Public deployment + keyless sample verification | Stage 1 (eligibility) | Pass/fail | 2–4 |
 | Public repo remote + licence check | Stage 1 | Pass/fail | 0.25 |
-| English demo video with corrected script | Stage 1 + C2 | Pass/fail + polish | 2–3 |
+| End-to-end rehearsal on the deployed demo (video optional) | Stage 1 + C2 | Pass/fail + polish | 1–2 |
 | Verify Ollama tool calling; enable and demonstrate the tool-choice loop honestly | C1 | +0.5 | 4–8 |
 | One validation result (blind review/holdout) quoted in README and video | C3/C4 | +0.5 | 4–6 |

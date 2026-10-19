@@ -37,11 +37,11 @@ API: ruff, mypy, pytest (not live) with coverage, grep tests (LLM-01: provider n
 
 - [ ] Working software integrating the Qloo API
 - [ ] Agentic positioning explained honestly in README (deterministic guarded tool pipeline; LLM item proposals and grounded briefs; tool-choice loop disabled until verified)
-- [ ] Public repo (GitHub/GitLab/Bitbucket) with open-source `LICENSE`
-- [ ] Functional demo link, free and unrestricted, works logged out
+- [ ] Public repo (GitHub/GitLab/Bitbucket) with open-source `LICENSE` visible in the About section
+- [ ] Demo hosted externally (local-only does not qualify), free and unrestricted, works logged out
 - [ ] Text description of features
-- [ ] Demo video in English, public
-- [ ] Works as shown in the video and text
+- [ ] Works as shown in the description (video optional; not required by the rules)
+- [ ] Demo run-through rehearsed end to end on the deployed URL
 - [ ] If any earlier code was reused, the submission explains what was built during the period
 
 ## Pre-submit, quality
