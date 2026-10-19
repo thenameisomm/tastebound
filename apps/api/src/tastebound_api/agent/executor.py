@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import time
@@ -10,6 +11,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import delete, func, select
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from tastebound_api.arrivals.matching import MarketRef, match_arrivals
@@ -112,6 +114,25 @@ def _extract_json(text: str | None) -> dict[str, Any] | None:
     return parsed if isinstance(parsed, dict) else None
 
 
+# --- database retry helper ---
+async def _with_retry(
+    session_factory: async_sessionmaker[AsyncSession],
+    operation: Callable[[AsyncSession], Awaitable[Any]],
+    max_retries: int = 5,
+    base_delay: float = 0.2,
+) -> Any:
+    """Execute a database operation with retry on OperationalError (e.g., SQLite locked)."""
+    for attempt in range(max_retries):
+        async with session_factory() as session:
+            try:
+                return await operation(session)
+            except OperationalError as exc:
+                if "locked" in str(exc).lower() and attempt < max_retries - 1:
+                    await asyncio.sleep(base_delay * (2**attempt))
+                    continue
+                raise
+
+
 class RunExecutor:
     def __init__(
         self,
@@ -137,7 +158,7 @@ class RunExecutor:
     # ------------------------------------------------------------- plumbing
 
     async def _emit(self, run_id: str, event_type: str, payload: dict[str, Any]) -> None:
-        async with self.session_factory() as session:
+        async def _op(session: AsyncSession) -> None:
             current = await session.scalar(
                 select(func.max(RunEvent.seq)).where(RunEvent.run_id == run_id)
             )
@@ -152,40 +173,47 @@ class RunExecutor:
             )
             await session.commit()
 
+        await _with_retry(self.session_factory, _op)
+
     async def _save_counters(self, run_id: str) -> None:
-        async with self.session_factory() as session:
+        async def _op(session: AsyncSession) -> None:
             row = await session.get(Run, run_id)
-            if row is None:
-                return
-            row.counters = dict(self.counters)
-            await session.commit()
+            if row is not None:
+                row.counters = dict(self.counters)
+                await session.commit()
+
+        await _with_retry(self.session_factory, _op)
 
     async def _set_status(self, run_id: str, status: str) -> None:
-        async with self.session_factory() as session:
+        async def _op(session: AsyncSession) -> None:
             row = await session.get(Run, run_id)
-            if row is None:
-                return
-            row.status = status
-            if status != "failed":
-                row.error_code = None
-                row.error_message = None
-            if status == "scoring" and row.started_at is None:
-                row.started_at = _now()
-            if status == "done":
-                row.finished_at = _now()
-            await session.commit()
+            if row is not None:
+                row.status = status
+                if status != "failed":
+                    row.error_code = None
+                    row.error_message = None
+                if status == "scoring" and row.started_at is None:
+                    row.started_at = _now()
+                if status == "done":
+                    row.finished_at = _now()
+                await session.commit()
+
+        await _with_retry(self.session_factory, _op)
 
     async def _add_warning(self, run_id: str, code: str, message: str) -> None:
         context = self.context
         if context is not None:
             context.warnings.append({"code": code, "message": message})
-            async with self.session_factory() as session:
+
+            async def _op(session: AsyncSession) -> None:
                 row = await session.get(Run, run_id)
                 if row is not None:
                     settings = dict(row.settings or {})
                     settings["warnings"] = context.warnings
                     row.settings = settings
                     await session.commit()
+
+            await _with_retry(self.session_factory, _op)
         await self._emit(run_id, "warning", {"code": code, "message": message})
 
     def _qloo_sink(self, run_id: str) -> Callable[[str, dict[str, Any]], Awaitable[None]]:
@@ -1125,7 +1153,7 @@ class RunExecutor:
                 content: BriefContent | None = None
                 source = "template"
                 model = None
-                if self.provider is not None:
+                if self.provider is not None and self.settings.llm_tool_calling:
                     content, model, violations = await self._write_with_llm(bundle, run.id)
                     if content is not None:
                         source = "llm"
@@ -1397,20 +1425,25 @@ class RunExecutor:
 
     async def _record_llm(self, run_id: str, purpose: str, status: str, duration_ms: int) -> None:
         self.counters["llm"] += 1
-        async with self.session_factory() as session:
+        provider_name = self.provider.name if self.provider else "none"
+        model_name = self.provider.model if self.provider else "none"
+
+        async def _op(session: AsyncSession) -> None:
             session.add(
                 LLMCall(
                     id=str(uuid.uuid4()),
                     run_id=run_id,
                     purpose=purpose,
-                    provider=self.provider.name if self.provider else "none",
-                    model=self.provider.model if self.provider else "none",
+                    provider=provider_name,
+                    model=model_name,
                     prompt_version=PROMPT_VERSION,
                     status=status,
                     duration_ms=duration_ms,
                 )
             )
             await session.commit()
+
+        await _with_retry(self.session_factory, _op)
 
     async def tool_finish_phase(self) -> dict[str, Any]:
         return {"ok": True}
