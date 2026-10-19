@@ -122,7 +122,6 @@ async def _propose_items_via_llm(
         ChatMessage(role="system", content=system),
         ChatMessage(role="user", content="\n\n".join(user_parts)),
     ]
-    last_error: str | None = None
     for _ in range(2):
         try:
             result = await provider.chat(

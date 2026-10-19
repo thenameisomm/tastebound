@@ -62,7 +62,9 @@ class OpenAICompatibleProvider:
         if response_format:
             payload["response_format"] = response_format
         try:
-            response = await self._client.post("/chat/completions", json=payload, follow_redirects=True)
+            response = await self._client.post(
+                "/chat/completions", json=payload, follow_redirects=True
+            )
         except httpx.TimeoutException as exc:
             raise LLMTimeoutError() from exc
         except httpx.HTTPError as exc:
@@ -74,11 +76,15 @@ class OpenAICompatibleProvider:
         if response.status_code >= 500:
             raise LLMUnavailable(f"Provider returned HTTP {response.status_code}.")
         if response.status_code >= 400:
-            raise LLMUnavailable(f"Provider returned HTTP {response.status_code}: {response.text[:200]}")
+            raise LLMUnavailable(
+                f"Provider returned HTTP {response.status_code}: {response.text[:200]}"
+            )
         try:
             body = response.json()
         except ValueError as exc:
-            raise LLMUnavailable("Provider returned non-JSON content (likely auth redirect).") from exc
+            raise LLMUnavailable(
+                "Provider returned non-JSON content (likely auth redirect)."
+            ) from exc
         try:
             message = body["choices"][0]["message"]
         except (KeyError, IndexError, TypeError) as exc:
