@@ -28,6 +28,18 @@ build
 dist
 
 
+.opencode
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.db
+apps/api/data/demo/active.json
+
 # Debug
 npm-debug.log*
 yarn-debug.log*
