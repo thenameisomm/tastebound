@@ -46,3 +46,9 @@
 | 2026-10-19 | Anonymous workspaces with header token | Free unrestricted judging; cross-site deploy |
 | 2026-10-19 | Fail closed on Qloo; kill switch tested | Proves the app is impossible without Qloo |
 | 2026-10-19 | Scoring strategy decided in Phase 0 (D, P or H) | Qloo behaviour unverified |
+| 2026-10-19 | **Strategy P chosen** (profile affinity per market, destination scoped via `filter.results.entities`) | Live spikes: destination entity is resolvable, per-market coverage 68/68, population correlation 0.026 |
+| 2026-10-19 | **Lift = raw affinity difference**, not percentile difference | Verified live: percentiles of target vs baseline are rank-identical within a response, so percentile differences collapse to ~0. Raw `target_affinity − baseline_affinity` preserves the signal; taste score is the percentile of lift. `docs/04` updated by `docs/qloo-contract.md` |
+| 2026-10-19 | Destination entity excluded from `signal.interests.entities` | Including it makes explainability return an empty entity list and flattens lift |
+| 2026-10-19 | Demographics require a taste signal; location-only is rejected (400) | Verified live |
+| 2026-10-19 | Demo run is seeded from an exported fixture and is read-only for non-demo workspaces | Free logged-out demo must not spend Qloo calls or mutate demo data |
+| 2026-10-19 | SQLite locally (`aiosqlite`), Postgres/Supabase unchanged for deploy | Docker unavailable on the build machine; SQLAlchemy layer stays portable |
