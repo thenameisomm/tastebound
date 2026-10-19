@@ -1,0 +1,11 @@
+{
+  "source_name": "Illustrative Lisbon origin-market distribution built from published Greater Lisbon guest totals",
+  "url": "https://www.statista.com/statistics/425622/number-of-guests-in-lisbon-portugal-by-country-of-origin/",
+  "secondary_url": "https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_publicacoes",
+  "retrieved_on": "2026-10-19",
+  "licence": "Illustrative values for the hackathon demo. Country totals are informed by published Statista (2024) and INE Tourism Statistics (2023) aggregates; the full row set is not an official city-level arrivals series.",
+  "notes": "Top five figures are informed by published Greater Lisbon guest totals (United States 870k, Spain 451k, Brazil 399k, France 394k, Germany 327k). Remaining rows are illustrative estimates shown only to demonstrate gap analysis. Replace with a DMO export for real decisions. Country-level rows are split across selected markets by population band and labelled as an approximation in the UI.",
+  "level": "country",
+  "year": 2024,
+  "is_illustrative": true
+}

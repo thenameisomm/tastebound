@@ -1,0 +1,12 @@
+{
+  "name": "api",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "uv run uvicorn tastebound_api.main:app --reload --port 8000",
+    "start": "uv run uvicorn tastebound_api.main:app --host 0.0.0.0 --port 8000",
+    "lint": "uv run ruff check . && uv run ruff format --check . && uv run mypy src",
+    "test": "uv run pytest -m \"not live\"",
+    "build": "uv run python scripts/export_openapi.py"
+  }
+}
