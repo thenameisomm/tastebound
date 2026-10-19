@@ -13,8 +13,67 @@ CAVEAT_PATTERNS = (
 )
 
 ALLOWED_NAME_WORDS = {
-    "why",
+    "a",
+    "an",
+    "not",
+    "no",
+    "of",
+    "to",
+    "so",
+    "but",
+    "or",
+    "per",
+    "vs",
+    "also",
+    "because",
+    "however",
+    "while",
+    "if",
+    "then",
+    "than",
+    "as",
+    "at",
+    "by",
+    "for",
+    "from",
+    "in",
+    "into",
+    "on",
+    "onto",
+    "over",
+    "under",
+    "about",
+    "after",
+    "before",
+    "during",
+    "here",
+    "there",
+    "when",
+    "where",
+    "which",
     "who",
+    "whose",
+    "its",
+    "it",
+    "is",
+    "are",
+    "was",
+    "were",
+    "has",
+    "have",
+    "had",
+    "can",
+    "could",
+    "should",
+    "would",
+    "will",
+    "may",
+    "might",
+    "must",
+    "our",
+    "their",
+    "them",
+    "why",
     "what",
     "partners",
     "budget",
@@ -45,8 +104,6 @@ ALLOWED_NAME_WORDS = {
     "gender",
     "female",
     "male",
-    "under",
-    "over",
     "index",
     "share",
     "summary",
@@ -63,7 +120,6 @@ ALLOWED_NAME_WORDS = {
     "february",
     "march",
     "april",
-    "may",
     "june",
     "july",
     "august",
@@ -170,11 +226,14 @@ def validate_brief(content: BriefContent, bundle: EvidenceBundle) -> list[str]:
 
     allowed = {name.casefold() for name in bundle.names} | ALLOWED_NAME_WORDS
     for match in WORD_RE.findall(text):
+        folded = match.casefold()
+        if folded in allowed:
+            continue
+        # Multi-word names with lowercase connectors ("Pastéis de Belém") match in parts;
+        # accept any fragment that appears inside an allowed name.
+        if any(folded in name for name in allowed):
+            continue
         words = match.split()
-        if len(words) == 1 and words[0].casefold() in allowed:
-            continue
-        if match.casefold() in allowed:
-            continue
         if any(word.casefold() in allowed for word in words):
             continue
         violations.append(f"Name '{match}' is not in the evidence bundle.")

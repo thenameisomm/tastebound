@@ -91,6 +91,8 @@ def validate_public_url(url: str) -> str:
 
 async def _fetch_html(client: httpx.AsyncClient, url: str) -> httpx.Response:
     response = await client.get(url, headers={"User-Agent": USER_AGENT})
+    if response.status_code in {301, 302, 303, 307, 308}:
+        return response
     if len(response.content) > MAX_BYTES_PER_PAGE:
         raise WebsiteUnreadable("The page is larger than 1.5 MB.")
     content_type = response.headers.get("content-type", "")
