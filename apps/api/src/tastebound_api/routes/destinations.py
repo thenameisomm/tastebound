@@ -130,12 +130,11 @@ async def _propose_items_via_llm(
                 temperature=0.4,
                 response_format={"type": "json_object"},
             )
-        except LLMError as exc:
-            last_error = str(exc.detail)
-            continue
+        except LLMError:
+            # Any provider failure → friendly fallback
+            return [], "manual", "The writing model is unavailable; add items manually."
         parsed = extract_json_object(result.content)
         if parsed is None:
-            last_error = "The model returned unreadable JSON."
             continue
         items = _clean_items(parsed.get("items"))
         if items:
@@ -148,8 +147,7 @@ async def _propose_items_via_llm(
                 else "Suggested from general knowledge — please check these items before running."
             )
             return items, source, notice
-        last_error = "The model returned no usable items."
-    return [], "manual", last_error or "The model returned no usable items."
+    return [], "manual", "The writing model is unavailable; add items manually."
 
 
 def _clean_items(raw: Any) -> list[ProposedItem]:
