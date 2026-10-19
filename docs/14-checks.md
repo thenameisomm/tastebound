@@ -28,10 +28,10 @@ API: ruff, mypy, pytest (not live) with coverage, grep tests (LLM-01: provider n
 
 ## Pre-demo
 
-- [ ] Demo run reseeded with the final scoring version; cache warm
-- [ ] `/health` shows Qloo configured, and `tools_ok` matching `LLM_TOOL_CALLING` (`false` by default until tool calling is verified)
-- [ ] Kill-switch rehearsal done and key restored
-- [ ] Evaluation numbers ready to quote; arrivals source note visible
+- [x] Demo run reseeded with the final scoring version; cache warm
+- [x] `/health` shows Qloo configured, and `tools_ok` matching `LLM_TOOL_CALLING` (`false` by default until tool calling is verified)
+- [x] Kill-switch rehearsal done and key restored
+- [x] Evaluation numbers ready to quote; arrivals source note visible
 
 ## Pre-submit (Oct 29), official requirements
 

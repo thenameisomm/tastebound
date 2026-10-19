@@ -17,7 +17,7 @@ Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Dev
 | 1 | Working software integrating the Qloo API | **PASS** | Live Lisbon run (68 markets, 252 Qloo calls in fixture); live Kyoto run `f29c1697…` done with 80 live + 13 cached calls; `apps/api/src/tastebound_api/qloo/` |
 | 2 | (a) agentic tool, (b) agent framework, or (c) existing-agent integration | **AT RISK (a)** | Phase executor calls guarded tools, records orchestration, falls back deterministically (`agent/executor.py:376-397`); LLM proposes items (`routes/destinations.py:128`) and writes grounded briefs (`executor.py:1215,1244`). No LLM tool-choice loop and no agent framework; `LLM_TOOL_CALLING=false`; copy corrected to match |
 | 3 | Hosted, fully published demo (external hosting required; local-only does not qualify) | **FAIL (not yet)** | Local app works end to end; no deployment URL. Team action required |
-| 4 | Public repo with open-source licence | **AT RISK** | `LICENSE` (MIT, Om Badgujar) present; `git remote -v` empty — repo not published. Licence must be visible in the About section |
+| 4 | Public repo with open-source licence | **PASS** | https://github.com/thenameisomm/tastebound — public, MIT, clean history; licence visible in About |
 | 5 | Text description | **PASS** | `README.md`; `docs/` pack; Devpost text skeleton in `docs/17-judging.md` |
 | 6 | Demo video | **N/A — not required** | Live Devpost page (Oct 19, 2026): "Demo videos are *not* required." Run-through script remains in `docs/17-judging.md` |
 | 7 | Free, unrestricted testing for judges | **PASS locally** | No login; keyless read-only `/sample` spends no Qloo quota (`test_api.py::test_demo_is_public_and_read_only`); must be re-verified on the deployment |

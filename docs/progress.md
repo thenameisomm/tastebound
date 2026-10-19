@@ -25,6 +25,8 @@ Updated 2026-10-19. Phases per `docs/11-plan.md`.
 | SUB | Second live destination (Kyoto, APAC-15): top five (Mumbai, Delhi, Kuala Lumpur, Sydney, Auckland) differs from Lisbon's (Cartagena, Tokyo, Kuala Lumpur, San Diego, Seattle) | run `f29c1697…`, 80 live Qloo calls |
 | SUB | README product page, hero, six screenshots, MIT licence; axe 0 violations and Lighthouse accessibility 100 | `assets/readme/`, `scripts/readme-shots.mjs` |
 | SUB | Visual redesign to `docs/DESIGN.md`: Inter (NotionInter substitute) + Source Serif (Lyon substitute), full token set, 64px nav with primary action, centered hero with avatar marks/highlight pill/product mockup with mockup shadow, accent feature blocks, greyscale chain wall, eyebrow cadence on all screen headers; axe 0 violations re-verified, smoke 6/6 | commits `bb8b338`…`0820f21`; screenshots refreshed `f04769c` |
+| SUB | Public repo pushed: https://github.com/thenameisomm/tastebound (MIT, clean history, LICENSE in About); JUDGING_REPORT Stage 1 items 1, 2(a), 4, 5, 6, 7 PASS; item 3 (deploy) and 8 (description match deployed) remain | gh repo create + push; JUDGING_REPORT.md updated |
+| SUB | Kill-switch rehearsal verified: invalid QLOO_API_KEY → run fails with `qloo_auth`, zero counters, empty shortlist; pre-demo checks all ticked | docs/14-checks.md Pre-demo |
 
 ## Acceptance status (live-verified, not yet test-coded)
 
