@@ -108,7 +108,7 @@ sequenceDiagram
 
 ## Design rules
 
-1. **Qloo decides, LLM narrates.** Scores, gaps, audiences, angle evidence and partners come from Qloo through pure functions in `scoring/`. The LLM chooses tools, proposes signature item **names**, and writes briefs that pass the grounding validator.
+1. **Qloo decides, LLM narrates.** Scores, gaps, audiences, angle evidence and partners come from Qloo through pure functions in `scoring/`. Tool orchestration is deterministic; the LLM proposes signature item **names** and writes briefs that pass the grounding validator.
 2. **Deterministic tools.** Same inputs and cache give identical scores whichever LLM or orchestration path ran.
 3. **Agent with safety net.** Native tool calling on Ollama Cloud; plan guard; planner variant; deterministic fallback (`05-agent-and-llm.md`).
 4. **Fail closed on Qloo.** No fallback scoring from any other source outside `APP_ENV=test`.

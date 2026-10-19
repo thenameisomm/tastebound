@@ -8,8 +8,8 @@
 
 Destination marketing organisations (DMOs) spend limited public money on campaigns in a handful of origin markets. Their data tools (mobile location, card spend, flight searches, bookings) show **who already comes or already searches**. They cannot show **who would love the destination but hasn't considered it**, so budgets keep chasing the same markets.
 
-- The median destination organisation budget is about **$1.77M** a year, 92% public funding (Destinations International, Mar 8, 2022).
-- Brand USA's federal matching funds fell from **$100M to $20M** (PAX News, Jul 4, 2025), so spending smarter per market matters.
+- The median destination organisation budget is about **$1.77M** a year, 92% public funding ([Destinations International, Mar 8, 2022](https://destinationsinternational.org/blog/new-insights-destination-organization-performance-reporting-platform)).
+- Brand USA's federal matching funds fell from **$100M to $20M** ([Brand USA statement, Jul 3, 2025](https://www.thebrandusa.com/media/newsroom/brand-usa-statement-regarding-budget-reconciliation-bill-passed-congress); PAX News, Jul 4, 2025), so spending smarter per market matters.
 
 Verify these sources again before quoting them in the demo.
 
@@ -35,7 +35,7 @@ Verify these sources again before quoting them in the demo.
 | Output | Source | Without Qloo |
 |---|---|---|
 | Destination taste profile | Qloo entity search, tags | Generic adjectives |
-| Market taste lift | Qloo location-aware insights against a baseline | Nothing: no dataset maps cross-domain taste to origin cities |
+| Market taste lift | Qloo location-aware insights against a baseline | No dataset we found maps cross-domain taste to origin cities (Qloo 2025 gallery, Arrivalist, Zartico, Mabrian; checked Oct 19, 2026) |
 | Gap (taste vs arrivals) | Qloo lift minus arrivals share | Only arrivals, which shows existing visitors, not latent fans |
 | Audience per market | Qloo demographics | Census data, unrelated to taste |
 | Campaign angle evidence | Qloo tags and explanations | LLM guesswork |
@@ -46,7 +46,7 @@ With Qloo switched off, the app refuses to score markets (kill switch, tested).
 ## Positioning
 
 - **Zartico, Datafy, Mabrian, ForwardKeys, Sojern/Adara** measure existing behaviour: visits, spend, searches, bookings. TasteBound measures **latent taste fit** and is a complement, not a replacement: the gap view literally combines the two.
-- **Qloo hackathon 2025:** about 343 projects; none targeted tourism boards or origin markets. Travel entries (40+) were consumer itinerary planners. The 2025 grand prize (GeoTaste) analysed a location for a business; TasteBound reverses the direction (destination → origin markets) and adds the arrivals gap.
+- **Qloo hackathon 2025:** 344 projects in the gallery (checked Oct 19, 2026); none of the 120 entries we reviewed targeted tourism boards or origin markets, and the travel entries reviewed were consumer itinerary planners. The 2025 grand prize (GeoTaste) analysed a location for a business; TasteBound reverses the direction (destination → origin markets) and adds the arrivals gap.
 
 ## Success metrics (hackathon)
 

@@ -16,17 +16,20 @@ Updated 2026-10-19. Phases per `docs/11-plan.md`.
 | PH6 | HTTP API: sessions, markets, intake, arrivals upload, runs (SSE), profile, markets, detail, allocation, rescore, briefs, exports, trace, demo | `routes/`, `main.py` |
 | PH7 | Live E2E: Lisbon run `e5b2b8fd-…` done; 6 briefs; 68 scored markets; Cartagena rank 1 (99.26, gap 0.98); allocation 250k EUR works | `/tmp/tb-flow.json` |
 | PH7 | Demo fixture exported and seeded: `data/demo/lisbon-run.json` (68 markets, 48 audience rows, 6 angles, 250 partners, 6 briefs) | `GET /v1/demo` 200; demo run read-only for other workspaces (403 `demo_read_only`) |
-| PH8 | Tests: 46 passing (`uv run pytest -m "not live"`); unit (scoring, grounding, plan guard, arrivals, LLM parsing, Qloo client, website) + API (token, destinations, arrivals incl. bundled sample, kill switch, demo read-only); mypy strict + ruff clean | `apps/api/tests/` |
+| PH8 | Tests: 48 passing (`uv run pytest -m "not live"`); unit (scoring, grounding, plan guard, arrivals, LLM parsing, Qloo client, website incl. redirect-to-private) + API (token, destinations, arrivals incl. bundled sample, kill switch, demo trace, 40-market cap, demo read-only); mypy strict + ruff clean | `apps/api/tests/` |
 | PH8 | `packages/contracts` generated from OpenAPI (`src/api.ts`); contracts + web lint/check-types pass | `apps/api/scripts/export_openapi.py`, `pnpm --filter @repo/contracts generate` |
 | PH9 | Frontend complete: landing, 4-step wizard, results (SSE live progress, gap quadrant, sortable/filterable market table, shortlist + deep dive), market detail (audience, angle + evidence, partners, brands), plan (budget split with locks, editable briefs, exports), trace, sample; design tokens per `docs/DESIGN.md` | `apps/web/`; smoke + axe scripts in `scripts/` |
 | PH9 | Accessibility: 0 axe violations on all six routes; contrast fixes, SVG anchor points with text alternatives; 360 px layout (table → cards, quadrant scrolls) | `scripts/a11y-check.mjs` |
 | PH9 | Fixed found bugs: SSE resume URL, terminal-run reconnect banner, quadrant percentile scale, SQLite `database is locked` under concurrent fetches (WAL + busy timeout), redirect content-type check, grounding name fragments | commits `80b6705`, `63277c8` |
+| SUB | Judge protocol (`docs/judge.md`) run with independent J5/J6 audits; fixed sample-trace Qloo rows, 40-market cap, README/docs overclaims, `tools_ok` semantics, SSRF redirect test | `JUDGING_REPORT.md`; tests 48 |
+| SUB | Second live destination (Kyoto, APAC-15): top five (Mumbai, Delhi, Kuala Lumpur, Sydney, Auckland) differs from Lisbon's (Cartagena, Tokyo, Kuala Lumpur, San Diego, Seattle) | run `f29c1697…`, 80 live Qloo calls |
+| SUB | README product page, hero, six screenshots, MIT licence; axe 0 violations and Lighthouse accessibility 100 | `assets/readme/`, `scripts/readme-shots.mjs` |
 
 ## Acceptance status (live-verified, not yet test-coded)
 
 - Intake with manual fallback; workspace sessions; presets; arrivals upload; run lifecycle to `done`; SSE events; deep dive; briefs list/patch/export; CSV export; trace — all exercised via curl on port 8020.
-- Qloo calls spent: 152 live + 100 cached in the demo run; ~90 during spikes. Budget well under the monthly cap.
-- UI-01..UI-06: screens follow `docs/DESIGN.md`; gap quadrant and table with accessible equivalents; states implemented (loading, live, partial, failure, no arrivals, thin data, empty filters, reconnect, 404); tooltips and source chips; copy rules respected. Lighthouse run still pending.
+- Qloo calls spent: 152 live + 100 cached in the demo run; ~90 during spikes; 80 live for the Kyoto verification. Budget well under the monthly cap.
+- UI-01..UI-06: screens follow `docs/DESIGN.md`; gap quadrant and table with accessible equivalents; states implemented (loading, live, partial, failure, no arrivals, thin data, empty filters, reconnect, 404); tooltips and source chips; copy rules respected. Lighthouse accessibility 100; smoke 6/6 with 0 console errors.
 
 ## Blockers
 
@@ -35,5 +38,6 @@ Updated 2026-10-19. Phases per `docs/11-plan.md`.
 
 ## Next
 
-1. README + screenshots (Playwright); Lighthouse pass; `docs/judge.md` before submission.
-2. Update `docs/14-checks.md` run before final commit.
+1. User-side submission items: push the repo to a public remote, deploy the demo URL, record the English video, file the Devpost entry.
+2. Re-run `docs/14-checks.md`, then smoke + axe against the deployed URL.
+3. If an Ollama Cloud key with quota is available: verify tool calling, then (only then) enable `LLM_TOOL_CALLING` and claim it.

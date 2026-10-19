@@ -4,7 +4,7 @@
 
 **TasteBound** builds a Qloo taste profile for a destination, scores origin markets by **taste lift over a popularity baseline**, compares that with your **real visitor arrivals** — and shows you the **untapped markets** that already love what the destination offers but are not visiting yet. For each market it produces audiences, a campaign angle with evidence, media partners and a budget split.
 
-Every score, gap, audience and partner comes from Qloo through deterministic code. The agent only chooses tools and writes prose. Every number links back to the Qloo call that produced it.
+Every score, gap, audience and partner comes from Qloo through deterministic code; the LLM proposes item names and writes briefs that must pass a grounding validator, and every fallback is labelled. Every number links back to the Qloo call that produced it.
 
 Built for the **Qloo Agentic Hackathon 2026**. **Taste fit, not a visitor forecast** — no demand claims, no black boxes.
 
@@ -42,7 +42,7 @@ Split a budget across markets with locks; briefs are editable, labelled `templat
 ## How it works
 
 1. **Profile** — you name a destination and add signature items (or let TasteBound suggest them from the website). Each item resolves to a real Qloo entity; unresolved items are listed, not hidden.
-2. **Score** — for each origin market, TasteBound fetches Qloo affinity for the destination's entity and its top explainability entities, and computes **lift = raw affinity − the run's typical affinity**. The taste score is the percentile of lift across the run — a ranking, not a fake absolute.
+2. **Score** — for each origin market, TasteBound fetches Qloo affinity for the destination's entity and its top explainability entities, then queries the same markets again **without** the destination signals to get a per-market baseline, and computes **lift = target affinity − baseline affinity**. The taste score is the percentile of lift across the run — a ranking, not a fake absolute.
 3. **Gap** — your arrivals CSV (or a bundled sample) is matched to markets; the gap quadrant and table compare taste percentile against arrivals percentile. Population correlation is checked and flagged when the ranking may track market size.
 4. **Deep dive** — audiences, angle evidence and media partners for the shortlist, then briefs and a budget split weighted by taste score, confidence and the untapped gap.
 
@@ -68,7 +68,7 @@ pnpm turbo dev                   # web :3000, api :8000 (SQLite, auto-migrated a
 Open **http://localhost:3000/sample** — a stored, read-only Lisbon run that needs no keys and spends no Qloo quota. Or start a live run at `/start`.
 
 ```bash
-(cd apps/api && uv run pytest -m "not live")   # 46 tests, no network
+(cd apps/api && uv run pytest -m "not live")   # 48 tests, no network
 pnpm turbo lint test build
 ```
 
@@ -107,7 +107,7 @@ scripts/     smoke and accessibility checks (Playwright + axe)
 - Taste scores rank markets **within a run**; they are percentiles of Qloo affinity lift, not calibrated demand estimates.
 - Audience demographics come from Qloo and need a taste signal; they are affinity deltas, not census data.
 - The bundled arrivals sample is illustrative (Statista/INE-informed), labelled as such everywhere it appears.
-- The agent's tool-calling loop on Ollama Cloud is implemented behind a provider layer; when the LLM is unavailable the orchestrator falls back to deterministic tools and template briefs, and says so.
+- Orchestration is deterministic by design: tool choice stays in code, and the LLM proposes item names and writes grounded briefs when a key is present. The Ollama Cloud tool-calling loop is spec'd behind the provider layer but disabled (`LLM_TOOL_CALLING=false`) until tool calling is verified live; `/health` reports `tools_ok` accordingly.
 
 ## License
 

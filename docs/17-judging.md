@@ -14,7 +14,7 @@
 |---|---|---|
 | Thorough, skilful use of Qloo | 5+ capabilities in a dependent chain; baseline lift; guards; cache; budget; trace | Trace page; call counter; lift vs raw example |
 | Impossible without Qloo | Kill switch; no other source can map cross-domain taste to origin markets | Invalid key on camera |
-| Agentic | Gemma 4 agent choosing guarded tools; fallback recorded | Trace of tool calls |
+| Agentic | LLM proposes profile items and writes grounded briefs; deterministic orchestration is recorded | Run detail shows orchestration; trace of every tool and Qloo step |
 | Complete product | Intake → profile → quadrant → deep dive → budget → briefs → export | One uninterrupted flow |
 | Real problem, real audience | DMOs with shrinking budgets; median ~$1.77M; Brand USA cut (verify sources) | Cited statistic, real destination, real arrivals |
 | Non-obvious use | Reverses travel recommenders: destination → origin markets; gap vs arrivals | Untapped quadrant |
@@ -40,7 +40,7 @@ Placement estimate: **plausible top 3 if executed very well**; around 13 if the 
 | "Does taste predict travel?" | Not on its own. We show it as a shortlist signal and report a backtest or blind review: [result]. |
 | "Isn't this just big cities?" | Taste scores are lift over a popularity baseline; correlation with population band is [value]. |
 | "Does Qloo cover non-US markets?" | We measured coverage per market; thin markets are flagged and get low confidence. |
-| "Where's the agent?" | Gemma 4 on Ollama Cloud plans and calls guarded tools; the trace shows each step; the deterministic fallback gives identical numbers. |
+| "Where's the agent?" | Gemma 4 on Ollama Cloud proposes the profile items and writes the briefs; tool orchestration is deterministic on purpose so Qloo decides, and every run records which path ran. The tool-choice loop is disabled until live tool calling is verified. |
 | "Different from GeoTaste?" | GeoTaste analyses a location for a business. We start from a destination and find which origin markets to target, then add arrivals gaps, audiences, angles and partners. |
 
 ## Demo video (about 3 minutes)
@@ -59,7 +59,7 @@ Placement estimate: **plausible top 3 if executed very well**; around 13 if the 
 
 ## Devpost text skeleton
 
-Name and tagline ("TasteBound: find the markets that already love your destination"); Inspiration (budgets, blind spot); What it does (5 bullets); How we built it (Turborepo, Next.js, FastAPI, Supabase, Gemma 4 on Ollama Cloud agent, Qloo chain diagram); How Qloo is used (chain, baseline, gap, cross-domain partners, kill switch); Challenges (coverage, popularity bias, silent failures, cloud tool calling); Accomplishments (evaluation numbers, trace); What's next (more destinations, campaign tracking, DMO pilots); Built with.
+Name and tagline ("TasteBound: find the markets that already love your destination"); Inspiration (budgets, blind spot); What it does (5 bullets); How we built it (Turborepo, Next.js, FastAPI, Supabase, Gemma 4 on Ollama Cloud for item proposals and grounded briefs, deterministic tool orchestration, Qloo chain diagram); How Qloo is used (chain, baseline, gap, cross-domain partners, kill switch); Challenges (coverage, popularity bias, silent failures, cloud tool calling); Accomplishments (evaluation numbers, trace); What's next (more destinations, campaign tracking, DMO pilots); Built with.
 
 ## Run `docs/judge.md` before submitting
 
