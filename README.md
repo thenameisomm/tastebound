@@ -1,159 +1,50 @@
-# Turborepo starter
+# TasteBound: documentation pack
 
-This Turborepo starter is maintained by the Turborepo core team.
+**TasteBound** (working name; rename freely) is an agent for **tourism boards, regional tourism offices and hotel groups**. It answers: *"Which origin cities already love what our destination offers, which of them are not visiting yet, and how should we pitch each one?"*
 
-## Using this example
+It builds a **taste profile** of a destination from Qloo entities (its signature places, food, culture), scores **origin markets** by how strongly their residents over-index on that profile compared with a popularity baseline, compares that with **actual visitor arrivals** to find **untapped markets (gaps)**, and produces per-market **audience, campaign angle, media partners and budget split**, all traced to Qloo calls. An LLM writes the market briefs from that data only.
 
-Run the following command:
+Built for the **Qloo Agentic Hackathon 2026** (deadline **Oct 30, 2026, 11:45pm EDT** = **Oct 31, 9:15am IST**).
 
-```sh
-npx create-turbo@latest
-```
+Stack: Turborepo monorepo · **Next.js** (`apps/web`) · **FastAPI** (`apps/api`) · **Supabase** Postgres · **Ollama Cloud** (API key, never local; default model Gemma 4 31B) behind a provider layer portable to **Gemini** or any direct API (no OpenRouter) · **Qloo Taste AI**.
 
-## What's inside?
+## Read in this order
 
-This Turborepo includes the following packages/apps:
+| # | File | Covers |
+|---|---|---|
+| 1 | `docs/00-product-brief.md` | Problem, users, value, why Qloo, metrics |
+| 2 | `docs/01-scope.md` | MVP, stretch, out of scope |
+| 3 | `docs/02-user-flows.md` | Flows with diagrams |
+| 4 | `docs/03-architecture.md` | Monorepo, components, data flow, config |
+| 5 | `docs/features/F01`–`F12` | One file per feature: how it works, failures, UI, tests |
+| 6 | `docs/04-qloo-integration.md` | **How Qloo is used**, multi-call chain, strategies, baseline, budget, kill switch |
+| 7 | `docs/05-agent-and-llm.md` | Agent tools, Ollama Cloud, provider portability, prompts |
+| 8 | `docs/06-data-model-supabase.md` | Tables and SQL |
+| 9 | `docs/07-api-spec.md` | FastAPI endpoints |
+| 10 | `docs/08-frontend-spec.md` | Screens and states (visuals from `DESIGN.md`) |
+| 11 | `docs/09-data-sources.md` | Arrivals data, market catalogue, licences |
+| 12 | `docs/10-security-and-privacy.md` | Secrets, data handling |
+| 13 | `docs/11-plan.md` | Phases and day-by-day schedule |
+| 14 | `docs/12-acceptance-criteria.md` | Numbered, testable criteria |
+| 15 | `docs/13-test-plan.md` | What, how, commands |
+| 16 | `docs/14-checks.md` | Per-commit, per-phase, pre-demo, pre-submit |
+| 17 | `docs/15-evaluation-and-backtest.md` | Proving Qloo adds signal |
+| 18 | `docs/16-runbook.md` | Setup, run, seed, deploy, troubleshoot |
+| 19 | `docs/17-judging.md` | Rules, criteria mapping, self-score, demo script, Devpost text |
+| 20 | `docs/18-risks-and-decisions.md` | Risks, Day 0 spikes, decisions |
+| 21 | `docs/judge.md` | Protocol for an AI judge (with sub-agents) to score the built project |
+| 22 | `docs/DESIGN.md` | **Placeholder: replace with your design file** |
+| — | `AGENTS.md`, `CLAUDE.md`, `START_PROMPT.md` | Agent rules and the detailed first prompt |
 
-### Apps and Packages
+## How to use
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `@next/eslint-plugin-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+1. Copy this folder's contents into your Turborepo root so `docs/` sits beside `apps/` and `packages/`. Append this `AGENTS.md` to your existing one.
+2. Replace `docs/DESIGN.md` with your design file.
+3. Create `apps/api/.env` from `docs/03-architecture.md`.
+4. Paste the prompt in `START_PROMPT.md` into your coding agent.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Three rules above everything
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo build
-pnpm exec turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+1. **Qloo decides; the LLM narrates.** Market scores, gaps, audiences, angles' evidence and partners come from Qloo through deterministic code. The LLM picks tools and writes prose. It never invents a market, number or partner.
+2. **Verify before building.** Every Qloo parameter and response field here is unverified until Phase 0 records it from a live call. Same for Gemma 4 tool calling on Ollama Cloud.
+3. **Fail closed.** Without Qloo the app refuses to score markets. This "kill switch" is a tested feature that proves the app is impossible without Qloo.
