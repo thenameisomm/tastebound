@@ -2,9 +2,9 @@ import Link from "next/link";
 import { AvatarRow, Sparkle, Squiggle } from "@/components/Marks";
 
 const MOCK_MARKETS = [
-  { city: "Cartagena", score: 99.3, width: "92%", fill: "#097fe8", label: "untapped", pill: "pillGood" },
-  { city: "Tokyo", score: 97.8, width: "88%", fill: "#62aef0", label: "untapped", pill: "pillGood" },
-  { city: "Kuala Lumpur", score: 96.3, width: "85%", fill: "#ffb110", label: "growing", pill: "pillWarn" },
+  { city: "New York", score: 98.7, width: "95%", fill: "#097fe8", label: "untapped", pill: "pillGood" },
+  { city: "Los Angeles", score: 97.2, width: "90%", fill: "#62aef0", label: "untapped", pill: "pillGood" },
+  { city: "Chicago", score: 95.8, width: "86%", fill: "#ffb110", label: "growing", pill: "pillWarn" },
   { city: "San Diego", score: 94.9, width: "82%", fill: "#b18164", label: "core", pill: "pill" },
   { city: "Seattle", score: 93.4, width: "79%", fill: "#097fe8", label: "core", pill: "pill" },
 ];
@@ -26,9 +26,9 @@ export default function LandingPage() {
             Find the markets that <span className="heroPill">already share</span> your taste.
           </h1>
           <p className="heroSub">
-            TasteBound builds a taste profile for your destination with Qloo, scores origin markets
-            by taste lift over a popularity baseline, compares that with real arrivals — and shows
-            you the untapped markets worth a campaign.
+            TasteBound builds a taste profile for your US destination with Qloo, scores domestic
+            origin markets by taste lift over a popularity baseline, compares that with real
+            domestic arrivals — and shows you the untapped US markets worth a campaign.
           </p>
           <div className="row" style={{ justifyContent: "center", gap: 12 }}>
             <Link className="btnPrimary" href="/start" style={{ padding: "12px 24px", fontSize: 16 }}>
@@ -98,10 +98,10 @@ export default function LandingPage() {
 
       <section className="section grid2">
         <div className="cardAccent stack">
-          <h2 className="headingSm">The gap quadrant</h2>
+          <h2 className="headingSm">The domestic gap quadrant</h2>
           <p>
-            Taste score on one axis, arrivals share on the other. Untapped markets sit top-left:
-            strong taste fit, few visitors today.
+            Taste score on one axis, domestic arrivals share on the other. Untapped US markets
+            sit top-left: strong taste fit, few domestic visitors today.
           </p>
         </div>
         <div className="cardDark stack">
@@ -124,12 +124,13 @@ export default function LandingPage() {
 
       <section className="section">
         <div className="card stack" style={{ alignItems: "center", textAlign: "center", padding: "48px 24px" }}>
-          <p className="subheading">Try it without keys</p>
+          <p className="subheading">Try it for your US destination</p>
           <p className="muted" style={{ maxWidth: 480 }}>
             The sample run is a stored, read-only run — no Qloo quota, no sign-up.
+            Explore domestic taste fit for a US city.
           </p>
           <Link className="btnPrimary" href="/sample">
-            Open the sample run
+            Open the US sample run
           </Link>
         </div>
       </section>

@@ -40,8 +40,10 @@ const ORIGIN_LABELS: Record<string, string> = {
 };
 
 const PRESET_LABELS: Record<string, string> = {
-  europe20: "Europe (20)",
+  us10: "US Domestic (10)",
+  us20: "US Domestic (20)",
   na15: "North America (15)",
+  europe20: "Europe (20)",
   apac15: "Asia-Pacific (15)",
   me8: "Middle East (8)",
   latam10: "Latin America (10)",
@@ -118,7 +120,7 @@ export default function StartPage() {
 
   const [markets, setMarkets] = useState<MarketOut[]>([]);
   const [presets, setPresets] = useState<PresetOut[]>([]);
-  const [region, setRegion] = useState("all");
+  const [region, setRegion] = useState("US");
   const [marketQuery, setMarketQuery] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -597,16 +599,22 @@ export default function StartPage() {
           </div>
 
           <div className="row">
-            {presets.map((preset) => (
-              <button
-                key={preset.id}
-                type="button"
-                className="btnGhost btnSmall"
-                onClick={() => setSelected(Array.from(new Set([...selected, ...preset.market_ids])))}
-              >
-                + {PRESET_LABELS[preset.id] ?? preset.label}
-              </button>
-            ))}
+            {["us10", "us20", "na15", "europe20", "apac15", "me8", "latam10"]
+              .filter((id) => presets.some((p) => p.id === id))
+              .map((presetId) => {
+                const preset = presets.find((p) => p.id === presetId);
+                if (!preset) return null;
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    className="btnGhost btnSmall"
+                    onClick={() => setSelected(Array.from(new Set([...selected, ...preset.market_ids])))}
+                  >
+                    + {PRESET_LABELS[preset.id] ?? preset.label}
+                  </button>
+                );
+              })}
             <button type="button" className="btnText btnSmall" onClick={() => setSelected([])}>
               Clear
             </button>
