@@ -210,7 +210,11 @@ def _get_current_phase(state: IterationState) -> str:
         return "score"
     elif "gap" not in state.completed_phases:
         return "gap"
-    elif "audience" not in state.completed_phases or "angles" not in state.completed_phases or "partners" not in state.completed_phases:
+    elif (
+            "audience" not in state.completed_phases
+            or "angles" not in state.completed_phases
+            or "partners" not in state.completed_phases
+        ):
         return "deep_dive"
     elif "briefs" not in state.completed_phases:
         return "briefs"
@@ -309,7 +313,11 @@ class IterativeAgent:
             return "score"
         elif "gap" not in self.state.completed_phases:
             return "gap"
-        elif "audience" not in self.state.completed_phases or "angles" not in self.state.completed_phases or "partners" not in self.state.completed_phases:
+        elif (
+            "audience" not in self.state.completed_phases
+            or "angles" not in self.state.completed_phases
+            or "partners" not in self.state.completed_phases
+        ):
             return "deep_dive"
         elif "briefs" not in self.state.completed_phases:
             return "briefs"
@@ -421,7 +429,12 @@ class IterativeAgent:
         )
         return {
             "candidates": [
-                {"entity_id": c.entity.entity_id, "name": c.entity.name, "lift": c.lift, "call_id": c.call_id}
+                {
+                    "entity_id": c.entity.entity_id,
+                    "name": c.entity.name,
+                    "lift": c.lift,
+                    "call_id": c.call_id
+                }
                 for c in candidates
             ],
             "call_id": call_id,
@@ -437,7 +450,12 @@ class IterativeAgent:
         )
         return {
             "brands": [
-                {"entity_id": b.entity.entity_id, "name": b.entity.name, "lift": b.lift, "call_id": b.call_id}
+                {
+                    "entity_id": b.entity.entity_id,
+                    "name": b.entity.name,
+                    "lift": b.lift,
+                    "call_id": b.call_id
+                }
                 for b in brands
             ],
             "call_id": call_id,
@@ -579,7 +597,11 @@ class IterativeAgent:
             return "score"
         elif "gap" not in self.state.completed_phases:
             return "gap"
-        elif "audience" not in self.state.completed_phases or "angles" not in self.state.completed_phases or "partners" not in self.state.completed_phases:
+        elif (
+            "audience" not in self.state.completed_phases
+            or "angles" not in self.state.completed_phases
+            or "partners" not in self.state.completed_phases
+        ):
             return "deep_dive"
         elif "briefs" not in self.state.completed_phases:
             return "briefs"
@@ -721,7 +743,12 @@ class IterativeAgent:
         )
         return {
             "candidates": [
-                {"entity_id": c.entity.entity_id, "name": c.entity.name, "lift": c.lift, "call_id": c.call_id}
+                {
+                    "entity_id": c.entity.entity_id,
+                    "name": c.entity.name,
+                    "lift": c.lift,
+                    "call_id": c.call_id
+                }
                 for c in candidates
             ],
             "call_id": call_id,
@@ -737,7 +764,12 @@ class IterativeAgent:
         )
         return {
             "brands": [
-                {"entity_id": b.entity.entity_id, "name": b.entity.name, "lift": b.lift, "call_id": b.call_id}
+                {
+                    "entity_id": b.entity.entity_id,
+                    "name": b.entity.name,
+                    "lift": b.lift,
+                    "call_id": b.call_id
+                }
                 for b in brands
             ],
             "call_id": call_id,
