@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { QUADRANT_HELP, QUADRANT_LABELS, formatScore, formatShare } from "@/lib/format";
 import type { MarketRow, Quadrant } from "@/lib/types";
 
@@ -31,7 +30,6 @@ export function GapQuadrant({
   thresholds: Record<string, number>;
   runId: string;
 }) {
-  const router = useRouter();
   const points = markets.filter(
     (market) => market.taste_score !== null && market.arrivals_pct !== null,
   );
@@ -39,9 +37,9 @@ export function GapQuadrant({
     return <p className="muted">No arrivals data yet — upload arrivals to see the gap view.</p>;
   }
   const tasteThreshold = (thresholds.gap_taste ?? 0.5) * 100;
-  const arrivalsThreshold = (thresholds.gap_arrivals ?? 0.5) * 100;
+  const arrivalsThreshold = thresholds.gap_arrivals ?? 0.5;
 
-  const x = (arrivalsPct: number) => PAD + (arrivalsPct / 100) * (WIDTH - PAD * 2);
+  const x = (arrivalsPct: number) => PAD + arrivalsPct * (WIDTH - PAD * 2);
   const y = (tasteScore: number) => HEIGHT - PAD - (tasteScore / 100) * (HEIGHT - PAD * 2);
 
   const midX = x(arrivalsThreshold);
@@ -52,7 +50,6 @@ export function GapQuadrant({
       <svg
         className="quadrant"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-        role="img"
         aria-label={`Gap quadrant with ${points.length} markets. Untapped markets are top-left. The market table below lists every market with its quadrant.`}
       >
         <rect x={PAD} y={PAD} width={midX - PAD} height={midY - PAD} fill={QUADRANT_FILL.untapped} />
@@ -60,16 +57,16 @@ export function GapQuadrant({
         <rect x={PAD} y={midY} width={midX - PAD} height={HEIGHT - PAD - midY} fill={QUADRANT_FILL.low_priority} />
         <rect x={midX} y={midY} width={WIDTH - PAD - midX} height={HEIGHT - PAD - midY} fill={QUADRANT_FILL.habit} />
 
-        <text x={PAD + 12} y={PAD + 24} fill={QUADRANT_TEXT.untapped} fontSize={15} fontWeight={600}>
+        <text x={PAD + 12} y={PAD + 24} fill={QUADRANT_TEXT.untapped} fontSize={15} fontWeight={600} paintOrder="stroke" stroke="rgba(246,245,244,0.9)" strokeWidth={4}>
           {QUADRANT_LABELS.untapped}
         </text>
-        <text x={WIDTH - PAD - 12} y={PAD + 24} fill={QUADRANT_TEXT.core} fontSize={15} fontWeight={600} textAnchor="end">
+        <text x={WIDTH - PAD - 12} y={PAD + 24} fill={QUADRANT_TEXT.core} fontSize={15} fontWeight={600} textAnchor="end" paintOrder="stroke" stroke="rgba(246,245,244,0.9)" strokeWidth={4}>
           {QUADRANT_LABELS.core}
         </text>
-        <text x={PAD + 12} y={HEIGHT - PAD - 12} fill={QUADRANT_TEXT.low_priority} fontSize={15} fontWeight={600}>
+        <text x={PAD + 12} y={HEIGHT - PAD - 12} fill={QUADRANT_TEXT.low_priority} fontSize={15} fontWeight={600} paintOrder="stroke" stroke="rgba(246,245,244,0.9)" strokeWidth={4}>
           {QUADRANT_LABELS.low_priority}
         </text>
-        <text x={WIDTH - PAD - 12} y={HEIGHT - PAD - 12} fill={QUADRANT_TEXT.habit} fontSize={15} fontWeight={600} textAnchor="end">
+        <text x={WIDTH - PAD - 12} y={HEIGHT - PAD - 12} fill={QUADRANT_TEXT.habit} fontSize={15} fontWeight={600} textAnchor="end" paintOrder="stroke" stroke="rgba(246,245,244,0.9)" strokeWidth={4}>
           {QUADRANT_LABELS.habit}
         </text>
 
@@ -96,33 +93,28 @@ export function GapQuadrant({
           const pointX = x(market.arrivals_pct ?? 0);
           const pointY = y(market.taste_score ?? 0);
           const label = `${market.city}: taste ${formatScore(market.taste_score)}, arrivals ${formatShare(market.arrivals_pct)}, ${market.quadrant ? QUADRANT_LABELS[market.quadrant] : ""}`;
+          const showLabel = (market.rank ?? 999) <= 12 || market.quadrant === "untapped";
           return (
-            <g
+            <a
               key={market.market_id}
-              className="quadrantPoint"
-              role="link"
-              tabIndex={0}
+              href={`/runs/${runId}/markets/${market.market_id}`}
               aria-label={label}
-              onClick={() => router.push(`/runs/${runId}/markets/${market.market_id}`)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  router.push(`/runs/${runId}/markets/${market.market_id}`);
-                }
-              }}
             >
               <title>{`${label}${market.quadrant ? ` — ${QUADRANT_HELP[market.quadrant]}` : ""}`}</title>
               <circle
+                className="quadrantPoint"
                 cx={pointX}
                 cy={pointY}
                 r={market.confidence === "high" ? 7 : market.confidence === "medium" ? 6 : 5}
                 fill={market.quadrant === "untapped" ? "#097fe8" : "#615d59"}
                 opacity={market.confidence === "low" ? 0.55 : 0.9}
               />
-              <text x={pointX + 10} y={pointY + 4} fontSize={12} fill="rgba(0,0,0,0.75)">
-                {market.city}
-              </text>
-            </g>
+              {showLabel ? (
+                <text x={pointX + 10} y={pointY + 4} fontSize={12} fill="rgba(0,0,0,0.75)">
+                  {market.city}
+                </text>
+              ) : null}
+            </a>
           );
         })}
       </svg>

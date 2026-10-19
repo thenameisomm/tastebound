@@ -31,6 +31,8 @@ def _make_engine(settings: Settings) -> AsyncEngine:
             def _fk_pragma(dbapi_connection: Any, _record: Any) -> None:
                 cursor = dbapi_connection.cursor()
                 cursor.execute("PRAGMA foreign_keys=ON")
+                cursor.execute("PRAGMA journal_mode=WAL")
+                cursor.execute("PRAGMA busy_timeout=10000")
                 cursor.close()
 
         return engine

@@ -45,6 +45,7 @@ export function useRunStream(runId: string | null, enabled: boolean) {
       unsubscribeRef.current?.();
       unsubscribeRef.current = null;
       setConnected(false);
+      setReconnecting(false);
     };
   }, [runId, enabled]);
 
