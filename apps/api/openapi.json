@@ -1,0 +1,4247 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "TasteBound API",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/health": {
+   "get": {
+    "tags": [
+     "health"
+    ],
+    "summary": "Health",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HealthResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/workspaces/session": {
+   "post": {
+    "tags": [
+     "workspaces"
+    ],
+    "summary": "Create Session",
+    "operationId": "create_session_v1_workspaces_session_post",
+    "parameters": [
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/WorkspaceSessionResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/markets": {
+   "get": {
+    "tags": [
+     "markets"
+    ],
+    "summary": "List Markets",
+    "operationId": "list_markets_v1_markets_get",
+    "parameters": [
+     {
+      "name": "region",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Region"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MarketsResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/destinations/intake": {
+   "post": {
+    "tags": [
+     "destinations"
+    ],
+    "summary": "Intake",
+    "operationId": "intake_v1_destinations_intake_post",
+    "parameters": [
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/IntakeRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/IntakeResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/destinations": {
+   "post": {
+    "tags": [
+     "destinations"
+    ],
+    "summary": "Create Destination",
+    "operationId": "create_destination_v1_destinations_post",
+    "parameters": [
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DestinationCreateRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DestinationResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/destinations/{destination_id}": {
+   "get": {
+    "tags": [
+     "destinations"
+    ],
+    "summary": "Get Destination",
+    "operationId": "get_destination_v1_destinations__destination_id__get",
+    "parameters": [
+     {
+      "name": "destination_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Destination Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DestinationResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "tags": [
+     "destinations"
+    ],
+    "summary": "Update Destination",
+    "operationId": "update_destination_v1_destinations__destination_id__patch",
+    "parameters": [
+     {
+      "name": "destination_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Destination Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DestinationUpdateRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DestinationResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/destinations/{destination_id}/profile-preview": {
+   "post": {
+    "tags": [
+     "destinations"
+    ],
+    "summary": "Profile Preview",
+    "operationId": "profile_preview_v1_destinations__destination_id__profile_preview_post",
+    "parameters": [
+     {
+      "name": "destination_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Destination Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ProfilePreviewResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/qloo/search": {
+   "get": {
+    "tags": [
+     "qloo"
+    ],
+    "summary": "Qloo Search",
+    "operationId": "qloo_search_v1_qloo_search_get",
+    "parameters": [
+     {
+      "name": "q",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "minLength": 2,
+       "maxLength": 120,
+       "title": "Q"
+      }
+     },
+     {
+      "name": "type",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string",
+       "default": "place",
+       "title": "Type"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Qloo Search V1 Qloo Search Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/arrivals/samples": {
+   "get": {
+    "tags": [
+     "arrivals"
+    ],
+    "summary": "List Samples",
+    "operationId": "list_samples_v1_arrivals_samples_get",
+    "parameters": [
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/ArrivalsSampleOut"
+         },
+         "title": "Response List Samples V1 Arrivals Samples Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/arrivals": {
+   "post": {
+    "tags": [
+     "arrivals"
+    ],
+    "summary": "Upload Arrivals",
+    "operationId": "upload_arrivals_v1_arrivals_post",
+    "parameters": [
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_upload_arrivals_v1_arrivals_post"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ArrivalsResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/arrivals/{dataset_id}": {
+   "get": {
+    "tags": [
+     "arrivals"
+    ],
+    "summary": "Get Arrivals",
+    "operationId": "get_arrivals_v1_arrivals__dataset_id__get",
+    "parameters": [
+     {
+      "name": "dataset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Dataset Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ArrivalsResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Create Run",
+    "operationId": "create_run_v1_runs_post",
+    "parameters": [
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RunCreateRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RunCreatedResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Get Run",
+    "operationId": "get_run_v1_runs__run_id__get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RunOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/events": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Run Events",
+    "operationId": "run_events_v1_runs__run_id__events_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "after",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "After"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/deep-dive": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Deep Dive",
+    "operationId": "deep_dive_v1_runs__run_id__deep_dive_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "additionalProperties": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "title": "Payload"
+       }
+      }
+     }
+    },
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Deep Dive V1 Runs  Run Id  Deep Dive Post"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/profile": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Run Profile",
+    "operationId": "run_profile_v1_runs__run_id__profile_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RunProfileResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/markets": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Run Markets",
+    "operationId": "run_markets_v1_runs__run_id__markets_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "region",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Region"
+      }
+     },
+     {
+      "name": "confidence",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Confidence"
+      }
+     },
+     {
+      "name": "quadrant",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Quadrant"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MarketListResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/markets/{market_id}": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Run Market Detail",
+    "operationId": "run_market_detail_v1_runs__run_id__markets__market_id__get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "market_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Market Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MarketDetailResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/allocation": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Run Allocation",
+    "operationId": "run_allocation_v1_runs__run_id__allocation_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AllocationRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AllocationResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/rescore": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Rescore",
+    "operationId": "rescore_v1_runs__run_id__rescore_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "anyOf": [
+         {
+          "type": "object",
+          "additionalProperties": {
+           "type": "number"
+          }
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Payload"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MarketListResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/briefs": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "List Briefs",
+    "operationId": "list_briefs_v1_runs__run_id__briefs_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/BriefOut"
+         },
+         "title": "Response List Briefs V1 Runs  Run Id  Briefs Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/export.csv": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Export Csv",
+    "operationId": "export_csv_v1_runs__run_id__export_csv_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/trace": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Run Trace",
+    "operationId": "run_trace_v1_runs__run_id__trace_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "kind",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Kind"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TraceResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/briefs/{brief_id}": {
+   "patch": {
+    "tags": [
+     "briefs"
+    ],
+    "summary": "Update Brief",
+    "operationId": "update_brief_v1_briefs__brief_id__patch",
+    "parameters": [
+     {
+      "name": "brief_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Brief Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BriefUpdateRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/BriefOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/briefs/{brief_id}/export.md": {
+   "get": {
+    "tags": [
+     "briefs"
+    ],
+    "summary": "Export Brief Markdown",
+    "operationId": "export_brief_markdown_v1_briefs__brief_id__export_md_get",
+    "parameters": [
+     {
+      "name": "brief_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Brief Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/demo": {
+   "get": {
+    "tags": [
+     "demo"
+    ],
+    "summary": "Demo",
+    "operationId": "demo_v1_demo_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DemoResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AllocationRequest": {
+    "properties": {
+     "total": {
+      "type": "number",
+      "exclusiveMinimum": 0.0,
+      "title": "Total"
+     },
+     "currency": {
+      "type": "string",
+      "maxLength": 3,
+      "minLength": 3,
+      "title": "Currency",
+      "default": "USD"
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "grow_untapped",
+       "defend_core"
+      ],
+      "title": "Mode",
+      "default": "grow_untapped"
+     },
+     "locks": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Locks"
+     },
+     "minimum_share": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Minimum Share",
+      "default": 0.05
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "total"
+    ],
+    "title": "AllocationRequest"
+   },
+   "AllocationResponse": {
+    "properties": {
+     "total": {
+      "type": "number",
+      "title": "Total"
+     },
+     "currency": {
+      "type": "string",
+      "title": "Currency"
+     },
+     "mode": {
+      "type": "string",
+      "title": "Mode"
+     },
+     "shares": {
+      "items": {
+       "$ref": "#/components/schemas/AllocationShareOut"
+      },
+      "type": "array",
+      "title": "Shares"
+     }
+    },
+    "type": "object",
+    "required": [
+     "total",
+     "currency",
+     "mode",
+     "shares"
+    ],
+    "title": "AllocationResponse"
+   },
+   "AllocationShareOut": {
+    "properties": {
+     "market_id": {
+      "type": "string",
+      "title": "Market Id"
+     },
+     "city": {
+      "type": "string",
+      "title": "City"
+     },
+     "share": {
+      "type": "number",
+      "title": "Share"
+     },
+     "amount": {
+      "type": "number",
+      "title": "Amount"
+     },
+     "weight": {
+      "type": "number",
+      "title": "Weight"
+     },
+     "locked": {
+      "type": "boolean",
+      "title": "Locked"
+     }
+    },
+    "type": "object",
+    "required": [
+     "market_id",
+     "city",
+     "share",
+     "amount",
+     "weight",
+     "locked"
+    ],
+    "title": "AllocationShareOut"
+   },
+   "AngleEvidence": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "value": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Value"
+     },
+     "source_call_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source Call Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "label",
+     "value",
+     "source_call_id"
+    ],
+    "title": "AngleEvidence"
+   },
+   "AngleOut": {
+    "properties": {
+     "headline": {
+      "type": "string",
+      "title": "Headline"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/AngleEvidence"
+      },
+      "type": "array",
+      "title": "Evidence"
+     }
+    },
+    "type": "object",
+    "required": [
+     "headline",
+     "evidence"
+    ],
+    "title": "AngleOut"
+   },
+   "ArrivalsResponse": {
+    "properties": {
+     "dataset_id": {
+      "type": "string",
+      "title": "Dataset Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "level": {
+      "type": "string",
+      "title": "Level"
+     },
+     "source_note": {
+      "type": "string",
+      "title": "Source Note"
+     },
+     "is_sample": {
+      "type": "boolean",
+      "title": "Is Sample"
+     },
+     "rows": {
+      "type": "integer",
+      "title": "Rows"
+     },
+     "matched_markets": {
+      "type": "integer",
+      "title": "Matched Markets"
+     },
+     "matched_countries": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Matched Countries"
+     },
+     "errors": {
+      "items": {
+       "$ref": "#/components/schemas/ArrivalsRowErrorOut"
+      },
+      "type": "array",
+      "title": "Errors"
+     },
+     "unmatched": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Unmatched"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "dataset_id",
+     "name",
+     "level",
+     "source_note",
+     "is_sample",
+     "rows",
+     "matched_markets",
+     "matched_countries",
+     "errors",
+     "unmatched",
+     "notes"
+    ],
+    "title": "ArrivalsResponse"
+   },
+   "ArrivalsRowErrorOut": {
+    "properties": {
+     "line": {
+      "type": "integer",
+      "title": "Line"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "line",
+     "message"
+    ],
+    "title": "ArrivalsRowErrorOut"
+   },
+   "ArrivalsSampleOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "year": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Year"
+     },
+     "source_name": {
+      "type": "string",
+      "title": "Source Name"
+     },
+     "source_url": {
+      "type": "string",
+      "title": "Source Url"
+     },
+     "level": {
+      "type": "string",
+      "title": "Level"
+     },
+     "notes": {
+      "type": "string",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "year",
+     "source_name",
+     "source_url",
+     "level",
+     "notes"
+    ],
+    "title": "ArrivalsSampleOut"
+   },
+   "AudienceRow": {
+    "properties": {
+     "dimension": {
+      "type": "string",
+      "title": "Dimension"
+     },
+     "band": {
+      "type": "string",
+      "title": "Band"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "share": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Share"
+     },
+     "baseline_share": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Baseline Share"
+     },
+     "over_index": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Over Index"
+     },
+     "source_call_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source Call Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "dimension",
+     "band",
+     "label",
+     "share",
+     "baseline_share",
+     "over_index",
+     "source_call_id"
+    ],
+    "title": "AudienceRow"
+   },
+   "Body_upload_arrivals_v1_arrivals_post": {
+    "properties": {
+     "file": {
+      "type": "string",
+      "contentMediaType": "application/octet-stream",
+      "title": "File"
+     },
+     "source_note": {
+      "type": "string",
+      "maxLength": 500,
+      "minLength": 3,
+      "title": "Source Note"
+     },
+     "name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "destination_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Destination Id"
+     },
+     "sample_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sample Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "file",
+     "source_note"
+    ],
+    "title": "Body_upload_arrivals_v1_arrivals_post"
+   },
+   "BriefOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "market_id": {
+      "type": "string",
+      "title": "Market Id"
+     },
+     "city": {
+      "type": "string",
+      "title": "City"
+     },
+     "source": {
+      "type": "string",
+      "title": "Source"
+     },
+     "edited": {
+      "type": "boolean",
+      "title": "Edited"
+     },
+     "model": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "sections": {
+      "items": {
+       "$ref": "#/components/schemas/BriefSectionOut"
+      },
+      "type": "array",
+      "title": "Sections"
+     },
+     "evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Evidence Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "market_id",
+     "city",
+     "source",
+     "edited",
+     "model",
+     "title",
+     "summary",
+     "sections",
+     "evidence_ids"
+    ],
+    "title": "BriefOut"
+   },
+   "BriefSectionOut": {
+    "properties": {
+     "heading": {
+      "type": "string",
+      "title": "Heading"
+     },
+     "body": {
+      "type": "string",
+      "title": "Body"
+     },
+     "cited_evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Cited Evidence Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "heading",
+     "body",
+     "cited_evidence_ids"
+    ],
+    "title": "BriefSectionOut"
+   },
+   "BriefUpdateRequest": {
+    "properties": {
+     "title": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 160
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Title"
+     },
+     "summary": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 400
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Summary"
+     },
+     "sections": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/BriefSectionOut"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sections"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "BriefUpdateRequest"
+   },
+   "DemoResponse": {
+    "properties": {
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "destination": {
+      "type": "string",
+      "title": "Destination"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "shortlist": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Shortlist"
+     },
+     "headline": {
+      "type": "string",
+      "title": "Headline"
+     },
+     "sample": {
+      "type": "boolean",
+      "title": "Sample",
+      "default": true
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_id",
+     "destination",
+     "status",
+     "shortlist",
+     "headline"
+    ],
+    "title": "DemoResponse"
+   },
+   "DestinationCreateRequest": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 2,
+      "title": "Name"
+     },
+     "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "minLength": 2,
+      "title": "Country Code"
+     },
+     "website_url": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 2083,
+        "minLength": 1,
+        "format": "uri"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Website Url"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/SignatureItemInput"
+      },
+      "type": "array",
+      "maxItems": 15,
+      "title": "Items"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "name",
+     "country_code"
+    ],
+    "title": "DestinationCreateRequest"
+   },
+   "DestinationResponse": {
+    "properties": {
+     "destination_id": {
+      "type": "string",
+      "title": "Destination Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "country_code": {
+      "type": "string",
+      "title": "Country Code"
+     },
+     "website_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Website Url"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "lon": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lon"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/SignatureItemOut"
+      },
+      "type": "array",
+      "title": "Items"
+     }
+    },
+    "type": "object",
+    "required": [
+     "destination_id",
+     "name",
+     "country_code",
+     "website_url",
+     "lat",
+     "lon",
+     "items"
+    ],
+    "title": "DestinationResponse"
+   },
+   "DestinationUpdateRequest": {
+    "properties": {
+     "name": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 120,
+        "minLength": 2
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "country_code": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 2,
+        "minLength": 2
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Country Code"
+     },
+     "website_url": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 2083,
+        "minLength": 1,
+        "format": "uri"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Website Url"
+     },
+     "items": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/SignatureItemInput"
+        },
+        "type": "array",
+        "maxItems": 15
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Items"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "DestinationUpdateRequest"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "HealthResponse": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "title": "Status",
+      "default": "ok"
+     },
+     "db": {
+      "type": "string",
+      "title": "Db"
+     },
+     "qloo": {
+      "type": "string",
+      "title": "Qloo"
+     },
+     "llm": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Llm"
+     },
+     "version": {
+      "type": "string",
+      "title": "Version"
+     }
+    },
+    "type": "object",
+    "required": [
+     "db",
+     "qloo",
+     "llm",
+     "version"
+    ],
+    "title": "HealthResponse"
+   },
+   "IntakeRequest": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 2,
+      "title": "Name"
+     },
+     "country_code": {
+      "type": "string",
+      "maxLength": 2,
+      "minLength": 2,
+      "title": "Country Code"
+     },
+     "website_url": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 2083,
+        "minLength": 1,
+        "format": "uri"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Website Url"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "name",
+     "country_code"
+    ],
+    "title": "IntakeRequest"
+   },
+   "IntakeResponse": {
+    "properties": {
+     "destination_name": {
+      "type": "string",
+      "title": "Destination Name"
+     },
+     "country_code": {
+      "type": "string",
+      "title": "Country Code"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ProposedItem"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "notice": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Notice"
+     },
+     "source": {
+      "type": "string",
+      "enum": [
+       "website",
+       "general_knowledge",
+       "manual"
+      ],
+      "title": "Source",
+      "default": "manual"
+     },
+     "website_read": {
+      "type": "boolean",
+      "title": "Website Read",
+      "default": false
+     },
+     "text_chars": {
+      "type": "integer",
+      "title": "Text Chars",
+      "default": 0
+     }
+    },
+    "type": "object",
+    "required": [
+     "destination_name",
+     "country_code",
+     "items"
+    ],
+    "title": "IntakeResponse"
+   },
+   "MarketDetailResponse": {
+    "properties": {
+     "market": {
+      "$ref": "#/components/schemas/MarketOut"
+     },
+     "score": {
+      "$ref": "#/components/schemas/MarketRow"
+     },
+     "audience": {
+      "items": {
+       "$ref": "#/components/schemas/AudienceRow"
+      },
+      "type": "array",
+      "title": "Audience"
+     },
+     "audience_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Audience Note"
+     },
+     "angle": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/AngleOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "partners": {
+      "additionalProperties": {
+       "items": {
+        "$ref": "#/components/schemas/PartnerOut"
+       },
+       "type": "array"
+      },
+      "type": "object",
+      "title": "Partners"
+     },
+     "brands": {
+      "items": {
+       "$ref": "#/components/schemas/PartnerOut"
+      },
+      "type": "array",
+      "title": "Brands"
+     },
+     "arrivals_source_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Arrivals Source Note"
+     },
+     "allocation_share": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Allocation Share"
+     },
+     "budget_amount": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Budget Amount"
+     }
+    },
+    "type": "object",
+    "required": [
+     "market",
+     "score",
+     "audience",
+     "audience_note",
+     "angle",
+     "partners",
+     "brands",
+     "arrivals_source_note",
+     "allocation_share",
+     "budget_amount"
+    ],
+    "title": "MarketDetailResponse"
+   },
+   "MarketListResponse": {
+    "properties": {
+     "markets": {
+      "items": {
+       "$ref": "#/components/schemas/MarketRow"
+      },
+      "type": "array",
+      "title": "Markets"
+     },
+     "gap_enabled": {
+      "type": "boolean",
+      "title": "Gap Enabled"
+     },
+     "gap_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gap Note"
+     },
+     "thresholds": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Thresholds"
+     },
+     "population_correlation": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Population Correlation"
+     },
+     "population_suspect": {
+      "type": "boolean",
+      "title": "Population Suspect"
+     }
+    },
+    "type": "object",
+    "required": [
+     "markets",
+     "gap_enabled",
+     "gap_note",
+     "thresholds",
+     "population_correlation",
+     "population_suspect"
+    ],
+    "title": "MarketListResponse"
+   },
+   "MarketOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "city": {
+      "type": "string",
+      "title": "City"
+     },
+     "country_code": {
+      "type": "string",
+      "title": "Country Code"
+     },
+     "country_name": {
+      "type": "string",
+      "title": "Country Name"
+     },
+     "region": {
+      "type": "string",
+      "title": "Region"
+     },
+     "lat": {
+      "type": "number",
+      "title": "Lat"
+     },
+     "lon": {
+      "type": "number",
+      "title": "Lon"
+     },
+     "radius_km": {
+      "type": "integer",
+      "title": "Radius Km"
+     },
+     "population_band": {
+      "type": "integer",
+      "title": "Population Band"
+     },
+     "presets": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Presets"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "city",
+     "country_code",
+     "country_name",
+     "region",
+     "lat",
+     "lon",
+     "radius_km",
+     "population_band",
+     "presets"
+    ],
+    "title": "MarketOut"
+   },
+   "MarketRow": {
+    "properties": {
+     "market_id": {
+      "type": "string",
+      "title": "Market Id"
+     },
+     "city": {
+      "type": "string",
+      "title": "City"
+     },
+     "country_code": {
+      "type": "string",
+      "title": "Country Code"
+     },
+     "country_name": {
+      "type": "string",
+      "title": "Country Name"
+     },
+     "region": {
+      "type": "string",
+      "title": "Region"
+     },
+     "rank": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rank"
+     },
+     "taste_score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Taste Score"
+     },
+     "lift": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lift"
+     },
+     "target_affinity": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Target Affinity"
+     },
+     "baseline_affinity": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Baseline Affinity"
+     },
+     "coverage": {
+      "type": "number",
+      "title": "Coverage"
+     },
+     "confidence": {
+      "type": "string",
+      "enum": [
+       "high",
+       "medium",
+       "low"
+      ],
+      "title": "Confidence"
+     },
+     "arrivals_share": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Arrivals Share"
+     },
+     "arrivals_pct": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Arrivals Pct"
+     },
+     "gap": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gap"
+     },
+     "quadrant": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "untapped",
+         "core",
+         "habit",
+         "low_priority"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quadrant"
+     },
+     "flags": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Flags"
+     },
+     "angle_headline": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Angle Headline"
+     },
+     "population_band": {
+      "type": "integer",
+      "title": "Population Band"
+     }
+    },
+    "type": "object",
+    "required": [
+     "market_id",
+     "city",
+     "country_code",
+     "country_name",
+     "region",
+     "rank",
+     "taste_score",
+     "lift",
+     "target_affinity",
+     "baseline_affinity",
+     "coverage",
+     "confidence",
+     "arrivals_share",
+     "arrivals_pct",
+     "gap",
+     "quadrant",
+     "flags",
+     "angle_headline",
+     "population_band"
+    ],
+    "title": "MarketRow"
+   },
+   "MarketsResponse": {
+    "properties": {
+     "markets": {
+      "items": {
+       "$ref": "#/components/schemas/MarketOut"
+      },
+      "type": "array",
+      "title": "Markets"
+     },
+     "presets": {
+      "items": {
+       "$ref": "#/components/schemas/PresetOut"
+      },
+      "type": "array",
+      "title": "Presets"
+     }
+    },
+    "type": "object",
+    "required": [
+     "markets",
+     "presets"
+    ],
+    "title": "MarketsResponse"
+   },
+   "PartnerOut": {
+    "properties": {
+     "partner_type": {
+      "type": "string",
+      "title": "Partner Type"
+     },
+     "entity_id": {
+      "type": "string",
+      "title": "Entity Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "lift": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lift"
+     },
+     "rank": {
+      "type": "integer",
+      "title": "Rank"
+     },
+     "market_specific": {
+      "type": "boolean",
+      "title": "Market Specific"
+     }
+    },
+    "type": "object",
+    "required": [
+     "partner_type",
+     "entity_id",
+     "name",
+     "lift",
+     "rank",
+     "market_specific"
+    ],
+    "title": "PartnerOut"
+   },
+   "PresetOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "market_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Market Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "label",
+     "market_ids"
+    ],
+    "title": "PresetOut"
+   },
+   "ProfileEntityOut": {
+    "properties": {
+     "entity_id": {
+      "type": "string",
+      "title": "Entity Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "role": {
+      "type": "string",
+      "title": "Role"
+     },
+     "similarity": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Similarity"
+     },
+     "tags": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Tags"
+     }
+    },
+    "type": "object",
+    "required": [
+     "entity_id",
+     "name",
+     "entity_type",
+     "role",
+     "similarity",
+     "tags"
+    ],
+    "title": "ProfileEntityOut"
+   },
+   "ProfilePreviewResponse": {
+    "properties": {
+     "destination_entity_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Destination Entity Id"
+     },
+     "destination_name": {
+      "type": "string",
+      "title": "Destination Name"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ResolvedItemOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "tags": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Tags"
+     },
+     "unresolved": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Unresolved"
+     },
+     "can_run": {
+      "type": "boolean",
+      "title": "Can Run"
+     },
+     "warnings": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Warnings"
+     }
+    },
+    "type": "object",
+    "required": [
+     "destination_entity_id",
+     "destination_name",
+     "items",
+     "tags",
+     "unresolved",
+     "can_run",
+     "warnings"
+    ],
+    "title": "ProfilePreviewResponse"
+   },
+   "ProposedItem": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "landmark",
+       "neighbourhood",
+       "dish",
+       "drink",
+       "venue",
+       "festival",
+       "music",
+       "film",
+       "book",
+       "brand"
+      ],
+      "title": "Kind"
+     },
+     "origin": {
+      "type": "string",
+      "enum": [
+       "llm_website",
+       "llm_name_only",
+       "user"
+      ],
+      "title": "Origin",
+      "default": "user"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name",
+     "kind"
+    ],
+    "title": "ProposedItem"
+   },
+   "ResolvedItemOut": {
+    "properties": {
+     "item_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Item Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "landmark",
+       "neighbourhood",
+       "dish",
+       "drink",
+       "venue",
+       "festival",
+       "music",
+       "film",
+       "book",
+       "brand"
+      ],
+      "title": "Kind"
+     },
+     "role": {
+      "type": "string",
+      "title": "Role"
+     },
+     "entity_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Entity Id"
+     },
+     "entity_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Entity Name"
+     },
+     "entity_type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Entity Type"
+     },
+     "similarity": {
+      "type": "number",
+      "title": "Similarity"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "tags": {
+      "items": {
+       "additionalProperties": {
+        "type": "string"
+       },
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Tags"
+     }
+    },
+    "type": "object",
+    "required": [
+     "item_id",
+     "name",
+     "kind",
+     "role",
+     "entity_id",
+     "entity_name",
+     "entity_type",
+     "similarity",
+     "status",
+     "note",
+     "tags"
+    ],
+    "title": "ResolvedItemOut"
+   },
+   "RunCounters": {
+    "properties": {
+     "qloo_live": {
+      "type": "integer",
+      "title": "Qloo Live",
+      "default": 0
+     },
+     "qloo_cached": {
+      "type": "integer",
+      "title": "Qloo Cached",
+      "default": 0
+     },
+     "llm": {
+      "type": "integer",
+      "title": "Llm",
+      "default": 0
+     },
+     "tools": {
+      "type": "integer",
+      "title": "Tools",
+      "default": 0
+     }
+    },
+    "type": "object",
+    "title": "RunCounters"
+   },
+   "RunCreateRequest": {
+    "properties": {
+     "destination_id": {
+      "type": "string",
+      "title": "Destination Id"
+     },
+     "market_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 68,
+      "minItems": 3,
+      "title": "Market Ids"
+     },
+     "arrivals_dataset_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Arrivals Dataset Id"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "destination_id",
+     "market_ids"
+    ],
+    "title": "RunCreateRequest"
+   },
+   "RunCreatedResponse": {
+    "properties": {
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_id",
+     "status"
+    ],
+    "title": "RunCreatedResponse"
+   },
+   "RunOut": {
+    "properties": {
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "phase": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Phase"
+     },
+     "orchestration": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Orchestration"
+     },
+     "orchestration_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Orchestration Reason"
+     },
+     "counters": {
+      "$ref": "#/components/schemas/RunCounters"
+     },
+     "warnings": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Warnings"
+     },
+     "shortlist": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Shortlist"
+     },
+     "settings": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Settings"
+     },
+     "error_code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error Code"
+     },
+     "error_message": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error Message"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "started_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Started At"
+     },
+     "finished_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Finished At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_id",
+     "status",
+     "phase",
+     "orchestration",
+     "orchestration_reason",
+     "counters",
+     "warnings",
+     "shortlist",
+     "settings",
+     "error_code",
+     "error_message",
+     "created_at",
+     "started_at",
+     "finished_at"
+    ],
+    "title": "RunOut"
+   },
+   "RunProfileResponse": {
+    "properties": {
+     "destination_entity_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Destination Entity Id"
+     },
+     "entities": {
+      "items": {
+       "$ref": "#/components/schemas/ProfileEntityOut"
+      },
+      "type": "array",
+      "title": "Entities"
+     },
+     "tags": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Tags"
+     },
+     "warnings": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Warnings"
+     }
+    },
+    "type": "object",
+    "required": [
+     "destination_entity_id",
+     "entities",
+     "tags",
+     "warnings"
+    ],
+    "title": "RunProfileResponse"
+   },
+   "SignatureItemInput": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "landmark",
+       "neighbourhood",
+       "dish",
+       "drink",
+       "venue",
+       "festival",
+       "music",
+       "film",
+       "book",
+       "brand"
+      ],
+      "title": "Kind"
+     },
+     "origin": {
+      "type": "string",
+      "enum": [
+       "llm_website",
+       "llm_name_only",
+       "user"
+      ],
+      "title": "Origin",
+      "default": "user"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "name",
+     "kind"
+    ],
+    "title": "SignatureItemInput"
+   },
+   "SignatureItemOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "landmark",
+       "neighbourhood",
+       "dish",
+       "drink",
+       "venue",
+       "festival",
+       "music",
+       "film",
+       "book",
+       "brand"
+      ],
+      "title": "Kind"
+     },
+     "origin": {
+      "type": "string",
+      "enum": [
+       "llm_website",
+       "llm_name_only",
+       "user"
+      ],
+      "title": "Origin"
+     },
+     "position": {
+      "type": "integer",
+      "title": "Position"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "kind",
+     "origin",
+     "position"
+    ],
+    "title": "SignatureItemOut"
+   },
+   "TraceItem": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "qloo",
+       "llm",
+       "tool",
+       "event"
+      ],
+      "title": "Kind"
+     },
+     "at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "At"
+     },
+     "step": {
+      "type": "string",
+      "title": "Step"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "detail": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "required": [
+     "kind",
+     "at",
+     "step",
+     "summary",
+     "detail"
+    ],
+    "title": "TraceItem"
+   },
+   "TraceResponse": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/TraceItem"
+      },
+      "type": "array",
+      "title": "Items"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items"
+    ],
+    "title": "TraceResponse"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   },
+   "WorkspaceSessionResponse": {
+    "properties": {
+     "workspace_token": {
+      "type": "string",
+      "title": "Workspace Token"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "workspace_token",
+     "created_at"
+    ],
+    "title": "WorkspaceSessionResponse"
+   }
+  }
+ }
+}
