@@ -136,7 +136,7 @@ export default function RunPage() {
               {run.finished_at ? ` · finished ${formatDate(run.finished_at)}` : ""}
             </p>
           </div>
-          <CallCounter run={run} />
+          <CallCounter run={run} events={events} />
         </div>
 
         <ProgressSteps run={run} />
