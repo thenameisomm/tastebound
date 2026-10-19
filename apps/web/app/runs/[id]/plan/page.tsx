@@ -81,7 +81,8 @@ export default function PlanPage() {
             ← Back to results
           </Link>
         </p>
-        <h1 className="heading">Budget & briefs</h1>
+        <span className="eyebrow">Campaign planner</span>
+        <h1 className="heading">Budget &amp; briefs</h1>
         <p className="muted">
           The split is computed from Qloo taste scores, confidence and the gap. Locks pin an amount
           before the rest is split.

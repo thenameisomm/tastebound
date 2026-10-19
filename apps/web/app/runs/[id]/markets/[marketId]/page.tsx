@@ -121,10 +121,10 @@ export default function MarketDetailPage() {
           </div>
           <div className="card stackSm">
             <span className="kindTag">Lift</span>
-            <span className="heading" title="Raw Qloo affinity for this destination minus this run's typical affinity">
+            <span className="heading" title="Qloo affinity with this destination's signals minus the same market queried without them">
               {formatLift(score.lift)}
             </span>
-            <span className="caption">vs typical market in this run</span>
+            <span className="caption">target vs baseline affinity</span>
           </div>
           <div className="card stackSm">
             <span className="kindTag">Coverage</span>

@@ -229,7 +229,14 @@ export default function StartPage() {
   return (
     <main className="page pageNarrow">
       <div className="stack" style={{ marginTop: 32 }}>
-        <h1 className="heading">Start a run</h1>
+        <div className="stackSm">
+          <span className="eyebrow">Run builder</span>
+          <h1 className="heading">Start a run</h1>
+        </div>
+        <p className="serif">
+          Four steps: describe the destination, add its signature items, resolve the taste profile,
+          then pick markets and arrivals.
+        </p>
         <div className="steps" role="list" aria-label="Wizard steps">
           {(
             [

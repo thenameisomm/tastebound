@@ -129,6 +129,7 @@ export default function RunPage() {
       <div className="stack" style={{ marginTop: 32 }}>
         <div className="spread">
           <div>
+            <span className="eyebrow">Qloo scorecard</span>
             <h1 className="heading">Run results</h1>
             <p className="caption">
               Run {run.run_id} · created {formatDate(run.created_at)}

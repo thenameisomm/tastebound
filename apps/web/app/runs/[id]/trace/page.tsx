@@ -59,6 +59,7 @@ export default function TracePage() {
             ← Back to results
           </Link>
         </p>
+        <span className="eyebrow">Audit log</span>
         <h1 className="heading">Trace</h1>
         <p className="muted">
           Every LLM step, tool call and Qloo call in order. Expand a row for the full parameters.
