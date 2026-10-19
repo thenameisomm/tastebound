@@ -38,6 +38,8 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 *.db
+*.db-wal
+*.db-shm
 apps/api/data/demo/active.json
 
 # Debug
