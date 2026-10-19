@@ -46,6 +46,57 @@ const PRESET_LABELS: Record<string, string> = {
   latam10: "Latin America (10)",
 };
 
+// Quick-add presets: each is a curated set of signature items for a destination type
+const ITEM_PRESETS = {
+  "Cultural city": [
+    { name: "Historic center", kind: "neighbourhood" as ItemKind, origin: "user" as const },
+    { name: "Cathedral", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Art museum", kind: "venue" as ItemKind, origin: "user" as const },
+    { name: "Local festival", kind: "festival" as ItemKind, origin: "user" as const },
+    { name: "Traditional dish", kind: "dish" as ItemKind, origin: "user" as const },
+  ],
+  "Food destination": [
+    { name: "Signature dish", kind: "dish" as ItemKind, origin: "user" as const },
+    { name: "Food market", kind: "venue" as ItemKind, origin: "user" as const },
+    { name: "Local drink", kind: "drink" as ItemKind, origin: "user" as const },
+    { name: "Cooking class venue", kind: "venue" as ItemKind, origin: "user" as const },
+    { name: "Food festival", kind: "festival" as ItemKind, origin: "user" as const },
+  ],
+  "Beach & nature": [
+    { name: "Famous beach", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "National park", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Hiking trail", kind: "neighbourhood" as ItemKind, origin: "user" as const },
+    { name: "Sunset viewpoint", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Seafood dish", kind: "dish" as ItemKind, origin: "user" as const },
+  ],
+  "Kyoto (cultural)": [
+    { name: "Fushimi Inari Taisha", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Kiyomizu-dera", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Gion", kind: "neighbourhood" as ItemKind, origin: "user" as const },
+    { name: "Kaiseki", kind: "dish" as ItemKind, origin: "user" as const },
+    { name: "Matcha (Uji)", kind: "drink" as ItemKind, origin: "user" as const },
+    { name: "Gion Matsuri", kind: "festival" as ItemKind, origin: "user" as const },
+  ],
+  "Lisbon (food & culture)": [
+    { name: "Belém Tower", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Alfama", kind: "neighbourhood" as ItemKind, origin: "user" as const },
+    { name: "Pastel de nata", kind: "dish" as ItemKind, origin: "user" as const },
+    { name: "Bacalhau", kind: "dish" as ItemKind, origin: "user" as const },
+    { name: "Fado music", kind: "music" as ItemKind, origin: "user" as const },
+    { name: "Festa de Santo António", kind: "festival" as ItemKind, origin: "user" as const },
+  ],
+  "Tokyo (modern & traditional)": [
+    { name: "Senso-ji Temple", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Shibuya Crossing", kind: "landmark" as ItemKind, origin: "user" as const },
+    { name: "Tsukiji Outer Market", kind: "venue" as ItemKind, origin: "user" as const },
+    { name: "Sushi", kind: "dish" as ItemKind, origin: "user" as const },
+    { name: "Ramen", kind: "dish" as ItemKind, origin: "user" as const },
+    { name: "Izakaya", kind: "venue" as ItemKind, origin: "user" as const },
+  ],
+} as const;
+
+type ItemPresetKey = keyof typeof ITEM_PRESETS;
+
 type Step = 1 | 2 | 3 | 4;
 
 export default function StartPage() {
@@ -365,6 +416,12 @@ export default function StartPage() {
             <EmptyState title="No items yet">Add at least a few — they shape the whole taste profile.</EmptyState>
           ) : null}
 
+          <QuickAddPresets
+            items={items}
+            onAdd={(newItems) => setItems([...items, ...newItems].slice(0, 15))}
+            disabled={items.length >= 15}
+          />
+
           <AddItemRow
             onAdd={(item) => setItems([...items, item].slice(0, 15))}
             disabled={items.length >= 15}
@@ -662,6 +719,59 @@ export default function StartPage() {
         </section>
       ) : null}
     </main>
+  );
+}
+
+function QuickAddPresets({
+  items,
+  onAdd,
+  disabled,
+}: {
+  items: SignatureItemInput[];
+  onAdd: (items: SignatureItemInput[]) => void;
+  disabled: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const existingNames = useMemo(
+    () => new Set(items.map((item) => item.name.toLowerCase())),
+    [items],
+  );
+
+  const filteredPresets = useMemo(
+    () =>
+      Object.entries(ITEM_PRESETS)
+        .map(([key, presetItems]) => ({
+          key,
+          items: presetItems,
+          newCount: presetItems.filter((item) => !existingNames.has(item.name.toLowerCase())).length,
+        }))
+        .filter((p) => p.newCount > 0),
+    [existingNames],
+  );
+
+  if (disabled || filteredPresets.length === 0) return null;
+
+  return (
+    <div className="stackSm">
+      <span className="kindTag">Quick-add presets</span>
+      <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+        {filteredPresets.map((preset) => (
+          <button
+            key={preset.key}
+            type="button"
+            className="btnGhost btnSmall"
+            onClick={() => {
+              const toAdd = preset.items.filter((item) => !existingNames.has(item.name.toLowerCase()));
+              onAdd(toAdd);
+            }}
+            disabled={preset.newCount === 0}
+            title={`Adds ${preset.newCount} new items`}
+          >
+            + {preset.key} ({preset.newCount})
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
