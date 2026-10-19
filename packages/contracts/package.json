@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": "./src/api.ts"
+    ".": "./src/index.ts",
+    "./api": "./src/api.ts",
+    "./location": "./src/location.ts"
   },
   "scripts": {
     "generate": "openapi-typescript ../../apps/api/openapi.json -o src/api.ts",

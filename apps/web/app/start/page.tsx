@@ -7,6 +7,7 @@ import { Banner } from "@/components/Banner";
 import { ErrorPanel } from "@/components/ErrorPanel";
 import { EmptyState } from "@/components/EmptyState";
 import { SourceChip } from "@/components/SourceChip";
+import { LocationPicker } from "@/components/location";
 import type {
   ArrivalsResponse,
   ArrivalsSampleOut,
@@ -104,7 +105,7 @@ export default function StartPage() {
   const [step, setStep] = useState<Step>(1);
 
   const [name, setName] = useState("");
-  const [country, setCountry] = useState("");
+  const [destinationLocation, setDestinationLocation] = useState<any>(null);
   const [website, setWebsite] = useState("");
 
   const [items, setItems] = useState<SignatureItemInput[]>([]);
@@ -165,7 +166,7 @@ export default function StartPage() {
     const payload = await run("suggest", () =>
       api.post<IntakeResponse>("/v1/destinations/intake", {
         name,
-        country_code: country,
+        country_code: destinationLocation?.countryCode || "",
         website_url: website || null,
       }),
     );
@@ -187,7 +188,7 @@ export default function StartPage() {
     const payload = await run("create", () =>
       api.post<DestinationResponse>("/v1/destinations", {
         name,
-        country_code: country,
+        country_code: destinationLocation?.countryCode || "",
         website_url: website || null,
         items,
       }),
@@ -314,6 +315,7 @@ export default function StartPage() {
       {step === 1 ? (
         <section className="card stack sectionSm">
           <h2 className="headingSm">Where is the destination?</h2>
+
           <div className="grid2">
             <label className="field">
               <span className="label">Destination name</span>
@@ -325,17 +327,19 @@ export default function StartPage() {
                 maxLength={120}
               />
             </label>
-            <label className="field">
-              <span className="label">Country code (ISO-2)</span>
-              <input
-                className="input"
-                value={country}
-                onChange={(event) => setCountry(event.target.value.toUpperCase().slice(0, 2))}
-                placeholder="PT"
-                maxLength={2}
-              />
-            </label>
           </div>
+
+          <LocationPicker
+            value={destinationLocation}
+            onChange={setDestinationLocation}
+            label="Location"
+            placeholder="Search for a city, landmark, or destination…"
+            required={true}
+            showMap={true}
+            mapHeight={300}
+            searchType="place"
+          />
+
           <label className="field">
             <span className="label">Official website (optional)</span>
             <input
@@ -349,11 +353,12 @@ export default function StartPage() {
               If provided, TasteBound reads up to 3 pages to suggest signature items.
             </span>
           </label>
+
           <div className="row">
             <button
               type="button"
               className="btnPrimary"
-              disabled={busy !== null || name.trim().length < 2 || country.length !== 2}
+              disabled={busy !== null || name.trim().length < 2 || !destinationLocation}
               onClick={() => void suggest()}
             >
               {busy === "suggest" ? "Suggesting…" : "Suggest signature items"}
@@ -361,7 +366,7 @@ export default function StartPage() {
             <button
               type="button"
               className="btnText"
-              disabled={name.trim().length < 2 || country.length !== 2}
+              disabled={name.trim().length < 2 || !destinationLocation}
               onClick={() => setStep(2)}
             >
               I&apos;ll add items myself
