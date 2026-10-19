@@ -67,6 +67,8 @@ pnpm turbo dev                   # web :3000, api :8000 (SQLite, auto-migrated a
 
 Open **http://localhost:3000/sample** — a stored, read-only Lisbon run that needs no keys and spends no Qloo quota. Or start a live run at `/start`.
 
+Key-by-key setup, run and deploy instructions: [`docs/19-setup.md`](docs/19-setup.md).
+
 ```bash
 (cd apps/api && uv run pytest -m "not live")   # 48 tests, no network
 pnpm turbo lint test build
