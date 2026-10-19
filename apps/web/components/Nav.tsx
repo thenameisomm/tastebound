@@ -10,6 +10,9 @@ export function Nav() {
         <Link href="/#how" className="navLink">
           How it works
         </Link>
+        <Link href="/analytics" className="navLink">
+          Analytics
+        </Link>
         <Link href="/sample" className="navLink">
           Sample run
         </Link>
