@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter, Source_Serif_4 } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+
+const lyon = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-lyon",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${inter.variable} ${lyon.variable}`}>
         <Nav />
         {children}
       </body>
