@@ -42,8 +42,9 @@ curl -s localhost:8000/health
 
 ```bash
 cd apps/api
-uv run python scripts/spike_qloo.py --destinations "Lisbon,PT;Kyoto,JP" --markets preset:europe20,preset:na15,preset:apac15 --out tests/fixtures/qloo/
-uv run python scripts/spike_llm_tools.py
+uv run python scripts/spike_phase0.py
+# Live LLM tool probe: run a two-tool exchange through llm/provider.py when a
+# key with quota is available (see docs/llm-contract.md).
 ```
 
 ## Seed demo and evaluate

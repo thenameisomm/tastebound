@@ -1,6 +1,6 @@
 # LLM contract (Ollama Cloud, provider layer)
 
-Status: **partially verified**. The provider transport and JSON parsing are verified; live tool calling is unverified because the Ollama Cloud key hit its free usage limit during Phase 0. Everything below states exactly what is verified and what is not.
+Status: **partially verified**. The provider transport and JSON parsing are verified; live tool calling is unverified because the Ollama Cloud key hit its free usage limit during Phase 0. The project has no paid Ollama plan (confirmed 2026-10-20), so it ships with the tool-choice loop disabled and makes no tool-choice claim. Everything below states exactly what is verified and what is not.
 
 ## Provider
 
@@ -29,7 +29,9 @@ Status: **partially verified**. The provider transport and JSON parsing are veri
 - The tool-choice loop itself is not enabled: `LLM_TOOL_CALLING` stays `false` until the tool-call shape above is verified against a live key. Orchestration is deterministic and records `orchestration` on every run.
 - Whether `gemma4:31b-cloud` honours `temperature` in tool mode.
 
-Until verified, every run executes with the **deterministic fallback planner**: the same tool set runs in a fixed order and orchestration events are labelled `deterministic_fallback`. The UI shows this label honestly. A true LLM planner loop is not implemented yet; when a key is available, re-run `scripts/spike_phase0.py --llm` and update this file before building the planner.
+Until verified, every run executes with the **deterministic fallback planner**: the same tool set runs in a fixed order and orchestration events are labelled `deterministic_fallback`. The UI shows this label honestly. A true LLM planner loop is not implemented yet; when a key with quota is available, run a manual two-tool exchange through `llm/provider.py`, record the request and response here, and only then build the planner.
+
+**Submission position (2026-10-20):** the free tier is exhausted and there is no paid plan. The project ships with deterministic orchestration, template briefs when the LLM is unavailable, and no tool-choice claim. Revisit only if the free quota resets or a paid key is provided.
 
 ## Grounding
 

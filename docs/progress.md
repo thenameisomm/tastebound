@@ -39,7 +39,7 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 
 ## Blockers
 
-- **Ollama Cloud key quota exhausted** → agent tool calling and LLM-written briefs untested; briefs fall back to `source: "template"`. Need a working key or upgraded plan.
+- **Ollama Cloud free tier exhausted** → tool calling remains unverified and LLM-written briefs fall back to templates. The free key is authenticated but returns 429; there is no paid plan. This is a documented limitation, not a submission blocker: `LLM_TOOL_CALLING` stays `false`, the deterministic planner runs, and no tool-choice claim is made.
 - **External deployment not started** → no Vercel/Render/Fly/Railway/Supabase credentials or CLIs in this session; `gh` is authenticated but cannot host the app. Needs user auth or a provider choice, plus the production env vars.
 - **No Supabase CLI locally** → local runs use SQLite; the hosted deploy still targets Supabase Cloud.
 
@@ -47,4 +47,4 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 
 1. User-side: authenticate a host (Vercel for web; Render/Fly/Railway for the API) and provide the Supabase project, or approve preparing provider configs. Then deploy, seed the demo, set `NEXT_PUBLIC_API_URL`/`CORS_ORIGINS`, and run smoke + axe against the deployed URL.
 2. File the Devpost entry with the live demo URL; confirm the public repo and licence are visible. Video is not required by the rules.
-3. If an Ollama Cloud key with quota is available: verify tool calling, then (only then) enable `LLM_TOOL_CALLING` and claim it.
+3. If the free quota resets or a paid key is provided: verify tool calling, record it in `docs/llm-contract.md`, then (only then) consider enabling `LLM_TOOL_CALLING`. Otherwise submit with deterministic orchestration, as documented.
