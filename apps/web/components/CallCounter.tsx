@@ -39,7 +39,10 @@ export function CallCounter({ run, events = [] }: CallCounterProps) {
   const tools = sseCounts.tools > 0 ? sseCounts.tools : run.counters.tools;
   const total = qloo_live + qloo_cached;
 
-  const hasSSE = events.length > 0 && (sseCounts.qloo_live > 0 || sseCounts.qloo_cached > 0);
+  const hasSSE =
+    !["done", "failed", "partial"].includes(run.status) &&
+    events.length > 0 &&
+    (sseCounts.qloo_live > 0 || sseCounts.qloo_cached > 0);
 
   return (
     <div className="callCounter">

@@ -1902,13 +1902,16 @@ pre {
 
 .heroCopy .display {
   max-width: 720px;
+  line-height: 1;
 }
 
 .heroPill {
   display: inline;
-  padding: 0 0.1em 0.04em;
-  border-radius: var(--radius-pill);
-  background: var(--color-mint-chip);
+  padding: 0 0.1em;
+  background-image: linear-gradient(var(--color-mint-chip), var(--color-mint-chip));
+  background-repeat: no-repeat;
+  background-size: 100% 0.86em;
+  background-position: 0 0.31em;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
