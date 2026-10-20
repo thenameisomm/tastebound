@@ -1,10 +1,12 @@
 # Judging report: TasteBound (2026-10-19)
 
-Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Development/TasteBound`, README, `docs/`, running local stack (API `:8020`, web `:3000`). Updated against the live Devpost page (fetched Oct 19, 2026): a hosted demo is required, a video is **not**; neither URL exists yet — recorded as Stage 1 findings. Independent J5 (impact/novelty) and J6 (engineering/trust) audits were run in parallel; J1, J2, J3, J4 and J7 were run by the lead judge. No team code was modified by the judging sub-agents; fixes listed in section 9 were made by the team after the findings.
+**Status update 2026-10-20:** Public repo live at https://github.com/thenameisomm/tastebound. Frontend rebuilt and re-verified (smoke 6/6, axe 0 violations, production build pass); wrapped hero highlight and stale terminal "streaming" badge fixed; README screenshots refreshed. External deployment remains the only Stage 1 blocker; Ollama tool calling remains unverified because the free-tier quota is exhausted.
+
+Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Development/TasteBound`, README, `docs/`, running local stack (API `:8020`, web `:3000`). Updated against the live Devpost page (fetched Oct 19, 2026): a hosted demo is required, a video is **not**; the public repo now exists, the hosted demo does not — recorded as Stage 1 findings. Independent J5 (impact/novelty) and J6 (engineering/trust) audits were run in parallel; J1, J2, J3, J4 and J7 were run by the lead judge. No team code was modified by the judging sub-agents; fixes listed in section 9 were made by the team after the findings.
 
 ## Verdict
 
-**Stage 1: AT RISK.** The Qloo integration, licence and working app pass; the public repo remote and the externally hosted demo do not exist yet (video: not required). The agentic criterion is met only as a deterministic tool pipeline with an LLM in the loop for item proposals and grounded briefs — not as an LLM tool-choice loop, and the copy now says so.
+**Stage 1: AT RISK.** The Qloo integration, licence, working app and public repo pass; the externally hosted demo does not exist yet (video: not required). The agentic criterion is met only as a deterministic tool pipeline with an LLM in the loop for item proposals and grounded briefs — not as an LLM tool-choice loop, and the copy now says so.
 
 **Scores: C1 4/5 · C2 4/5 · C3 4/5 · C4 4/5 · Total 16/20**
 
@@ -22,7 +24,7 @@ Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Dev
 | 6 | Demo video | **N/A — not required** | Live Devpost page (Oct 19, 2026): "Demo videos are *not* required." Run-through script remains in `docs/17-judging.md` |
 | 7 | Free, unrestricted testing for judges | **PASS locally** | No login; keyless read-only `/sample` spends no Qloo quota (`test_api.py::test_demo_is_public_and_read_only`); must be re-verified on the deployment |
 | 8 | Functions as depicted | **AT RISK** | README/docs overclaims found and corrected during judging (section 9); description must match the deployed demo |
-| 9 | New work / significant update in period | **PASS** | Built 2026-10-19; 15 commits |
+| 9 | New work / significant update in period | **PASS** | Built 2026-10-19–20; public history |
 
 ## What Qloo wants vs what this project provides
 
@@ -103,7 +105,7 @@ Novelty verdict: genuinely non-obvious B2B direction with a clear differentiator
 ## Fix list (ranked by score gain per hour)
 
 1. **Deploy the demo** to a public URL (Fly/Render/Vercel + API host, SQLite volume) and verify the keyless `/sample` and a live run there. Stage 1 blocker; 2–4 h.
-2. **Publish the repo** to a public GitHub remote; confirm LICENSE renders and no `.env` is tracked. Stage 1 blocker; 15 min.
+2. **Publish the repo** to a public GitHub remote; confirm LICENSE renders and no `.env` is tracked. Stage 1 blocker; 15 min. **DONE 2026-10-20.**
 3. **Rehearse the run-through on the deployed URL** (sample logged out, one live run, kill switch); record it only if you want a video for the Devpost gallery. Optional; 1–2 h.
 4. **Get an Ollama Cloud key with quota, verify tool calling, then enable `LLM_TOOL_CALLING`** and only then claim LLM tool choice. Raises the theme fit (C1) and removes the biggest honesty risk; 4–8 h plus key.
 5. **Run one small validation** (blind review with 3 DMO-style judges or a holdout on one market) and quote it; otherwise keep every evaluation statement as a plan. Raises C3/C4 confidence; 4–6 h.
@@ -120,7 +122,7 @@ Novelty verdict: genuinely non-obvious B2B direction with a clear differentiator
 | Fix | Criterion | Expected gain | Hours |
 |---|---|---|---|
 | Public deployment + keyless sample verification | Stage 1 (eligibility) | Pass/fail | 2–4 |
-| Public repo remote + licence check | Stage 1 | Pass/fail | 0.25 |
+| Public repo remote + licence check | Stage 1 | Pass/fail | Done — https://github.com/thenameisomm/tastebound |
 | End-to-end rehearsal on the deployed demo (video optional) | Stage 1 + C2 | Pass/fail + polish | 1–2 |
 | Verify Ollama tool calling; enable and demonstrate the tool-choice loop honestly | C1 | +0.5 | 4–8 |
 | One validation result (blind review/holdout) quoted in README and video | C3/C4 | +0.5 | 4–6 |

@@ -27,6 +27,8 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 | SUB | Visual redesign to `docs/DESIGN.md`: Inter (NotionInter substitute) + Source Serif (Lyon substitute), full token set, 64px nav with primary action, centered hero with avatar marks/highlight pill/product mockup with mockup shadow, accent feature blocks, greyscale chain wall, eyebrow cadence on all screen headers; axe 0 violations re-verified, smoke 6/6 | commits `bb8b338`…`0820f21`; screenshots refreshed `f04769c` |
 | SUB | Public repo pushed: https://github.com/thenameisomm/tastebound (MIT, clean history, LICENSE in About); JUDGING_REPORT Stage 1 items 1, 2(a), 4, 5, 6, 7 PASS; item 3 (deploy) and 8 (description match deployed) remain | gh repo create + push; JUDGING_REPORT.md updated |
 | SUB | Final frontend refinement: Anton/Inter/JetBrains Mono, rebuilt design system and all screens (landing, wizard, results, market, plan, trace, sample, analytics), charts and maps restyled; analytics reads the demo run; axe 0 violations, smoke 6/6, production build passes | `apps/web/`; `scripts/a11y-check.mjs`; `scripts/smoke-web.mjs` |
+| SUB | Final polish: wrapped hero highlight no longer overlaps (band highlight + line-height), completed runs no longer show a stale "streaming" badge, README screenshots regenerated at 1440×1000 without the Playwright animation artifact | `globals.css`, `CallCounter.tsx`, `scripts/readme-shots.mjs`; web lint/check-types/build pass; smoke 6/6; axe 0 violations |
+| SUB | API/LLM cleanup: Ollama base URL corrected to `https://ollama.com/v1` (`ollama.ai` redirects and returns 405), unreachable iterative-agent scaffolding removed; live probe reached the API but hit the free-limit 429; docs updated | `settings.py`, `.env.example`, `docs/18-risks-and-decisions.md`, `docs/llm-contract.md`; ruff/format/mypy clean, pytest 48 passed |
 | SUB | Kill-switch rehearsal verified: invalid QLOO_API_KEY → run fails with `qloo_auth`, zero counters, empty shortlist; pre-demo checks all ticked | docs/14-checks.md Pre-demo |
 
 ## Acceptance status (live-verified, not yet test-coded)
@@ -38,10 +40,11 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 ## Blockers
 
 - **Ollama Cloud key quota exhausted** → agent tool calling and LLM-written briefs untested; briefs fall back to `source: "template"`. Need a working key or upgraded plan.
-- Docker/Supabase unavailable locally → SQLite for now.
+- **External deployment not started** → no Vercel/Render/Fly/Railway/Supabase credentials or CLIs in this session; `gh` is authenticated but cannot host the app. Needs user auth or a provider choice, plus the production env vars.
+- **No Supabase CLI locally** → local runs use SQLite; the hosted deploy still targets Supabase Cloud.
 
 ## Next
 
-1. User-side submission items: push the repo to a public remote, deploy the demo URL (external hosting required), file the Devpost entry; video is not required by the rules.
-2. Re-run `docs/14-checks.md`, then smoke + axe against the deployed URL.
+1. User-side: authenticate a host (Vercel for web; Render/Fly/Railway for the API) and provide the Supabase project, or approve preparing provider configs. Then deploy, seed the demo, set `NEXT_PUBLIC_API_URL`/`CORS_ORIGINS`, and run smoke + axe against the deployed URL.
+2. File the Devpost entry with the live demo URL; confirm the public repo and licence are visible. Video is not required by the rules.
 3. If an Ollama Cloud key with quota is available: verify tool calling, then (only then) enable `LLM_TOOL_CALLING` and claim it.
