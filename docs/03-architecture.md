@@ -146,7 +146,7 @@ QLOO_TIMEOUT_SECONDS=20
 SCORING_STRATEGY=P                   # D | P | H, chosen in Phase 0 and stored in each run's settings
 
 LLM_PROVIDER=ollama_cloud            # ollama_cloud | gemini | openai_compat | fake
-OLLAMA_BASE_URL=https://ollama.com
+OLLAMA_BASE_URL=https://ollama.com/v1
 OLLAMA_API_KEY=
 OLLAMA_MODEL=gemma4:31b              # confirm the exact name at https://ollama.com/api/tags in Phase 0
 GEMINI_API_KEY=

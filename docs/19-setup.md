@@ -115,6 +115,7 @@ DATABASE_URL=postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/
 | `MAX_MARKETS_PER_RUN` | `40` | Hard cap on selected origin markets |
 | `MAX_SIGNATURE_ITEMS` | `15` | Cap on destination items |
 | `PUBLIC_RUNS_PER_IP_PER_DAY` | `30` | Abuse limit on run creation |
+| `OLLAMA_BASE_URL` | `https://ollama.com/v1` | OpenAI-compatible endpoint; do not use the redirecting `ollama.ai` host |
 | `OLLAMA_MODEL` | `gemma4:31b-cloud` | Model name on Ollama Cloud |
 | `LLM_PROVIDER` | `ollama_cloud` | Provider adapter; this project uses Ollama only |
 | `LLM_TOOL_CALLING` | `false` | Tool-choice loop switch; keep false until live tool calling is verified |

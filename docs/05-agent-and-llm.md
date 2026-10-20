@@ -3,7 +3,7 @@
 ## Provider and model
 
 - **Ollama Cloud over HTTPS with an API key.** No local Ollama, ever.
-- Endpoint: `POST {OLLAMA_BASE_URL}/api/chat`, header `Authorization: Bearer {OLLAMA_API_KEY}`, body `{model, messages, tools?, stream: false, options: {temperature, num_predict}}`. The reply text is `message.content`; tool calls are `message.tool_calls[].function.{name, arguments}`; tool results go back as `{"role": "tool", "tool_name": "...", "content": "<string>"}`.
+- Endpoint: `POST {OLLAMA_BASE_URL}/chat/completions` with `OLLAMA_BASE_URL=https://ollama.com/v1`, header `Authorization: Bearer {OLLAMA_API_KEY}`, body `{model, messages, tools?, stream: false, temperature}`. The reply text is `choices[0].message.content`; tool calls are `choices[0].message.tool_calls[].function.{name, arguments}`; tool results go back as `{"role": "tool", "tool_call_id": "...", "content": "<string>"}`.
 - Default model **Gemma 4 31B**. The Ollama library lists `gemma4:31b` and `gemma4:31b-cloud` with native function calling, 256K context and configurable thinking. Ollama's docs say API calls use names listed at `https://ollama.com/api/tags`. **Phase 0 confirms the exact name** and sets `OLLAMA_MODEL`.
 - **Tool calling on the cloud model is not explicitly documented.** Phase 0 proves it (5 successful two-tool round trips) or the planner variant is used.
 - **Structured outputs (`format` with a JSON schema) are documented as not supported on Ollama Cloud.** All JSON uses prompt-and-validate (below).

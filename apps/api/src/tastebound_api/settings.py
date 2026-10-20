@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     scoring_strategy: str = "P"
 
     llm_provider: str = "ollama_cloud"
-    ollama_base_url: str = "https://ollama.com"
+    ollama_base_url: str = "https://ollama.com/v1"
     ollama_api_key: str = ""
     ollama_model: str = "gemma4:31b-cloud"
     gemini_api_key: str = ""

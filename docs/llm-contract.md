@@ -6,7 +6,7 @@ Status: **partially verified**. The provider transport and JSON parsing are veri
 
 | Fact | Value |
 |---|---|
-| Provider | Ollama Cloud (`https://ollama.com`), OpenAI-compatible `/v1/chat/completions` |
+| Provider | Ollama Cloud (`https://ollama.com/v1`), OpenAI-compatible `/chat/completions` |
 | Model | `gemma4:31b-cloud` (`OLLAMA_MODEL`) |
 | Auth | `Authorization: Bearer <OLLAMA_API_KEY>` |
 | Isolation | only `apps/api/src/tastebound_api/llm/` may name a provider; everything else uses the `LLMProvider` protocol |
@@ -15,6 +15,7 @@ Status: **partially verified**. The provider transport and JSON parsing are veri
 ## Verified
 
 - `POST /v1/chat/completions` with `messages`, `temperature`, `stream: false` returns `choices[0].message.content` and `usage`. Verified live before the quota was exhausted.
+- The base URL must be `https://ollama.com/v1`. `https://ollama.ai/v1` redirects the POST and returns HTTP 405; on 2026-10-20 the correct host returned the free-limit 429, confirming reachability and authentication.
 - Non-200 responses raise typed errors (`LLMUnavailable`, `LLMAuthError`, `LLMRateLimited`) with the body truncated.
 - Models sometimes wrap JSON in prose or code fences. `llm/parsing.py::extract_json_object` extracts the first balanced JSON object and is covered by unit tests. All structured outputs (destination items, tool arguments) go through it.
 - With no key configured, `get_provider()` returns `None`; `/health` reports `tools_ok: false`. `tools_ok` also stays `false` while `LLM_TOOL_CALLING` is disabled (the default), because the tool-choice loop is not enabled in this build. Endpoints that need the LLM degrade:

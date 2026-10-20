@@ -402,12 +402,6 @@ class RunExecutor:
     # ------------------------------------------------------------ phases
 
     async def _execute(self, run_id: str) -> None:
-        # Use iterative execution when LLM tool calling is enabled
-        if self.provider is not None and self.settings.llm_tool_calling:
-            from tastebound_api.agent.iterative_agent import IterativeAgent
-            agent = IterativeAgent(self)
-            await agent.run_iterative(run_id)
-            return
         await self._set_status(run_id, "scoring")
         await self._emit(
             run_id, "phase_started", {"phase": "scoring", "orchestration": "deterministic_fallback"}

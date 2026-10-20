@@ -57,3 +57,4 @@
 | 2026-10-19 | 40-market cap enforced in the request schema and the create route | `MAX_MARKETS_PER_RUN` was documented but unused; the API accepted 68 |
 | 2026-10-19 | README lift definition corrected to `target − baseline`; novelty claims softened and sourced | Judge audit: "run's typical affinity" described the wrong baseline; absolute novelty wording was unsupportable |
 | 2026-10-19 | Second live destination verified: Kyoto/APAC-15 (Mumbai 96.7, Delhi 90.0, Kuala Lumpur 83.3) vs Lisbon (Cartagena 99.26, Tokyo 97.8) | Claim "different destinations → different rankings" is now verified live; 80 live Qloo calls spent |
+| 2026-10-20 | Ollama base URL corrected to `https://ollama.com/v1`; unreachable iterative-agent scaffolding removed | Live probe: `ollama.ai/v1` redirected the POST to HTTP 405; `ollama.com/v1` reached the API and returned the free-limit 429. Tool calling remains unverified, so `LLM_TOOL_CALLING=false` and orchestration stays deterministic |
