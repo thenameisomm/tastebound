@@ -68,26 +68,31 @@ export function MarketTable({
     <th
       scope="col"
       title={title}
-      onClick={() => {
-        if (sortKey === key) {
-          setSortAsc(!sortAsc);
-        } else {
-          setSortKey(key);
-          setSortAsc(true);
-        }
-      }}
       aria-sort={sortKey === key ? (sortAsc ? "ascending" : "descending") : "none"}
     >
-      {label}
-      {sortKey === key ? (sortAsc ? " ↑" : " ↓") : ""}
+      <button
+        type="button"
+        className="sortButton"
+        onClick={() => {
+          if (sortKey === key) {
+            setSortAsc(!sortAsc);
+          } else {
+            setSortKey(key);
+            setSortAsc(true);
+          }
+        }}
+      >
+        {label}
+        <span aria-hidden="true">{sortKey === key ? (sortAsc ? "↑" : "↓") : ""}</span>
+      </button>
     </th>
   );
 
   return (
     <div className="stack">
-      <div className="row">
-        <label className="field" style={{ minWidth: 160 }}>
-          <span className="caption">Region</span>
+      <div className="filterRow">
+        <label className="field">
+          <span className="label">Region</span>
           <select className="select" value={region} onChange={(event) => setRegion(event.target.value)}>
             <option value="all">All regions</option>
             {regions.map((item) => (
@@ -97,8 +102,8 @@ export function MarketTable({
             ))}
           </select>
         </label>
-        <label className="field" style={{ minWidth: 140 }}>
-          <span className="caption">Confidence</span>
+        <label className="field">
+          <span className="label">Confidence</span>
           <select
             className="select"
             value={confidence}
@@ -110,8 +115,8 @@ export function MarketTable({
             <option value="low">Low</option>
           </select>
         </label>
-        <label className="field" style={{ minWidth: 150 }}>
-          <span className="caption">Quadrant</span>
+        <label className="field">
+          <span className="label">Quadrant</span>
           <select
             className="select"
             value={quadrant}
@@ -124,8 +129,8 @@ export function MarketTable({
             <option value="low_priority">Low priority</option>
           </select>
         </label>
-        <label className="field" style={{ flex: 1, minWidth: 180 }}>
-          <span className="caption">Search</span>
+        <label className="field fieldGrow">
+          <span className="label">Search</span>
           <input
             className="input"
             type="search"
@@ -142,7 +147,7 @@ export function MarketTable({
         <>
           <div className="tableWrap desktopOnly">
             <table className="table">
-              <caption className="caption" style={{ textAlign: "left", padding: "8px 16px" }}>
+              <caption>
                 {visible.length} of {markets.length} markets. Taste score is the percentile of lift
                 within this run; it is taste fit, not a visitor forecast.
               </caption>
@@ -180,7 +185,7 @@ export function MarketTable({
                     ) : null}
                     <td className="num">{market.rank ?? "—"}</td>
                     <td>
-                      <Link className="link" href={`/runs/${runId}/markets/${market.market_id}`}>
+                      <Link className="tableLink" href={`/runs/${runId}/markets/${market.market_id}`}>
                         {market.city}
                       </Link>
                       <div className="caption">{market.country_name}</div>

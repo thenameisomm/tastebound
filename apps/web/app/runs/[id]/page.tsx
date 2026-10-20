@@ -123,22 +123,26 @@ export default function RunPage() {
   const liveEvents = events.slice(-6).reverse();
   const scored = run.status !== "queued" && run.status !== "scoring";
   const canDeepDive = ["scored", "done"].includes(run.status);
+  const topMarket = markets?.markets.find((market) => market.rank === 1) ?? null;
+  const untappedCount =
+    markets?.markets.filter((market) => market.quadrant === "untapped").length ?? 0;
 
   return (
     <main className="page">
-      <div className="stack" style={{ marginTop: 32 }}>
-        <div className="spread">
-          <div>
-            <span className="eyebrow">Qloo scorecard</span>
-            <h1 className="heading">Run results</h1>
-            <p className="caption">
-              Run {run.run_id} · created {formatDate(run.created_at)}
-              {run.finished_at ? ` · finished ${formatDate(run.finished_at)}` : ""}
-            </p>
-          </div>
-          <CallCounter run={run} events={events} />
+      <div className="runHeader">
+        <div className="runHeaderMain">
+          <span className="eyebrow">Qloo scorecard</span>
+          <h1 className="heading">Run results</h1>
+          <p className="pageMeta">
+            <span>Run {run.run_id}</span>
+            <span>Created {formatDate(run.created_at)}</span>
+            {run.finished_at ? <span>Finished {formatDate(run.finished_at)}</span> : null}
+          </p>
         </div>
+        <CallCounter run={run} events={events} />
+      </div>
 
+      <div className="stack sectionSm">
         <ProgressSteps run={run} />
 
         {reconnecting ? (
@@ -185,16 +189,19 @@ export default function RunPage() {
         ) : null}
 
         {!TERMINAL.has(run.status) ? (
-          <div className="card stackSm">
-            <span className="kindTag">Live progress</span>
+          <div className="cardDark stackSm">
+            <div className="spread">
+              <span className="kindTag">Live progress</span>
+              <span className="pill pillGood">streaming</span>
+            </div>
             {liveEvents.length === 0 ? (
               <p className="muted">Waiting for the first event…</p>
             ) : (
-              <ul className="stackSm" style={{ listStyle: "none" }}>
+              <ul>
                 {liveEvents.map((event, index) => (
-                  <li key={`${event.seq}-${index}`} className="row" style={{ gap: 8 }}>
-                    <span className="pill pillSky">{event.type}</span>
-                    <span className="caption">
+                  <li key={`${event.seq}-${index}`} className="liveEvent">
+                    <span className="pill">{event.type}</span>
+                    <span className="truncate">
                       {String(event.payload.tool ?? event.payload.phase ?? "")}{" "}
                       {String(event.payload.summary && typeof event.payload.summary === "object" ? "" : event.payload.summary ?? "")}
                     </span>
@@ -208,6 +215,28 @@ export default function RunPage() {
 
       {scored && markets ? (
         <section className="section">
+          <div className="resultsBand">
+            <div className="stackSm">
+              <span className="eyebrow eyebrowOnDark">The short answer</span>
+              <h2 className="headingSm">
+                {topMarket ? `${topMarket.city} leads on taste fit.` : "Markets scored."}
+              </h2>
+              <p className="caption">
+                {markets.markets.length} markets scored
+                {markets.gap_enabled ? ` · ${untappedCount} sit in the untapped quadrant` : " · lift-only view"}
+              </p>
+            </div>
+            <div className="stackSm" style={{ alignItems: "flex-end" }}>
+              <span className="resultsBandBig">
+                {markets.gap_enabled ? String(untappedCount).padStart(2, "0") : "—"}
+              </span>
+              <span className="pill pillGood">
+                {markets.gap_enabled ? "untapped markets" : "arrivals needed"}
+              </span>
+            </div>
+          </div>
+
+          <div className="sectionSm stack">
           {markets.gap_enabled && markets.gap_note ? (
             <Banner tone="info">{markets.gap_note}</Banner>
           ) : null}
@@ -286,6 +315,7 @@ export default function RunPage() {
               })}
             </div>
           ) : null}
+          </div>
         </section>
       ) : null}
 

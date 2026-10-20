@@ -75,24 +75,27 @@ export default function PlanPage() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ marginTop: 32 }}>
-        <p className="caption">
-          <Link className="link" href={`/runs/${runId}`}>
+      <div className="pageHero">
+        <div className="pageHeroMain">
+          <Link className="backLink" href={`/runs/${runId}`}>
             ← Back to results
           </Link>
-        </p>
-        <span className="eyebrow">Campaign planner</span>
-        <h1 className="heading">Budget &amp; briefs</h1>
-        <p className="muted">
-          The split is computed from Qloo taste scores, confidence and the gap. Locks pin an amount
-          before the rest is split.
-        </p>
+          <span className="eyebrow">Campaign planner</span>
+          <h1 className="heading">Budget &amp; briefs</h1>
+          <p className="pageLead">
+            The split is computed from Qloo taste scores, confidence and the gap. Locks pin an
+            amount before the rest is split.
+          </p>
+        </div>
       </div>
 
       {hasScores ? (
         <section className="section">
-          <div className="card stack">
-            <h2 className="headingSm">Budget split</h2>
+          <div className="budgetCard stack">
+            <div className="stackSm">
+              <span className="kindTag">Allocator</span>
+              <h2 className="headingSm">Budget split, weighted by the gap.</h2>
+            </div>
             <BudgetSliders runId={runId} markets={markets.markets} />
           </div>
         </section>
@@ -105,11 +108,14 @@ export default function PlanPage() {
       )}
 
       <section className="section">
-        <div className="spread">
-          <h2 className="headingSm">Briefs</h2>
+        <div className="sectionHeader">
+          <div className="stackSm">
+            <span className="kindTag">Deliverables</span>
+            <h2 className="headingSm">Briefs</h2>
+          </div>
           <span className="caption">
-            One brief per shortlisted market. Template briefs are generated from Qloo evidence when the
-            LLM is unavailable.
+            One brief per shortlisted market. Template briefs are generated from Qloo evidence when
+            the LLM is unavailable.
           </span>
         </div>
         <div className="stack sectionSm">

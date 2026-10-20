@@ -66,11 +66,15 @@ export function BudgetSliders({ runId, markets }: { runId: string; markets: Mark
     void compute(next);
   };
 
+  const maxShare = allocation
+    ? Math.max(...allocation.shares.map((share) => share.share), 0.0001)
+    : 1;
+
   return (
     <div className="stack">
-      <div className="row">
-        <label className="field" style={{ minWidth: 160 }}>
-          <span className="caption">Total budget</span>
+      <div className="budgetControls">
+        <label className="field">
+          <span className="label">Total budget</span>
           <input
             className="input"
             type="number"
@@ -80,8 +84,8 @@ export function BudgetSliders({ runId, markets }: { runId: string; markets: Mark
             onChange={(event) => setTotal(Number(event.target.value))}
           />
         </label>
-        <label className="field" style={{ minWidth: 100 }}>
-          <span className="caption">Currency</span>
+        <label className="field">
+          <span className="label">Currency</span>
           <select className="select" value={currency} onChange={(event) => setCurrency(event.target.value)}>
             {["EUR", "USD", "GBP"].map((item) => (
               <option key={item} value={item}>
@@ -90,8 +94,8 @@ export function BudgetSliders({ runId, markets }: { runId: string; markets: Mark
             ))}
           </select>
         </label>
-        <label className="field" style={{ minWidth: 190 }}>
-          <span className="caption">Mode</span>
+        <label className="field">
+          <span className="label">Mode</span>
           <select
             className="select"
             value={mode}
@@ -104,7 +108,6 @@ export function BudgetSliders({ runId, markets }: { runId: string; markets: Mark
         <button
           type="button"
           className="btnPrimary"
-          style={{ alignSelf: "flex-end" }}
           disabled={busy}
           onClick={() => void compute(locks)}
         >
@@ -115,31 +118,50 @@ export function BudgetSliders({ runId, markets }: { runId: string; markets: Mark
       {error ? <ErrorPanel error={error} onRetry={() => void compute(locks)} /> : null}
 
       {allocation ? (
-        <div className="stackSm">
+        <div className="stack">
+          <div className="budgetSummary">
+            <div className="stackSm">
+              <span className="statLabel">Total allocated</span>
+              <span className="displaySm">
+                {formatCurrency(allocation.total, allocation.currency)}
+              </span>
+            </div>
+            <div className="stackSm" style={{ alignItems: "flex-end" }}>
+              <span className="pill pillGood">{allocation.shares.length} markets</span>
+              <span className="caption">
+                {mode === "grow_untapped"
+                  ? "Weighted by taste, confidence and untapped gap."
+                  : "Weighted by taste, confidence and today's arrivals."}
+              </span>
+            </div>
+          </div>
+
           <p className="caption">
-            {mode === "grow_untapped"
-              ? "Weighted by taste score, confidence and untapped gap."
-              : "Weighted by taste score, confidence and today's arrivals."}{" "}
-            Locks pin a market's amount before the rest is split.
+            Locks pin a market&apos;s amount before the rest is split.
           </p>
-          <ul className="stackSm" style={{ listStyle: "none" }}>
+
+          <ul>
             {allocation.shares.map((share) => {
               const market = eligible.find((item) => item.market_id === share.market_id);
               const locked = locks[share.market_id] !== undefined;
+              const width = Math.max((share.share / maxShare) * 100, 2);
               return (
-                <li key={share.market_id} className="row" style={{ gap: 12 }}>
+                <li key={share.market_id} className="budgetRow">
                   <button
                     type="button"
-                    className={locked ? "btnGhost btnSmall" : "btnOutline btnSmall"}
+                    className={`budgetLock ${locked ? "btnGhost btnSmall" : "btnOutline btnSmall"}`}
                     onClick={() => market && toggleLock(market)}
                     aria-pressed={locked}
                     title={locked ? "Unlock this market" : "Lock this market's current amount"}
                   >
                     {locked ? "Locked" : "Lock"}
                   </button>
-                  <span style={{ flex: 1 }}>{share.city}</span>
-                  <span className="num caption">{formatShare(share.share)}</span>
-                  <span className="num" style={{ minWidth: 110, textAlign: "right" }}>
+                  <span className="budgetCity">{share.city}</span>
+                  <span className="barTrack budgetBar" aria-hidden="true">
+                    <span className="barFill" style={{ width: `${width}%` }} />
+                  </span>
+                  <span className="num caption budgetPct">{formatShare(share.share)}</span>
+                  <span className="num budgetAmount">
                     {formatCurrency(amountByMarket.get(share.market_id) ?? 0, allocation.currency)}
                   </span>
                 </li>

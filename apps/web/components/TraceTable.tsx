@@ -12,10 +12,10 @@ const KIND_LABELS: Record<string, string> = {
 };
 
 const KIND_CLASS: Record<string, string> = {
-  qloo: "pill pillSky",
+  qloo: "pill pillGood",
   llm: "pill pillWarm",
-  tool: "pill pillGood",
-  event: "pill",
+  tool: "pill",
+  event: "pill pillMuted",
 };
 
 export function TraceTable({ items }: { items: TraceItem[] }) {
@@ -35,9 +35,9 @@ export function TraceTable({ items }: { items: TraceItem[] }) {
 
   return (
     <div className="stack">
-      <div className="row">
-        <label className="field" style={{ minWidth: 140 }}>
-          <span className="caption">Kind</span>
+      <div className="traceFilters">
+        <label className="field">
+          <span className="label">Kind</span>
           <select className="select" value={kind} onChange={(event) => setKind(event.target.value)}>
             <option value="all">All</option>
             <option value="qloo">Qloo calls</option>
@@ -46,8 +46,8 @@ export function TraceTable({ items }: { items: TraceItem[] }) {
             <option value="event">Events</option>
           </select>
         </label>
-        <label className="field" style={{ flex: 1, minWidth: 200 }}>
-          <span className="caption">Search</span>
+        <label className="field fieldGrow">
+          <span className="label">Search</span>
           <input
             className="input"
             type="search"
@@ -63,29 +63,16 @@ export function TraceTable({ items }: { items: TraceItem[] }) {
       ) : (
         <div className="stackSm">
           {visible.map((item, index) => (
-            <details key={`${item.at}-${index}`} className="card cardTight">
-              <summary style={{ cursor: "pointer", listStyle: "none" }}>
-                <span className="row" style={{ gap: 8 }}>
-                  <span className={KIND_CLASS[item.kind] ?? "pill"}>{KIND_LABELS[item.kind] ?? item.kind}</span>
-                  <strong style={{ fontSize: 14 }}>{item.step}</strong>
-                  <span className="muted" style={{ flex: 1, fontSize: 14 }}>
-                    {item.summary}
-                  </span>
-                  <span className="caption">{formatDate(item.at)}</span>
+            <details key={`${item.at}-${index}`} className="traceCard">
+              <summary>
+                <span className={KIND_CLASS[item.kind] ?? "pill"}>
+                  {KIND_LABELS[item.kind] ?? item.kind}
                 </span>
+                <strong className="traceStep">{item.step}</strong>
+                <span className="traceSummary">{item.summary}</span>
+                <span className="caption traceTime">{formatDate(item.at)}</span>
               </summary>
-              <pre
-                className="mono"
-                style={{
-                  marginTop: 12,
-                  padding: 12,
-                  background: "rgba(0,0,0,0.03)",
-                  borderRadius: 8,
-                  overflowX: "auto",
-                }}
-              >
-                {JSON.stringify(item.detail, null, 2)}
-              </pre>
+              <pre>{JSON.stringify(item.detail, null, 2)}</pre>
             </details>
           ))}
         </div>

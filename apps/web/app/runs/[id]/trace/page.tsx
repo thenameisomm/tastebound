@@ -53,18 +53,49 @@ export default function TracePage() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ marginTop: 32 }}>
-        <p className="caption">
-          <Link className="link" href={`/runs/${runId}`}>
+      <div className="pageHero">
+        <div className="pageHeroMain">
+          <Link className="backLink" href={`/runs/${runId}`}>
             ← Back to results
           </Link>
-        </p>
-        <span className="eyebrow">Audit log</span>
-        <h1 className="heading">Trace</h1>
-        <p className="muted">
-          Every LLM step, tool call and Qloo call in order. Expand a row for the full parameters.
-        </p>
+          <span className="eyebrow">Audit log</span>
+          <h1 className="heading">Trace</h1>
+          <p className="pageLead">
+            Every LLM step, tool call and Qloo call in order. Expand a row for the full parameters.
+          </p>
+        </div>
       </div>
+
+      {trace ? (
+        <div className="statGrid sectionSm">
+          <div className="stat">
+            <span className="statLabel">Qloo calls</span>
+            <span className="statValue">
+              {trace.items.filter((item) => item.kind === "qloo").length}
+            </span>
+            <span className="statNote">Live and cached requests</span>
+          </div>
+          <div className="stat">
+            <span className="statLabel">LLM calls</span>
+            <span className="statValue">
+              {trace.items.filter((item) => item.kind === "llm").length}
+            </span>
+            <span className="statNote">Proposals and written briefs</span>
+          </div>
+          <div className="stat">
+            <span className="statLabel">Tool calls</span>
+            <span className="statValue">
+              {trace.items.filter((item) => item.kind === "tool").length}
+            </span>
+            <span className="statNote">Deterministic agent tools</span>
+          </div>
+          <div className="stat statDark">
+            <span className="statLabel">Total events</span>
+            <span className="statValue">{trace.items.length}</span>
+            <span className="statNote">Ordered, timestamped, inspectable</span>
+          </div>
+        </div>
+      ) : null}
 
       <section className="section">
         {trace === null ? (

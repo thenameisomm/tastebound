@@ -65,17 +65,18 @@ export function BriefEditor({
   };
 
   return (
-    <article className="card stack">
+    <article className="briefCard stack">
       <div className="spread">
-        <div>
+        <div className="stackSm">
+          <span className="kindTag">Brief / {brief.city}</span>
           {editing ? (
             <input className="input" value={title} onChange={(event) => setTitle(event.target.value)} maxLength={160} />
           ) : (
             <h3 className="headingSm">{title}</h3>
           )}
-          <div className="row" style={{ gap: 6, marginTop: 6 }}>
+          <div className="row" style={{ gap: 6 }}>
             <span
-              className={brief.source === "llm" ? "pill pillSky" : "pill"}
+              className={brief.source === "llm" ? "pill pillGood" : "pill"}
               title={
                 brief.source === "llm"
                   ? "Written by the model from Qloo evidence"
@@ -116,13 +117,13 @@ export function BriefEditor({
       {editing ? (
         <textarea className="textarea" value={summary} maxLength={400} onChange={(event) => setSummary(event.target.value)} />
       ) : (
-        <p className="serif">{summary}</p>
+        <p className="summary">{summary}</p>
       )}
 
       <div className="stack">
         {sections.map((section, index) => (
-          <div key={section.heading} className="stackSm">
-            <h4 className="subheading">{section.heading}</h4>
+          <div key={section.heading} className="briefSection stackSm">
+            <h4>{section.heading}</h4>
             {editing ? (
               <textarea
                 className="textarea"

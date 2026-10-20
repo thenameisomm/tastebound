@@ -88,70 +88,87 @@ export default function MarketDetailPage() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ marginTop: 32 }}>
-        <div className="spread">
-          <div>
-            <p className="caption">
-              <Link className="link" href={`/runs/${runId}`}>
-                ← Back to results
-              </Link>
-            </p>
-            <h1 className="heading">
-              {market.city}
-              {score.quadrant ? (
-                <span className={quadrantClass(score.quadrant)} style={{ marginLeft: 12, verticalAlign: "middle" }} title={QUADRANT_HELP[score.quadrant]}>
-                  {QUADRANT_LABELS[score.quadrant]}
-                </span>
-              ) : null}
-            </h1>
-            <p className="muted">
+      <div className="pageHero">
+        <div className="pageHeroMain">
+          <Link className="backLink" href={`/runs/${runId}`}>
+            ← Back to results
+          </Link>
+          <span className="eyebrow">Market brief / {market.region}</span>
+          <div className="marketTitleRow">
+            <h1 className="display">{market.city}</h1>
+            {score.quadrant ? (
+              <span
+                className={quadrantClass(score.quadrant)}
+                title={QUADRANT_HELP[score.quadrant]}
+              >
+                {QUADRANT_LABELS[score.quadrant]}
+              </span>
+            ) : null}
+          </div>
+          <p className="pageMeta">
+            <span>
               {market.country_name} · {market.region}
-              {score.rank !== null ? ` · rank #${score.rank} in this run` : ""}
-            </p>
-          </div>
+            </span>
+            {score.rank !== null ? <span>Rank #{score.rank} in this run</span> : null}
+            <span>Taste fit, not a visitor forecast</span>
+          </p>
         </div>
+      </div>
 
-        <div className="grid4">
-          <div className="card stackSm">
-            <span className="kindTag">Taste score</span>
-            <span className="heading" title="Percentile of lift across this run's markets (0–100). Taste fit, not demand.">
-              {formatScore(score.taste_score)}
-            </span>
-            <span className="caption">percentile of lift, 0–100</span>
-          </div>
-          <div className="card stackSm">
-            <span className="kindTag">Lift</span>
-            <span className="heading" title="Qloo affinity with this destination's signals minus the same market queried without them">
-              {formatLift(score.lift)}
-            </span>
-            <span className="caption">target vs baseline affinity</span>
-          </div>
-          <div className="card stackSm">
-            <span className="kindTag">Coverage</span>
-            <span className="heading" title="Share of the destination's profile entities with Qloo signals in this market">
-              {formatShare(score.coverage)}
-            </span>
-            <span className="caption">of profile entities have signals here</span>
-          </div>
-          <div className="card stackSm">
-            <span className="kindTag">Confidence</span>
-            <span style={{ marginTop: 4 }}>
-              <ConfidenceBadge confidence={score.confidence} />
-            </span>
-            <span className="caption">{confidenceHelp(score.confidence)}</span>
-          </div>
+      <div className="statGrid sectionSm">
+        <div className="stat statDark">
+          <span className="statLabel">Taste score</span>
+          <span
+            className="statValue"
+            title="Percentile of lift across this run's markets (0–100). Taste fit, not a visitor forecast."
+          >
+            {formatScore(score.taste_score)}
+          </span>
+          <span className="statNote">Percentile of lift, 0–100</span>
         </div>
+        <div className="stat">
+          <span className="statLabel">Lift</span>
+          <span
+            className="statValue"
+            title="Qloo affinity with this destination's signals minus the same market queried without them"
+          >
+            {formatLift(score.lift)}
+          </span>
+          <span className="statNote">Target vs baseline affinity</span>
+        </div>
+        <div className="stat">
+          <span className="statLabel">Coverage</span>
+          <span
+            className="statValue"
+            title="Share of the destination's profile entities with Qloo signals in this market"
+          >
+            {formatShare(score.coverage)}
+          </span>
+          <span className="statNote">Of profile entities have signals here</span>
+        </div>
+        <div className="stat">
+          <span className="statLabel">Confidence</span>
+          <span style={{ marginTop: 4 }}>
+            <ConfidenceBadge confidence={score.confidence} />
+          </span>
+          <span className="statNote">{confidenceHelp(score.confidence)}</span>
+        </div>
+      </div>
 
-        {score.flags.length > 0 ? (
+      {score.flags.length > 0 ? (
+        <div className="sectionSm">
           <Banner tone="warn">
             {score.flags.map(flagLabel).join(" · ")} — read this market&apos;s numbers with care.
           </Banner>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       <section className="section grid2">
         <div className="card stack">
-          <h2 className="headingSm">Arrivals & gap</h2>
+          <div className="stackSm">
+            <span className="kindTag">Evidence</span>
+            <h2 className="headingSm">Arrivals &amp; gap</h2>
+          </div>
           <dl className="kv">
             <dt title="Share of your uploaded arrivals in this market">Arrivals share</dt>
             <dd className="num">{formatShare(score.arrivals_share)}</dd>
@@ -171,7 +188,10 @@ export default function MarketDetailPage() {
 
         <div className="card stack">
           <div className="spread">
-            <h2 className="headingSm">Audience</h2>
+            <div className="stackSm">
+              <span className="kindTag">Signal</span>
+              <h2 className="headingSm">Audience</h2>
+            </div>
             {audience_note ? <span className="caption">{audience_note}</span> : null}
           </div>
           <AudienceBars audience={audience} />
@@ -179,16 +199,18 @@ export default function MarketDetailPage() {
       </section>
 
       <section className="section">
-        <div className="card stack">
-          <h2 className="headingSm">Campaign angle</h2>
-          {angle ? (
-            <>
-              <p className="serif" style={{ fontSize: 20 }}>
-                {angle.headline}
-              </p>
-              <EvidenceList evidence={angle.evidence} />
-            </>
-          ) : (
+        {angle ? (
+          <div className="angleCard stack">
+            <div className="spread">
+              <span className="kindTag">Campaign angle</span>
+              <span className="pill pillGood">evidence attached</span>
+            </div>
+            <p className="angleHeadline">{angle.headline}</p>
+            <EvidenceList evidence={angle.evidence} />
+          </div>
+        ) : (
+          <div className="card stack">
+            <h2 className="headingSm">Campaign angle</h2>
             <p className="muted">
               No angle yet. Pick this market in a deep dive on the{" "}
               <Link className="link" href={`/runs/${runId}`}>
@@ -196,22 +218,28 @@ export default function MarketDetailPage() {
               </Link>
               .
             </p>
-          )}
-        </div>
+          </div>
+        )}
       </section>
 
       <section className="section grid2">
         <div className="card stack">
-          <h2 className="headingSm">Partners</h2>
+          <div className="stackSm">
+            <span className="kindTag">Media</span>
+            <h2 className="headingSm">Partners</h2>
+          </div>
           <PartnerTabs partners={partners} />
         </div>
         <div className="card stack">
-          <h2 className="headingSm">Global brands</h2>
+          <div className="stackSm">
+            <span className="kindTag">Brands</span>
+            <h2 className="headingSm">Global brands</h2>
+          </div>
           {brands.length > 0 ? (
-            <ul className="stackSm" style={{ listStyle: "none" }}>
+            <ul>
               {brands.map((brand) => (
-                <li key={brand.entity_id} className="spread">
-                  <span>{brand.name}</span>
+                <li key={brand.entity_id} className="partnerRow">
+                  <span className="partnerName">{brand.name}</span>
                   <span className="num caption" title="Taste lift of this brand against the destination profile">
                     {formatLift(brand.lift)}
                   </span>
@@ -226,14 +254,14 @@ export default function MarketDetailPage() {
 
       {detail.allocation_share !== null ? (
         <section className="section">
-          <div className="cardTint row" style={{ justifyContent: "space-between" }}>
+          <div className="cardTint spread">
             <span>
               Budget share from the latest plan: <strong>{formatShare(detail.allocation_share)}</strong>
             </span>
             {detail.budget_amount !== null ? (
-              <strong>{formatCurrency(detail.budget_amount, "EUR")}</strong>
+              <strong className="num">{formatCurrency(detail.budget_amount, "EUR")}</strong>
             ) : null}
-            <Link className="link" href={`/runs/${runId}/plan`}>
+            <Link className="btnOutline" href={`/runs/${runId}/plan`}>
               Open plan
             </Link>
           </div>

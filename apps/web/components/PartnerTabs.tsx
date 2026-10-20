@@ -35,17 +35,17 @@ export function PartnerTabs({ partners }: { partners: Record<string, PartnerOut[
           </button>
         ))}
       </div>
-      <ul className="stackSm" style={{ listStyle: "none" }}>
+      <ul>
         {rows.map((partner) => (
-          <li key={`${partner.partner_type}-${partner.entity_id}`} className="spread">
-            <span>
+          <li key={`${partner.partner_type}-${partner.entity_id}`} className="partnerRow">
+            <span className="partnerName">
               {partner.name}
               {partner.market_specific ? (
-                <span className="pill pillSky" style={{ marginLeft: 8 }} title="Found specifically for this market">
+                <span className="pill pillGood" title="Found specifically for this market">
                   market-specific
                 </span>
               ) : (
-                <span className="pill" style={{ marginLeft: 8 }} title="Found across the destination's profile">
+                <span className="pill" title="Found across the destination's profile">
                   profile-wide
                 </span>
               )}

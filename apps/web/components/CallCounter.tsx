@@ -42,7 +42,7 @@ export function CallCounter({ run, events = [] }: CallCounterProps) {
   const hasSSE = events.length > 0 && (sseCounts.qloo_live > 0 || sseCounts.qloo_cached > 0);
 
   return (
-    <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+    <div className="callCounter">
       <span className="pill pillSky" title="Qloo API calls: live + served from the local cache">
         Qloo calls {total}
       </span>
@@ -58,11 +58,7 @@ export function CallCounter({ run, events = [] }: CallCounterProps) {
       <span className="pill" title="Agent tool invocations">
         tools {tools}
       </span>
-      {hasSSE && (
-        <span className="pill pillSky" style={{ fontSize: 11, opacity: 0.8 }}>
-          live
-        </span>
-      )}
+      {hasSSE && <span className="pill pillGood">streaming</span>}
     </div>
   );
 }
