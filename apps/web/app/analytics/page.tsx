@@ -3,29 +3,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { Banner } from "@/components/Banner";
-import { EmptyState } from "@/components/EmptyState";
-import { SourceChip } from "@/components/SourceChip";
 import { TasteScoreChart } from "@/components/charts/TasteScoreChart";
 import { QuadrantScatterChart } from "@/components/charts/QuadrantScatterChart";
-import type { MarketRow, ArrivalsSampleOut } from "@/lib/types";
-
-const PRESET_LABELS: Record<string, string> = {
-  us10: "US Domestic (10)",
-  us20: "US Domestic (20)",
-  na15: "North America (15)",
-  europe20: "Europe (20)",
-  apac15: "Asia-Pacific (15)",
-  me8: "Middle East (8)",
-  latam10: "Latin America (10)",
-};
+import type { ArrivalsSampleOut, DemoResponse, MarketListResponse, MarketRow } from "@/lib/types";
 
 export default function AnalyticsPage() {
   const [markets, setMarkets] = useState<MarketRow[]>([]);
-  const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
-  const [runs, setRuns] = useState<Array<{ run_id: string; created_at: string; status: string; destination_name?: string }>>([]);
   const [samples, setSamples] = useState<ArrivalsSampleOut[]>([]);
+  const [demoDestination, setDemoDestination] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
-  const [busy, setBusy] = useState<string | null>(null);
 
   // Filters
   const [regionFilter, setRegionFilter] = useState<string>("all");
@@ -38,21 +24,20 @@ export default function AnalyticsPage() {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
   const loadData = async () => {
-    setBusy("markets");
     setError(null);
     try {
-      const [marketsPayload, runsPayload, samplesPayload] = await Promise.all([
-        api.get<{ markets: MarketRow[] }>("/v1/markets"),
-        api.get<Array<{ run_id: string; created_at: string; status: string }>>("/v1/runs?limit=20"),
+      const [demoPayload, samplesPayload] = await Promise.all([
+        api.get<DemoResponse>("/v1/demo"),
         api.get<ArrivalsSampleOut[]>("/v1/arrivals/samples"),
       ]);
-      setMarkets(marketsPayload.markets);
-      setRuns(runsPayload);
+      const marketPayload = await api.get<MarketListResponse>(
+        `/v1/runs/${demoPayload.run_id}/markets`,
+      );
+      setMarkets(marketPayload.markets);
       setSamples(samplesPayload);
+      setDemoDestination(demoPayload.destination);
     } catch (err) {
       setError(err);
-    } finally {
-      setBusy(null);
     }
   };
 
@@ -83,6 +68,8 @@ export default function AnalyticsPage() {
   }, [markets, regionFilter, quadrantFilter, minTasteScore, maxTasteScore, minArrivals, maxArrivals, sortBy, sortDir]);
 
   const regions = useMemo(() => Array.from(new Set(markets.map((m) => m.region))).sort(), [markets]);
+  const untappedCount = filteredMarkets.filter((market) => market.quadrant === "untapped").length;
+  const highConfidenceCount = filteredMarkets.filter((market) => market.confidence === "high").length;
 
   const handleSort = (field: typeof sortBy) => {
     if (sortBy === field) {
@@ -91,6 +78,17 @@ export default function AnalyticsPage() {
       setSortBy(field);
       setSortDir("desc");
     }
+  };
+
+  const resetFilters = () => {
+    setRegionFilter("all");
+    setQuadrantFilter("all");
+    setMinTasteScore(0);
+    setMaxTasteScore(100);
+    setMinArrivals(0);
+    setMaxArrivals(100);
+    setSortBy("taste_score");
+    setSortDir("desc");
   };
 
   const exportCSV = () => {
@@ -119,22 +117,64 @@ export default function AnalyticsPage() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ marginTop: 32 }}>
-        <div className="stackSm">
+      <div className="pageHero">
+        <div className="pageHeroMain">
           <span className="eyebrow">Analytics</span>
-          <h1 className="heading">Market Analytics</h1>
+          <h1 className="heading">Market analytics</h1>
+          <p className="pageLead">
+            Explore taste fit, quadrants and arrival gaps across origin markets. Filter, sort and
+            export to find the places where interest runs ahead of the crowd.
+          </p>
+          {demoDestination ? (
+            <p className="pageMeta">
+              <span>Sample run: {demoDestination}</span>
+              <span>Arrivals attached</span>
+              <span>Scores from Qloo</span>
+            </p>
+          ) : null}
         </div>
-        <p className="serif">
-          Explore taste scores, quadrants, and arrival gaps across origin markets.
-          Filter, sort, and export to identify untapped opportunities.
-        </p>
       </div>
 
-      {error ? <div className="sectionSm"><Banner tone="error">Failed to load data</Banner></div> : null}
+      {error ? (
+        <div className="sectionSm">
+          <Banner tone="error">Failed to load data</Banner>
+        </div>
+      ) : null}
+
+      <div className="statGrid sectionSm">
+        <div className="stat">
+          <span className="statLabel">In view</span>
+          <span className="statValue">{filteredMarkets.length}</span>
+          <span className="statNote">of {markets.length} scored markets</span>
+        </div>
+        <div className="stat">
+          <span className="statLabel">Untapped</span>
+          <span className="statValue">{untappedCount}</span>
+          <span className="statNote">taste ahead of arrivals</span>
+        </div>
+        <div className="stat">
+          <span className="statLabel">High confidence</span>
+          <span className="statValue">{highConfidenceCount}</span>
+          <span className="statNote">Qloo confidence high</span>
+        </div>
+        <div className="stat statDark">
+          <span className="statLabel">Arrivals</span>
+          <span className="statValue">{samples.length}</span>
+          <span className="statNote">samples loaded</span>
+        </div>
+      </div>
 
       <section className="section">
-        <div className="card stackSm">
-          <h3 className="headingSm">Filters</h3>
+        <div className="filterPanel stack">
+          <div className="spread">
+            <div className="stackSm">
+              <span className="kindTag">Filters</span>
+              <h2 className="headingSm">Narrow the market set</h2>
+            </div>
+            <button type="button" className="btnGhost btnSmall" onClick={resetFilters}>
+              Reset
+            </button>
+          </div>
           <div className="grid4">
             <label className="field">
               <span className="label">Region</span>
@@ -154,17 +194,17 @@ export default function AnalyticsPage() {
               </select>
             </label>
             <label className="field">
-              <span className="label">Taste Score Range</span>
+              <span className="label">Taste score range</span>
               <div className="row" style={{ gap: 8 }}>
-                <input type="number" className="input" min="0" max="100" value={minTasteScore} onChange={(e) => setMinTasteScore(Math.min(parseInt(e.target.value) || 0, maxTasteScore))} placeholder="Min" />
-                <input type="number" className="input" min="0" max="100" value={maxTasteScore} onChange={(e) => setMaxTasteScore(Math.max(parseInt(e.target.value) || 100, minTasteScore))} placeholder="Max" />
+                <input type="number" className="input" min="0" max="100" value={minTasteScore} onChange={(e) => setMinTasteScore(Math.min(parseInt(e.target.value) || 0, maxTasteScore))} placeholder="Min" aria-label="Minimum taste score" />
+                <input type="number" className="input" min="0" max="100" value={maxTasteScore} onChange={(e) => setMaxTasteScore(Math.max(parseInt(e.target.value) || 100, minTasteScore))} placeholder="Max" aria-label="Maximum taste score" />
               </div>
             </label>
             <label className="field">
-              <span className="label">Arrivals Share Range</span>
+              <span className="label">Arrivals share range</span>
               <div className="row" style={{ gap: 8 }}>
-                <input type="number" className="input" min="0" max="100" value={minArrivals} onChange={(e) => setMinArrivals(Math.min(parseInt(e.target.value) || 0, maxArrivals))} placeholder="Min %" />
-                <input type="number" className="input" min="0" max="100" value={maxArrivals} onChange={(e) => setMaxArrivals(Math.max(parseInt(e.target.value) || 100, minArrivals))} placeholder="Max %" />
+                <input type="number" className="input" min="0" max="100" value={minArrivals} onChange={(e) => setMinArrivals(Math.min(parseInt(e.target.value) || 0, maxArrivals))} placeholder="Min %" aria-label="Minimum arrivals share" />
+                <input type="number" className="input" min="0" max="100" value={maxArrivals} onChange={(e) => setMaxArrivals(Math.max(parseInt(e.target.value) || 100, minArrivals))} placeholder="Max %" aria-label="Maximum arrivals share" />
               </div>
             </label>
           </div>
@@ -172,34 +212,62 @@ export default function AnalyticsPage() {
       </section>
 
       <section className="section">
-        <div className="spread">
-          <h2 className="headingSm">Markets ({filteredMarkets.length})</h2>
-          <button type="button" className="btnPrimary" onClick={exportCSV} disabled={filteredMarkets.length === 0}>
-            Export CSV
-          </button>
+        <div className="sectionHeader">
+          <div className="stackSm">
+            <span className="kindTag">Market table</span>
+            <h2 className="headingSm">Markets ({filteredMarkets.length})</h2>
+          </div>
+          <div className="row" style={{ gap: 12 }}>
+            <span className="caption">
+              Sorted by {sortBy.replace(/_/g, " ")} · {sortDir === "asc" ? "ascending" : "descending"}
+            </span>
+            <button type="button" className="btnPrimary" onClick={exportCSV} disabled={filteredMarkets.length === 0}>
+              Export CSV
+            </button>
+          </div>
         </div>
 
-        <div className="card">
+        <div className="tableCard">
           <div style={{ overflowX: "auto" }}>
             <table className="table">
               <thead>
                 <tr>
-                  <th onClick={() => handleSort("city")} style={{ cursor: "pointer" }}>City <span className="caption">{sortBy === "city" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span></th>
-                  <th>Country</th>
-                  <th>Region</th>
-                  <th onClick={() => handleSort("taste_score")} style={{ cursor: "pointer" }}>Taste Score <span className="caption">{sortBy === "taste_score" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span></th>
-                  <th onClick={() => handleSort("lift")} style={{ cursor: "pointer" }}>Lift <span className="caption">{sortBy === "lift" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span></th>
-                  <th>Coverage</th>
-                  <th>Confidence</th>
-                  <th onClick={() => handleSort("arrivals_share")} style={{ cursor: "pointer" }}>Arrivals % <span className="caption">{sortBy === "arrivals_share" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span></th>
-                  <th onClick={() => handleSort("gap")} style={{ cursor: "pointer" }}>Gap <span className="caption">{sortBy === "gap" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span></th>
-                  <th>Quadrant</th>
+                  <th scope="col" aria-sort={sortBy === "city" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+                    <button type="button" className="sortButton" onClick={() => handleSort("city")}>
+                      City <span aria-hidden="true">{sortBy === "city" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span>
+                    </button>
+                  </th>
+                  <th scope="col">Country</th>
+                  <th scope="col">Region</th>
+                  <th scope="col" aria-sort={sortBy === "taste_score" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+                    <button type="button" className="sortButton" onClick={() => handleSort("taste_score")}>
+                      Taste score <span aria-hidden="true">{sortBy === "taste_score" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span>
+                    </button>
+                  </th>
+                  <th scope="col" aria-sort={sortBy === "lift" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+                    <button type="button" className="sortButton" onClick={() => handleSort("lift")}>
+                      Lift <span aria-hidden="true">{sortBy === "lift" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span>
+                    </button>
+                  </th>
+                  <th scope="col">Coverage</th>
+                  <th scope="col">Confidence</th>
+                  <th scope="col" aria-sort={sortBy === "arrivals_share" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+                    <button type="button" className="sortButton" onClick={() => handleSort("arrivals_share")}>
+                      Arrivals % <span aria-hidden="true">{sortBy === "arrivals_share" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span>
+                    </button>
+                  </th>
+                  <th scope="col" aria-sort={sortBy === "gap" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+                    <button type="button" className="sortButton" onClick={() => handleSort("gap")}>
+                      Gap <span aria-hidden="true">{sortBy === "gap" ? (sortDir === "asc" ? "↑" : "↓") : ""}</span>
+                    </button>
+                  </th>
+                  <th scope="col">Quadrant</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredMarkets.map((m) => (
                   <tr key={m.market_id}>
-                    <td className="num">{m.city}</td>
+                    <td><span className="tableCity">{m.city}</span></td>
                     <td>{m.country_name}</td>
                     <td>{m.region}</td>
                     <td className="num">{m.taste_score?.toFixed(1) ?? "—"}</td>
@@ -221,8 +289,8 @@ export default function AnalyticsPage() {
                 ))}
                 {filteredMarkets.length === 0 && (
                   <tr>
-                    <td colSpan={11} style={{ textAlign: "center", padding: 32 }}>
-                      <EmptyState title="No markets match filters" />
+                    <td colSpan={10} className="tableEmpty">
+                      No markets match these filters.
                     </td>
                   </tr>
                 )}
@@ -233,41 +301,8 @@ export default function AnalyticsPage() {
       </section>
 
       <section className="section grid2">
-        <TasteScoreChart markets={filteredMarkets} title="Top Taste Scores" />
-        <QuadrantScatterChart markets={filteredMarkets} title="Quadrant: Taste Score vs Arrivals Share" />
-      </section>
-
-      <section className="section">
-        <h2 className="headingSm">Run Comparison</h2>
-        <p className="muted">Recent runs for comparison (click to load into analytics)</p>
-        <div className="card">
-          {runs.length === 0 ? (
-            <EmptyState title="No runs yet" />
-          ) : (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Run ID</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                </tr>
-              </thead>
-              <tbody>
-                {runs.map((r) => (
-                  <tr key={r.run_id} style={{ cursor: "pointer" }}>
-                    <td className="mono">{r.run_id.slice(0, 8)}…</td>
-                    <td>
-                      <span className={`pill ${r.status === "done" ? "pillGood" : r.status === "partial" ? "pillWarn" : r.status === "failed" ? "pillBad" : "pillSky"}`}>
-                        {r.status}
-                      </span>
-                    </td>
-                    <td>{new Date(r.created_at).toLocaleString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+        <TasteScoreChart markets={filteredMarkets} title="Top taste scores" />
+        <QuadrantScatterChart markets={filteredMarkets} title="Taste fit vs arrivals" />
       </section>
     </main>
   );

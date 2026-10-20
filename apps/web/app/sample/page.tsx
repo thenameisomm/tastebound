@@ -58,46 +58,65 @@ export default function SamplePage() {
   }
 
   return (
-    <main className="page pageNarrow">
-      <div className="stack" style={{ marginTop: 48 }}>
-        <span className="pill pillWarm" style={{ alignSelf: "flex-start" }}>
-          Sample run · stored {run ? formatDate(run.created_at) : "date unavailable"}
-        </span>
-        <h1 className="displaySm">{demo.headline}</h1>
-        <p className="serif" style={{ fontSize: 18 }}>
-          A stored, read-only run for {demo.destination}. No Qloo quota and no sign-up — explore the
-          full results, plan and trace exactly as they were produced.
-        </p>
-        <Banner tone="info">
-          This run is read-only: editing, rescoring and deep dives are disabled on the sample.
-        </Banner>
-        <div className="row" style={{ gap: 12 }}>
-          <Link className="btnPrimary" href={`/runs/${demo.run_id}`}>
-            Open the results
-          </Link>
-          <Link className="btnOutline" href={`/runs/${demo.run_id}/plan`}>
-            Budget & briefs
-          </Link>
-          <Link className="btnOutline" href={`/runs/${demo.run_id}/trace`}>
-            Trace
-          </Link>
-        </div>
-        {demo.shortlist.length > 0 ? (
+    <main className="page">
+      <div className="sampleHero">
+        <div className="samplePanel stack">
           <div className="stackSm">
-            <span className="kindTag">Shortlisted markets</span>
-            <div className="row" style={{ gap: 6 }}>
-              {demo.shortlist.map((city) => (
-                <span key={city} className="chip">
-                  {city}
-                </span>
-              ))}
-            </div>
+            <span className="eyebrow">Sample run / read only</span>
+            <h1 className="heading">{demo.headline}</h1>
           </div>
-        ) : null}
-        <p className="caption">
-          Taste fit, not a visitor forecast. Every number links to the Qloo call that produced it in
-          the trace.
-        </p>
+          <p className="pageLead">
+            A stored, read-only run for {demo.destination}. No Qloo quota and no sign-up — explore
+            the full results, plan and trace exactly as they were produced.
+          </p>
+          <Banner tone="info">
+            This run is read-only: editing, rescoring and deep dives are disabled on the sample.
+          </Banner>
+          <div className="row" style={{ gap: 10 }}>
+            <Link className="btnPrimary" href={`/runs/${demo.run_id}`}>
+              Open the results
+            </Link>
+            <Link className="btnOutline" href={`/runs/${demo.run_id}/plan`}>
+              Budget &amp; briefs
+            </Link>
+            <Link className="btnOutline" href={`/runs/${demo.run_id}/trace`}>
+              Trace
+            </Link>
+          </div>
+          <p className="caption">
+            Taste fit, not a visitor forecast. Every number links to the Qloo call that produced it
+            in the trace.
+          </p>
+        </div>
+
+        <aside className="sampleMeta">
+          <div className="stackSm">
+            <span className="eyebrow">Destination</span>
+            <span className="displaySm">{demo.destination}</span>
+          </div>
+          <div className="stackSm">
+            <span className="statLabel">Stored</span>
+            <span className="statValue" style={{ fontSize: 22 }}>
+              {run ? formatDate(run.created_at) : "Date unavailable"}
+            </span>
+          </div>
+          <div className="stackSm">
+            <span className="statLabel">Shortlist</span>
+            <span className="statValue" style={{ fontSize: 22 }}>
+              {demo.shortlist.length} markets
+            </span>
+            {demo.shortlist.length > 0 ? (
+              <div className="row" style={{ gap: 6, marginTop: 4 }}>
+                {demo.shortlist.map((city) => (
+                  <span key={city} className="pill pillGood">
+                    {city}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          <p className="caption">Sample runs never spend Qloo quota.</p>
+        </aside>
       </div>
     </main>
   );
