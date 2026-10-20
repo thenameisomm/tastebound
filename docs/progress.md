@@ -30,6 +30,7 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 | SUB | Final polish: wrapped hero highlight no longer overlaps (band highlight + line-height), completed runs no longer show a stale "streaming" badge, README screenshots regenerated at 1440×1000 without the Playwright animation artifact | `globals.css`, `CallCounter.tsx`, `scripts/readme-shots.mjs`; web lint/check-types/build pass; smoke 6/6; axe 0 violations |
 | SUB | API/LLM cleanup: Ollama base URL corrected to `https://ollama.com/v1` (`ollama.ai` redirects and returns 405), unreachable iterative-agent scaffolding removed; live probe reached the API but hit the free-limit 429; docs updated | `settings.py`, `.env.example`, `docs/18-risks-and-decisions.md`, `docs/llm-contract.md`; ruff/format/mypy clean, pytest 48 passed |
 | SUB | Kill-switch rehearsal verified: invalid QLOO_API_KEY → run fails with `qloo_auth`, zero counters, empty shortlist; pre-demo checks all ticked | docs/14-checks.md Pre-demo |
+| SUB | README beautified in the current Anton/Inter/mint system: new pure-SVG hero, scrolled gap-quadrant capture, trace proof, accurate image text, tightened copy; skill audit and Prettier pass | `README.md`, `assets/readme/hero.svg`, `assets/readme/02-results.png`, `scripts/readme-shots.mjs` |
 
 ## Acceptance status (live-verified, not yet test-coded)
 
@@ -40,11 +41,10 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 ## Blockers
 
 - **Ollama Cloud free tier exhausted** → tool calling remains unverified and LLM-written briefs fall back to templates. The free key is authenticated but returns 429; there is no paid plan. This is a documented limitation, not a submission blocker: `LLM_TOOL_CALLING` stays `false`, the deterministic planner runs, and no tool-choice claim is made.
-- **External deployment not started** → no Vercel/Render/Fly/Railway/Supabase credentials or CLIs in this session; `gh` is authenticated but cannot host the app. Needs user auth or a provider choice, plus the production env vars.
-- **No Supabase CLI locally** → local runs use SQLite; the hosted deploy still targets Supabase Cloud.
+- **External deployment intentionally skipped** → the user chose “Skip deployment for now” on 2026-10-20. No hosted demo URL exists; the public repo and local sample are the submission surface. Revisit only if the user reverses this decision.
+- **No Supabase CLI locally** → local runs use SQLite; a future hosted deploy would target Supabase Cloud.
 
 ## Next
 
-1. User-side: authenticate a host (Vercel for web; Render/Fly/Railway for the API) and provide the Supabase project, or approve preparing provider configs. Then deploy, seed the demo, set `NEXT_PUBLIC_API_URL`/`CORS_ORIGINS`, and run smoke + axe against the deployed URL.
-2. File the Devpost entry with the live demo URL; confirm the public repo and licence are visible. Video is not required by the rules.
-3. If the free quota resets or a paid key is provided: verify tool calling, record it in `docs/llm-contract.md`, then (only then) consider enabling `LLM_TOOL_CALLING`. Otherwise submit with deterministic orchestration, as documented.
+1. User-side: file the Devpost entry with the public repo URL and the local-sample instructions; confirm the licence is visible. Hosted deployment is intentionally skipped. Video is not required by the rules.
+2. If the free quota resets or a paid key is provided: verify tool calling, record it in `docs/llm-contract.md`, then (only then) consider enabling `LLM_TOOL_CALLING`. Otherwise submit with deterministic orchestration, as documented.

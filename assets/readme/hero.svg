@@ -1,55 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" role="img" aria-label="TasteBound — find the markets that already share your taste. A gap quadrant shows untapped markets in the top-left.">
-  <title>TasteBound — find the markets that already share your taste</title>
-  <defs>
-    <clipPath id="panelClip">
-      <rect x="700" y="56" width="452" height="288" rx="16"/>
-    </clipPath>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" role="img" aria-labelledby="title desc">
+  <title id="title">TasteBound — find the markets that already share your taste</title>
+  <desc id="desc">TasteBound title with a Qloo hackathon label and a Lisbon demo card showing 12 untapped markets, including Cartagena, Tokyo and Bogotá.</desc>
 
-  <rect x="0" y="0" width="1200" height="400" rx="20" fill="#f6f5f4"/>
-  <rect x="0.5" y="0.5" width="1199" height="399" rx="19.5" fill="none" stroke="rgba(0,0,0,0.08)"/>
+  <style>
+    @keyframes tb-repaint { from { opacity: 0.99; } to { opacity: 1; } }
+    svg { animation: tb-repaint 0.01s linear; }
+  </style>
+  <rect width="1200" height="420" rx="24" fill="#e5e5e5"/>
+  <rect x="0.5" y="0.5" width="1199" height="419" rx="23.5" fill="none" stroke="#c9c9c9"/>
 
-  <rect x="64" y="64" width="304" height="40" rx="20" fill="#f6d5b8"/>
-  <text x="88" y="90" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#5c4a35">Qloo Agentic Hackathon 2026</text>
+  <g id="eyebrow" transform="translate(56 62)">
+    <rect width="10" height="10" fill="#0a0a0a"/>
+    <text x="22" y="9" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="17" letter-spacing="1.4" fill="#4f4f4f">QLOO AGENTIC HACKATHON / 2026</text>
+  </g>
 
-  <text x="64" y="188" font-family="Georgia, 'Times New Roman', serif" font-size="84" font-weight="700" letter-spacing="-2" fill="#111111">TasteBound<tspan fill="#0075de">.</tspan></text>
+  <g id="title" font-family="Impact, 'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-size="66" letter-spacing="-1.5" fill="#0a0a0a">
+    <rect x="54" y="240" width="402" height="64" fill="#d1ffca"/>
+    <text x="56" y="168">FIND THE</text>
+    <text x="56" y="234">MARKETS THAT</text>
+    <text x="56" y="300">ALREADY SHARE</text>
+    <text x="56" y="366">YOUR TASTE.</text>
+  </g>
 
-  <text x="64" y="244" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="28" fill="#615d59">Find the markets that already share</text>
-  <text x="64" y="282" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="28" fill="#615d59">your taste — before you spend to find out.</text>
+  <g id="meta" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="17" fill="#4f4f4f">
+    <text x="56" y="400">QLOO TASTE SCORES &#215; REAL ARRIVALS &#8594; UNTAPPED MARKETS</text>
+    <text x="1144" y="400" text-anchor="end">OPEN SOURCE / MIT</text>
+  </g>
 
-  <text x="64" y="342" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#757575">Qloo taste scores &#215; real arrivals &#8594; untapped markets.</text>
+  <g id="run-card">
+    <rect x="680" y="48" width="464" height="324" rx="24" fill="#ffffff"/>
+    <rect x="680.5" y="48.5" width="463" height="323" rx="23.5" fill="none" stroke="#d0d0d0"/>
 
-  <g clip-path="url(#panelClip)">
-    <rect x="700" y="56" width="452" height="288" fill="#ffffff"/>
-    <rect x="700" y="56" width="226" height="144" fill="#d9f2e3" opacity="0.7"/>
-    <rect x="926" y="56" width="226" height="144" fill="#e6f3fe" opacity="0.8"/>
-    <rect x="700" y="200" width="226" height="144" fill="rgba(0,0,0,0.03)"/>
-    <rect x="926" y="200" width="226" height="144" fill="#ffe9c7" opacity="0.6"/>
-    <line x1="926" y1="56" x2="926" y2="344" stroke="rgba(0,0,0,0.15)" stroke-dasharray="6 6"/>
-    <line x1="700" y1="200" x2="1152" y2="200" stroke="rgba(0,0,0,0.15)" stroke-dasharray="6 6"/>
+    <text x="704" y="84" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="16" letter-spacing="1.2" fill="#5a5a5a">LISBON / DEMO RUN</text>
+    <rect x="966" y="64" width="154" height="30" rx="15" fill="#d1ffca"/>
+    <text x="1043" y="84" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="16" letter-spacing="0.8" fill="#0a0a0a">12 UNTAPPED</text>
 
-    <text x="718" y="88" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#116b3a">Untapped</text>
-    <text x="1134" y="88" text-anchor="end" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#0a4d8c">Core</text>
-    <text x="718" y="330" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="rgba(0,0,0,0.4)">Low priority</text>
-    <text x="1134" y="330" text-anchor="end" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#8a5300">Habit</text>
+    <text x="704" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="23" font-weight="700" fill="#0a0a0a">CARTAGENA LEADS ON TASTE FIT.</text>
+    <text x="704" y="154" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="16" fill="#5a5a5a">68 markets scored &#183; 12 untapped</text>
 
-    <circle cx="758" cy="112" r="11" fill="#097fe8"/>
-    <text x="778" y="120" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="600" fill="#111111">Cartagena</text>
-    <circle cx="836" cy="160" r="9" fill="#097fe8"/>
-    <circle cx="776" cy="188" r="8" fill="#097fe8"/>
-    <circle cx="900" cy="132" r="9" fill="#097fe8"/>
-    <circle cx="962" cy="120" r="8" fill="#615d59"/>
-    <circle cx="1032" cy="148" r="9" fill="#615d59"/>
-    <circle cx="1108" cy="140" r="8" fill="#615d59"/>
-    <circle cx="990" cy="230" r="8" fill="#615d59"/>
-    <circle cx="1064" cy="252" r="9" fill="#615d59"/>
-    <circle cx="1112" cy="226" r="8" fill="#615d59"/>
-    <circle cx="944" cy="276" r="8" fill="#615d59"/>
-    <circle cx="1018" cy="300" r="9" fill="#615d59"/>
-    <circle cx="1096" cy="292" r="8" fill="#615d59"/>
-    <circle cx="1130" cy="312" r="8" fill="#615d59"/>
-    <circle cx="780" cy="248" r="8" fill="#615d59"/>
-    <circle cx="852" cy="268" r="9" fill="#615d59"/>
-    <circle cx="760" cy="300" r="8" fill="#615d59"/>
+    <g id="mini-quadrant">
+      <rect x="704" y="176" width="208" height="80" fill="#dcffd6"/>
+      <rect x="912" y="176" width="208" height="80" fill="#fffbd6"/>
+      <rect x="704" y="256" width="208" height="80" fill="#f2f2f2"/>
+      <rect x="912" y="256" width="208" height="80" fill="#fff4c9"/>
+      <line x1="912" y1="176" x2="912" y2="336" stroke="#bfbfbf" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="704" y1="256" x2="1120" y2="256" stroke="#bfbfbf" stroke-width="1" stroke-dasharray="4 4"/>
+
+      <text x="716" y="196" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="18" letter-spacing="0.8" fill="#1b4d26">UNTAPPED</text>
+      <text x="1108" y="196" text-anchor="end" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="18" letter-spacing="0.8" fill="#5a4a00">CORE</text>
+      <text x="716" y="326" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="16" letter-spacing="0.6" fill="#8a8a8a">LOW PRIORITY</text>
+      <text x="1108" y="326" text-anchor="end" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace" font-size="16" letter-spacing="0.6" fill="#8a6a00">HABIT</text>
+
+      <g stroke="#0a0a0a" stroke-width="2">
+        <circle cx="728" cy="216" r="6" fill="#dcffd6"/>
+        <circle cx="846" cy="214" r="5" fill="#dcffd6"/>
+        <circle cx="786" cy="238" r="5" fill="#dcffd6"/>
+        <circle cx="758" cy="232" r="4" fill="#dcffd6"/>
+        <circle cx="816" cy="228" r="4" fill="#dcffd6"/>
+      </g>
+      <text x="740" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#0a0a0a">Cartagena</text>
+      <text x="858" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#0a0a0a">Tokyo</text>
+      <text x="798" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#0a0a0a">Bogotá</text>
+
+      <g fill="#0a0a0a">
+        <circle cx="940" cy="214" r="6"/>
+        <circle cx="1004" cy="232" r="5"/>
+        <circle cx="1064" cy="220" r="6"/>
+        <circle cx="982" cy="248" r="5"/>
+        <circle cx="744" cy="286" r="6"/>
+        <circle cx="808" cy="302" r="5"/>
+        <circle cx="864" cy="282" r="5"/>
+        <circle cx="1084" cy="276" r="5"/>
+        <circle cx="952" cy="296" r="5"/>
+        <circle cx="1030" cy="310" r="6"/>
+        <circle cx="1100" cy="300" r="5"/>
+      </g>
+      <text x="952" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#0a0a0a">San Diego</text>
+      <text x="1016" y="238" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#0a0a0a">Austin</text>
+    </g>
   </g>
 </svg>

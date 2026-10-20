@@ -37,7 +37,7 @@ Read `README.md`, then `docs/` in numbered order and `docs/features/`, before wr
 ```bash
 pnpm install && (cd apps/api && uv sync)
 pnpm turbo dev
-pnpm turbo lint test build
+pnpm turbo lint check-types build
 (cd apps/api && uv run pytest -m "not live")
 (cd apps/api && uv run python scripts/export_openapi.py)   # then regenerate packages/contracts
 supabase db reset

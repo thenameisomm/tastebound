@@ -57,7 +57,7 @@ Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Dev
 | # | Claim | Source | Result | Evidence |
 |---|---|---|---|---|
 | 1 | Scores come from Qloo, not the LLM | README, docs | **VERIFIED** | `scoring/markets.py`; kill-switch test; run trace |
-| 2 | Taste score is percentile of lift over a per-market popularity baseline | README:45,107 | **VERIFIED** | `scoring/markets.py:47-63,81`; baseline call in `qloo/service.py:640-676`; demo population corr 0.026 |
+| 2 | Taste score is percentile of lift over a per-market popularity baseline | README §How it works, §Limits | **VERIFIED** | `scoring/markets.py:47-63,81`; baseline call in `qloo/service.py:640-676`; demo population corr 0.026 |
 | 3 | Different destinations produce different rankings | README, docs | **VERIFIED live** | Kyoto/APAC-15 top five: Mumbai 96.7, Delhi 90.0, Kuala Lumpur 83.3, Sydney 76.7, Auckland 70.0; Lisbon: Cartagena 99.26, Tokyo 97.8, Kuala Lumpur 96.3, San Diego 94.9, Seattle 93.4 |
 | 4 | Gap combines taste with real arrivals | README | **VERIFIED, with honesty caveat** | `scoring/gap.py`; arrival source notes shown; bundled sample is `is_illustrative: true` |
 | 5 | Audiences, angles, partners per market come from location-aware Qloo calls | docs | **VERIFIED** | Audience `source_call_id`; angle evidence chips; partner rows in `market_partners`; partner lists differ by market |
