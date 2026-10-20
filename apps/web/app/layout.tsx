@@ -1,22 +1,30 @@
 import type { Metadata } from "next";
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { Anton, Inter, JetBrains_Mono } from "next/font/google";
+import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
 
-const inter = Inter({
+const anton = Anton({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: "400",
+  variable: "--font-display-family",
   display: "swap",
 });
 
-const lyon = Source_Serif_4({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-lyon",
+  variable: "--font-ui-family",
+  display: "swap",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono-family",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TasteBound — find the markets that already share your taste",
+  title: "TasteBound — the markets that already share your taste",
   description:
     "TasteBound scores origin markets by taste fit for a destination, compares them with real arrivals and finds the untapped ones. Taste fit, not a visitor forecast.",
 };
@@ -27,10 +35,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${lyon.variable}`}>
+    <html
+      lang="en"
+      className={`${anton.variable} ${inter.variable} ${jetBrainsMono.variable}`}
+    >
+      <body>
         <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );

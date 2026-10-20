@@ -1,7 +1,10 @@
 "use client";
 
+import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
-import type { SelectedLocation } from "@repo/contracts/location";
+import type { LeafletMouseEvent, Map as LeafletMap, Marker } from "leaflet";
+import type { LocationResult, SelectedLocation } from "@repo/contracts/location";
+import { api } from "@/lib/api";
 
 interface LocationMapProps {
   value?: SelectedLocation | null;
@@ -12,8 +15,22 @@ interface LocationMapProps {
   disabled?: boolean;
 }
 
-const DEFAULT_CENTER: [number, number] = [39.8283, -98.5795]; // USA center
+const DEFAULT_CENTER: [number, number] = [39.8283, -98.5795];
 const DEFAULT_ZOOM = 4;
+const FOCUS_ZOOM = 10;
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function popupContent(location: SelectedLocation): string {
+  return `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.countryName)}`;
+}
 
 export function LocationMap({
   value,
@@ -24,220 +41,189 @@ export function LocationMap({
   disabled = false,
 }: LocationMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
+  const mapInstanceRef = useRef<LeafletMap | null>(null);
+  const markerRef = useRef<Marker | null>(null);
+  const leafletRef = useRef<typeof import("leaflet") | null>(null);
+  const valueRef = useRef(value);
+  const disabledRef = useRef(disabled);
+  const onChangeRef = useRef(onChange);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (disabled) return;
+    valueRef.current = value;
+  }, [value]);
+
+  useEffect(() => {
+    disabledRef.current = disabled;
+  }, [disabled]);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useEffect(() => {
+    let cancelled = false;
 
     const initMap = async () => {
       try {
-        // Dynamic import to avoid SSR issues
         const L = await import("leaflet");
+        if (cancelled || !mapRef.current || mapInstanceRef.current) return;
+        leafletRef.current = L;
 
-        // Fix for Leaflet marker icon issues
-        delete (L.Icon.Default.prototype as any)._getIconUrl;
+        delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
           iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
           shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
         });
 
-        const map = L.map(mapRef.current!, {
-          center: value ? [value.lat, value.lon] : DEFAULT_CENTER,
-          zoom: value ? 10 : zoom,
-          zoomControl: true,
+        const current = valueRef.current;
+        const map = L.map(mapRef.current, {
+          center: current ? [current.lat, current.lon] : DEFAULT_CENTER,
+          zoom: current ? FOCUS_ZOOM : zoom,
+          zoomControl: false,
           attributionControl: true,
-          dragging: !disabled,
-          touchZoom: !disabled,
-          scrollWheelZoom: !disabled,
-          doubleClickZoom: !disabled,
-          boxZoom: !disabled,
-          keyboard: !disabled,
         });
 
-        // Add OpenStreetMap tiles
+        L.control.zoom({ position: "bottomright" }).addTo(map);
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           attribution:
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           maxZoom: 19,
         }).addTo(map);
 
-        mapInstanceRef.current = map;
+        map.on("click", async (event: LeafletMouseEvent) => {
+          if (disabledRef.current) return;
+          const { lat, lng } = event.latlng;
+          let selected: SelectedLocation = {
+            id: `manual-${lat}-${lng}`,
+            name: `Selected location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+            countryCode: "US",
+            countryName: "United States",
+            region: "",
+            lat,
+            lon: lng,
+            type: "place",
+          };
 
-        // Add marker for current value
-        if (value && showMarker) {
-          const marker = L.marker([value.lat, value.lon], {
-            draggable: !disabled,
-            title: value.name,
-          }).addTo(map);
-
-          marker.bindPopup(`<strong>${value.name}</strong><br>${value.countryName}`).openPopup();
-
-          marker.on("dragend", (e: any) => {
-            const { lat, lng } = e.target.getLatLng();
-            onChange({
-              ...value,
-              lat,
-              lon: lng,
-            });
-          });
-
-          markerRef.current = marker;
-        }
-
-        // Handle map click to select location
-        if (!disabled) {
-          map.on("click", async (e: any) => {
-            const { lat, lng } = e.latlng;
-
-            // Reverse geocode using our API
-            try {
-              const response = await fetch(
-                `/v1/qloo/search?q=${lat},${lng}&type=place&limit=1`
-              );
-              if (response.ok) {
-                const data = await response.json();
-                if (data.entities && data.entities.length > 0) {
-                  const location = data.entities[0];
-                  onChange({
-                    id: location.id,
-                    name: location.name,
-                    countryCode: location.countryCode || "US",
-                    countryName: location.countryName || "United States",
-                    region: location.region || "",
-                    lat,
-                    lon: lng,
-                    type: location.type || "place",
-                  });
-
-                  // Update marker
-                  if (markerRef.current) {
-                    markerRef.current.setLatLng([lat, lng]);
-                    markerRef.current
-                      .setPopupContent(
-                        `<strong>${location.name}</strong><br>${location.countryName}`
-                      )
-                      .openPopup();
-                  } else {
-                    const newMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
-                    newMarker.bindPopup(
-                      `<strong>${location.name}</strong><br>${location.countryName}`
-                    ).openPopup();
-                    markerRef.current = newMarker;
-                  }
-                }
-              }
-            } catch (err) {
-              console.error("Reverse geocoding failed:", err);
-              // Still allow selection with coordinates
-              onChange({
-                id: `manual-${lat}-${lng}`,
-                name: `Selected location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
-                countryCode: "US",
-                countryName: "United States",
-                region: "",
+          try {
+            const payload = await api.get<{ entities: LocationResult[] }>(
+              `/v1/qloo/search?q=${lat},${lng}&type=place&limit=1`,
+            );
+            const location = payload.entities?.[0];
+            if (location) {
+              selected = {
+                id: location.id,
+                name: location.name,
+                countryCode: location.countryCode || "US",
+                countryName: location.countryName || "United States",
+                region: location.region || "",
                 lat,
                 lon: lng,
-                type: "place",
-              });
-
-              if (markerRef.current) {
-                markerRef.current.setLatLng([lat, lng]);
-                markerRef.current
-                  .setPopupContent(
-                    `<strong>Selected location</strong><br>${lat.toFixed(4)}, ${lng.toFixed(4)}`
-                  )
-                  .openPopup();
-              } else {
-                const newMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
-                newMarker
-                  .bindPopup(
-                    `<strong>Selected location</strong><br>${lat.toFixed(4)}, ${lng.toFixed(4)}`
-                  )
-                  .openPopup();
-                markerRef.current = newMarker;
-              }
+                type: location.type || "place",
+              };
             }
-          });
-        }
-
-        // Handle marker drag
-        map.on("dragend", () => {
-          if (markerRef.current && value) {
-            const { lat, lng } = markerRef.current.getLatLng();
-            onChange({
-              ...value,
-              lat,
-              lon: lng,
-            });
+          } catch {
+            // Keep the manual coordinate selection when reverse geocoding fails.
           }
+
+          onChangeRef.current(selected);
         });
 
+        mapInstanceRef.current = map;
         setMapLoaded(true);
-      } catch (err) {
-        console.error("Failed to initialize map:", err);
-        setMapError("Failed to load map");
+      } catch {
+        if (!cancelled) setMapError("The map could not load.");
       }
     };
 
-    if (mapRef.current && !mapInstanceRef.current) {
-      initMap();
-    }
+    void initMap();
 
     return () => {
+      cancelled = true;
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
         markerRef.current = null;
+        leafletRef.current = null;
         setMapLoaded(false);
       }
     };
-  }, [value, onChange, disabled, showMarker, zoom]);
+  }, [zoom]);
 
-  // Update marker when value changes externally
   useEffect(() => {
-    if (mapInstanceRef.current && markerRef.current && value) {
-      markerRef.current.setLatLng([value.lat, value.lon]);
-      mapInstanceRef.current.setView([value.lat, value.lon], 10);
-      markerRef.current
-        .setPopupContent(`<strong>${value.name}</strong><br>${value.countryName}`)
-        .openPopup();
+    const map = mapInstanceRef.current;
+    if (!map || !mapLoaded) return;
+    const handlers = [
+      map.dragging,
+      map.touchZoom,
+      map.scrollWheelZoom,
+      map.doubleClickZoom,
+      map.boxZoom,
+      map.keyboard,
+    ];
+    for (const handler of handlers) {
+      if (disabled) handler.disable();
+      else handler.enable();
     }
-  }, [value]);
+    if (markerRef.current?.dragging) {
+      if (disabled) markerRef.current.dragging.disable();
+      else markerRef.current.dragging.enable();
+    }
+  }, [disabled, mapLoaded]);
 
-  if (!mapLoaded && !mapError) {
-    return (
-      <div
-        className="w-full h-[300px] bg-gray-100 rounded-lg flex items-center justify-center"
-        role="status"
-        aria-label="Loading map"
-      >
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const L = leafletRef.current;
+    const map = mapInstanceRef.current;
+    if (!L || !map || !mapLoaded) return;
 
-  if (mapError) {
-    return (
-      <div
-        className="w-full h-[300px] bg-gray-100 rounded-lg flex items-center justify-center p-4"
-        role="alert"
-      >
-        <p className="text-center text-gray-600">{mapError}</p>
-      </div>
-    );
-  }
+    if (!value || !showMarker) {
+      if (markerRef.current) {
+        markerRef.current.remove();
+        markerRef.current = null;
+      }
+      return;
+    }
+
+    if (!markerRef.current) {
+      const marker = L.marker([value.lat, value.lon], {
+        draggable: !disabledRef.current,
+        title: value.name,
+      }).addTo(map);
+      marker.on("dragend", () => {
+        const { lat, lng } = marker.getLatLng();
+        const current = valueRef.current;
+        if (current) onChangeRef.current({ ...current, lat, lon: lng });
+      });
+      markerRef.current = marker;
+    } else {
+      markerRef.current.setLatLng([value.lat, value.lon]);
+    }
+
+    markerRef.current.bindPopup(popupContent(value)).openPopup();
+    map.setView([value.lat, value.lon], Math.max(map.getZoom(), FOCUS_ZOOM));
+  }, [mapLoaded, showMarker, value]);
 
   return (
-    <div
-      ref={mapRef}
-      className="w-full rounded-lg overflow-hidden"
-      style={{ height: `${height}px` }}
-      role="application"
-      aria-label="Interactive map for location selection"
-    />
+    <div className="mapFrame" style={{ height: `${height}px` }}>
+      <div
+        ref={mapRef}
+        className="mapCanvas"
+        role="application"
+        aria-label="Interactive map for location selection"
+      />
+      {!mapLoaded && !mapError ? (
+        <div className="mapLoading mapOverlay" role="status" aria-label="Loading map">
+          <span className="mapSpinner" aria-hidden="true" />
+          <span>Loading map…</span>
+        </div>
+      ) : null}
+      {mapError ? (
+        <div className="mapLoading mapError mapOverlay" role="alert">
+          <p>{mapError}</p>
+        </div>
+      ) : null}
+    </div>
   );
 }

@@ -282,14 +282,14 @@ export default function StartPage() {
 
   return (
     <main className="page pageNarrow">
-      <div className="stack" style={{ marginTop: 32 }}>
+      <div className="wizardHeader">
         <div className="stackSm">
           <span className="eyebrow">Run builder</span>
           <h1 className="heading">Start a run</h1>
         </div>
-        <p className="serif">
+        <p className="pageLead">
           Four steps: describe the destination, add its signature items, resolve the taste profile,
-          then pick markets and arrivals.
+          then pick markets and arrivals. Qloo does the scoring; you decide the shortlist.
         </p>
         <div className="steps" role="list" aria-label="Wizard steps">
           {(
@@ -315,8 +315,11 @@ export default function StartPage() {
       {error ? <div className="sectionSm"><ErrorPanel error={error} /></div> : null}
 
       {step === 1 ? (
-        <section className="card stack sectionSm">
-          <h2 className="headingSm">Where is the destination?</h2>
+        <section className="card wizardCard stack sectionSm" data-step="01">
+          <div className="stackSm">
+            <span className="kindTag">Step 01 / Destination</span>
+            <h2 className="headingSm">Where is the destination?</h2>
+          </div>
 
           <div className="grid2">
             <label className="field">
@@ -356,32 +359,38 @@ export default function StartPage() {
             </span>
           </label>
 
-          <div className="row">
-            <button
-              type="button"
-              className="btnPrimary"
-              disabled={busy !== null || name.trim().length < 2 || !destinationLocation}
-              onClick={() => void suggest()}
-            >
-              {busy === "suggest" ? "Suggesting…" : "Suggest signature items"}
-            </button>
-            <button
-              type="button"
-              className="btnText"
-              disabled={name.trim().length < 2 || !destinationLocation}
-              onClick={() => setStep(2)}
-            >
-              I&apos;ll add items myself
-            </button>
+          <div className="wizardFooter">
+            <span className="wizardFooterNote">Nothing is scored until you start the run.</span>
+            <div className="row">
+              <button
+                type="button"
+                className="btnText"
+                disabled={name.trim().length < 2 || !destinationLocation}
+                onClick={() => setStep(2)}
+              >
+                I&apos;ll add items myself
+              </button>
+              <button
+                type="button"
+                className="btnPrimary"
+                disabled={busy !== null || name.trim().length < 2 || !destinationLocation}
+                onClick={() => void suggest()}
+              >
+                {busy === "suggest" ? "Suggesting…" : "Suggest signature items"}
+              </button>
+            </div>
           </div>
         </section>
       ) : null}
 
       {step === 2 ? (
-        <section className="card stack sectionSm">
+        <section className="card wizardCard stack sectionSm" data-step="02">
           <div className="spread">
-            <h2 className="headingSm">Signature items</h2>
-            <span className="caption">{items.length}/15</span>
+            <div className="stackSm">
+              <span className="kindTag">Step 02 / Signature items</span>
+              <h2 className="headingSm">What makes it unmistakable?</h2>
+            </div>
+            <span className="pill pillGood">{items.length} / 15</span>
           </div>
           {intakeNotice ? <Banner tone="warn">{intakeNotice}</Banner> : null}
           {intakeSource ? (
@@ -434,25 +443,31 @@ export default function StartPage() {
             disabled={items.length >= 15}
           />
 
-          <div className="row">
-            <button type="button" className="btnText" onClick={() => setStep(1)}>
-              Back
-            </button>
-            <button
-              type="button"
-              className="btnPrimary"
-              disabled={busy !== null || items.length === 0}
-              onClick={() => void createDestination()}
-            >
-              {busy === "create" ? "Creating…" : "Create destination"}
-            </button>
+          <div className="wizardFooter">
+            <span className="wizardFooterNote">5–15 items gives Qloo the clearest signal.</span>
+            <div className="row">
+              <button type="button" className="btnText" onClick={() => setStep(1)}>
+                Back
+              </button>
+              <button
+                type="button"
+                className="btnPrimary"
+                disabled={busy !== null || items.length === 0}
+                onClick={() => void createDestination()}
+              >
+                {busy === "create" ? "Creating…" : "Create destination"}
+              </button>
+            </div>
           </div>
         </section>
       ) : null}
 
       {step === 3 ? (
-        <section className="card stack sectionSm">
-          <h2 className="headingSm">Taste profile</h2>
+        <section className="card wizardCard stack sectionSm" data-step="03">
+          <div className="stackSm">
+            <span className="kindTag">Step 03 / Taste profile</span>
+            <h2 className="headingSm">What Qloo actually knows.</h2>
+          </div>
           {profile === null ? (
             <div className="stackSm">
               <div className="skeleton skeletonLine" style={{ width: "60%" }} />
@@ -477,9 +492,9 @@ export default function StartPage() {
 
               <div className="stackSm">
                 <span className="kindTag">Resolved entities</span>
-                <ul className="stackSm" style={{ listStyle: "none" }}>
+                <ul className="resolvedList">
                   {profile.items.map((item) => (
-                    <li key={`${item.name}-${item.role}`} className="row" style={{ gap: 8 }}>
+                    <li key={`${item.name}-${item.role}`} className="entityRow">
                       <span
                         className={item.status === "resolved" ? "pill pillGood" : "pill pillWarn"}
                         title={item.note ?? (item.status === "resolved" ? "Matched to a Qloo entity" : "No Qloo match")}
@@ -572,33 +587,41 @@ export default function StartPage() {
             </>
           )}
 
-          <div className="row">
-            <button type="button" className="btnText" onClick={() => setStep(2)}>
-              Back
-            </button>
-            <button
-              type="button"
-              className="btnPrimary"
-              disabled={busy !== null || !profile?.can_run}
-              title={profile?.can_run ? undefined : "At least 3 items must resolve to Qloo entities"}
-              onClick={() => setStep(4)}
-            >
-              Choose markets
-            </button>
+          <div className="wizardFooter">
+            <span className="wizardFooterNote">
+              At least 3 resolved items are needed before a run.
+            </span>
+            <div className="row">
+              <button type="button" className="btnText" onClick={() => setStep(2)}>
+                Back
+              </button>
+              <button
+                type="button"
+                className="btnPrimary"
+                disabled={busy !== null || !profile?.can_run}
+                title={profile?.can_run ? undefined : "At least 3 items must resolve to Qloo entities"}
+                onClick={() => setStep(4)}
+              >
+                Choose markets
+              </button>
+            </div>
           </div>
         </section>
       ) : null}
 
       {step === 4 ? (
-        <section className="card stack sectionSm">
+        <section className="card wizardCard stack sectionSm" data-step="04">
           <div className="spread">
-            <h2 className="headingSm">Markets</h2>
-            <span className="pill" title="Pick 20–40 markets for a meaningful comparison">
+            <div className="stackSm">
+              <span className="kindTag">Step 04 / Markets & arrivals</span>
+              <h2 className="headingSm">Where does taste travel?</h2>
+            </div>
+            <span className="pill pillGood" title="Pick 20–40 markets for a meaningful comparison">
               {selected.length} selected
             </span>
           </div>
 
-          <div className="row">
+          <div className="presetRow">
             {["us10", "us20", "na15", "europe20", "apac15", "me8", "latam10"]
               .filter((id) => presets.some((p) => p.id === id))
               .map((presetId) => {
@@ -644,10 +667,7 @@ export default function StartPage() {
             </label>
           </div>
 
-          <div
-            className="stackSm"
-            style={{ maxHeight: 320, overflowY: "auto", border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, padding: 12 }}
-          >
+          <div className="marketPicker">
             {filteredMarkets.map((market) => (
               <label key={market.id} className="checkRow">
                 <input
@@ -713,21 +733,25 @@ export default function StartPage() {
             </div>
           </div>
 
-          <div className="row">
-            <button type="button" className="btnText" onClick={() => setStep(3)}>
-              Back
-            </button>
-            <button
-              type="button"
-              className="btnPrimary"
-              disabled={busy !== null || selected.length < 3 || !destinationId}
-              onClick={() => void startRun()}
-            >
-              {busy === "start" ? "Starting…" : "Start the run"}
-            </button>
-            {selected.length > 0 && selected.length < 20 ? (
-              <span className="caption">20–40 markets gives the most meaningful comparison.</span>
-            ) : null}
+          <div className="wizardFooter">
+            <span className="wizardFooterNote">
+              {selected.length > 0 && selected.length < 20
+                ? "20–40 markets gives the most meaningful comparison."
+                : "No arrival data? You still get the lift ranking."}
+            </span>
+            <div className="row">
+              <button type="button" className="btnText" onClick={() => setStep(3)}>
+                Back
+              </button>
+              <button
+                type="button"
+                className="btnPrimary"
+                disabled={busy !== null || selected.length < 3 || !destinationId}
+                onClick={() => void startRun()}
+              >
+                {busy === "start" ? "Starting…" : "Start the run"}
+              </button>
+            </div>
           </div>
         </section>
       ) : null}
@@ -744,7 +768,6 @@ function QuickAddPresets({
   onAdd: (items: SignatureItemInput[]) => void;
   disabled: boolean;
 }) {
-  const [open, setOpen] = useState(false);
   const existingNames = useMemo(
     () => new Set(items.map((item) => item.name.toLowerCase())),
     [items],

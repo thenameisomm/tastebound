@@ -150,7 +150,7 @@ export function LocationAutocomplete({
         {label}
         {required && <span aria-hidden="true">*</span>}
       </label>
-      <div className="relative">
+      <div className="autocomplete">
         <input
           ref={inputRef}
           id={id}
@@ -175,35 +175,13 @@ export function LocationAutocomplete({
           }
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-error` : undefined}
+          aria-busy={loading}
         />
-        {loading && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2" aria-hidden="true">
-            <svg
-              className="animate-spin h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <circle
-                cx={12}
-                cy={12}
-                r={10}
-                strokeOpacity={0.25}
-                strokeWidth={3}
-              />
-              <path
-                d="M12 2a10 10 0 0 1 10 10"
-                strokeLinecap="round"
-                strokeWidth={3}
-              />
-            </svg>
-          </span>
-        )}
+        {loading && <span className="autocompleteSpinner" aria-hidden="true" />}
         {value && !loading && (
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 hover:text-gray-700"
+            className="autocompleteClear"
             onClick={handleClear}
             aria-label="Clear selection"
           >
@@ -217,7 +195,7 @@ export function LocationAutocomplete({
           ref={listboxRef}
           id={listboxId}
           role="listbox"
-          className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto"
+          className="autocompleteMenu"
           aria-label="Location suggestions"
         >
           {results.map((location, index) => (
@@ -226,31 +204,29 @@ export function LocationAutocomplete({
               id={`${id}-option-${index}`}
               role="option"
               aria-selected={index === highlightedIndex}
-              className={`px-4 py-3 cursor-pointer transition-colors ${
-                index === highlightedIndex ? "bg-blue-50" : "hover:bg-gray-50"
-              }`}
+              className={`autocompleteOption ${index === highlightedIndex ? "autocompleteOptionActive" : ""}`}
               onClick={() => handleSelect(location)}
               onMouseEnter={() => setHighlightedIndex(index)}
             >
-              <div className="font-medium">{location.name}</div>
-              <div className="text-sm text-gray-500">
+              <span className="autocompleteOptionName">{location.name}</span>
+              <span className="autocompleteOptionMeta">
                 {location.region && location.region !== location.countryName
                   ? `${location.region}, ${location.countryName}`
                   : location.countryName}
-              </div>
+              </span>
             </li>
           ))}
         </ul>
       )}
 
       {open && results.length === 0 && !loading && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-center text-gray-500">
-          No locations found for "{displayValue}"
+        <div className="autocompleteMenu autocompleteEmpty">
+          No locations found for &ldquo;{displayValue}&rdquo;
         </div>
       )}
 
       {(searchError || error) && (
-        <p id={`${id}-error`} className="text-sm text-red-600" role="alert">
+        <p id={`${id}-error`} className="autocompleteError" role="alert">
           {searchError?.message || error}
         </p>
       )}
