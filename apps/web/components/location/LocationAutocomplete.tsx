@@ -41,7 +41,8 @@ export function LocationAutocomplete({
   const listboxId = useId();
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState(() => (value ? formatLocation(value) : ""));
+  const lastValueRef = useRef<LocationResult | null>(value ?? null);
   const listboxRef = useRef<HTMLUListElement>(null);
 
   const searchFn = useMemo(
@@ -63,14 +64,21 @@ export function LocationAutocomplete({
     enabled: !disabled,
   });
 
-  const displayValue = useMemo(() => {
-    if (!value) return "";
-    return formatLocation(value);
+  useEffect(() => {
+    if (value) {
+      setQuery(formatLocation(value));
+      lastValueRef.current = value;
+    } else if (lastValueRef.current) {
+      setQuery("");
+      lastValueRef.current = null;
+    }
   }, [value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    if (!value || value.name !== newValue) {
+    setQuery(newValue);
+    if (value) {
+      lastValueRef.current = null;
       onChange(null);
     }
     search(newValue);
@@ -79,12 +87,11 @@ export function LocationAutocomplete({
   };
 
   const handleSelect = (location: LocationResult) => {
+    setQuery(formatLocation(location));
+    lastValueRef.current = location;
     onChange(location);
     setOpen(false);
     setHighlightedIndex(-1);
-    if (inputRef.current) {
-      inputRef.current.value = formatLocation(location);
-    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -132,9 +139,12 @@ export function LocationAutocomplete({
   };
 
   const handleClear = () => {
+    setQuery("");
+    lastValueRef.current = null;
     onChange(null);
     clear();
     setOpen(false);
+    setHighlightedIndex(-1);
   };
 
   useEffect(() => {
@@ -152,16 +162,15 @@ export function LocationAutocomplete({
       </label>
       <div className="autocomplete">
         <input
-          ref={inputRef}
           id={id}
           type="text"
           className="input"
           placeholder={placeholder}
-          value={displayValue}
+          value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => {
-            if (displayValue === "" && results.length > 0) {
+            if (results.length > 0) {
               setOpen(true);
             }
           }}
@@ -221,7 +230,7 @@ export function LocationAutocomplete({
 
       {open && results.length === 0 && !loading && (
         <div className="autocompleteMenu autocompleteEmpty">
-          No locations found for &ldquo;{displayValue}&rdquo;
+          No locations found for &ldquo;{query}&rdquo;
         </div>
       )}
 
