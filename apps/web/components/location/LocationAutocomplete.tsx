@@ -22,7 +22,9 @@ function formatLocation(location: LocationResult): string {
   if (location.region && location.region !== location.countryName) {
     parts.push(location.region);
   }
-  parts.push(location.countryName);
+  if (location.countryName) {
+    parts.push(location.countryName);
+  }
   return parts.join(", ");
 }
 

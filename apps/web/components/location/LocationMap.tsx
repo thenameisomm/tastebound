@@ -28,8 +28,15 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function hasCoordinates(
+  location: Pick<SelectedLocation, "lat" | "lon"> | null | undefined,
+): location is Pick<SelectedLocation, "lat" | "lon"> {
+  return !!location && Number.isFinite(location.lat) && Number.isFinite(location.lon);
+}
+
 function popupContent(location: SelectedLocation): string {
-  return `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.countryName)}`;
+  const country = location.countryName ? `<br>${escapeHtml(location.countryName)}` : "";
+  return `<strong>${escapeHtml(location.name)}</strong>${country}`;
 }
 
 export function LocationMap({
@@ -79,9 +86,12 @@ export function LocationMap({
         });
 
         const current = valueRef.current;
+        const initialCenter: [number, number] = hasCoordinates(current)
+          ? [current.lat, current.lon]
+          : DEFAULT_CENTER;
         const map = L.map(mapRef.current, {
-          center: current ? [current.lat, current.lon] : DEFAULT_CENTER,
-          zoom: current ? FOCUS_ZOOM : zoom,
+          center: initialCenter,
+          zoom: hasCoordinates(current) ? FOCUS_ZOOM : zoom,
           zoomControl: false,
           attributionControl: true,
         });
@@ -178,7 +188,7 @@ export function LocationMap({
     const map = mapInstanceRef.current;
     if (!L || !map || !mapLoaded) return;
 
-    if (!value || !showMarker) {
+    if (!value || !showMarker || !hasCoordinates(value)) {
       if (markerRef.current) {
         markerRef.current.remove();
         markerRef.current = null;

@@ -52,7 +52,7 @@ export function LocationPicker({
   } : null;
 
   const handleAutocompleteChange = (location: LocationResult | null) => {
-    if (!location) {
+    if (!location || !Number.isFinite(location.lat) || !Number.isFinite(location.lon)) {
       setLocalValue(null);
       onChange(null);
       return;

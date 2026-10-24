@@ -253,6 +253,55 @@ def _city_name(entity: QlooEntity) -> str | None:
     return None
 
 
+def _country_name_from_code(code: str) -> str:
+    if not code:
+        return ""
+    return next((name for name, value in COUNTRY_NAMES.items() if value == code), "")
+
+
+def location_payload(entity: QlooEntity, requested_type: str = "place") -> dict[str, Any] | None:
+    """Map a Qloo search entity to the location shape used by the web client."""
+    location = entity.location
+    if location is None or location.lat is None or location.lon is None:
+        return None
+    properties: dict[str, Any] = entity.properties or {}
+    raw_geocode = properties.get("geocode")
+    geocode: dict[str, Any] = raw_geocode if isinstance(raw_geocode, dict) else {}
+    country_code = _country_code(entity) or ""
+    country_name = properties.get("country")
+    if not isinstance(country_name, str) or not country_name:
+        country_name = geocode.get("country")
+    if not isinstance(country_name, str) or not country_name:
+        country_name = _country_name_from_code(country_code)
+    region = ""
+    for key in ("admin2_region", "admin1_region", "city"):
+        value = geocode.get(key)
+        if isinstance(value, str) and value:
+            region = value
+            break
+    entity_type = _short_type(entity.subtype or (entity.types[0] if entity.types else ""))
+    return {
+        "id": entity.entity_id,
+        "entity_id": entity.entity_id,
+        "name": entity.name,
+        "countryCode": country_code,
+        "countryName": country_name or "",
+        "region": region,
+        "lat": location.lat,
+        "lon": location.lon,
+        "type": entity_type or requested_type,
+        "tags": [
+            {
+                "id": tag.id or tag.tag_id or "",
+                "label": tag.name,
+                "type": tag.type or "",
+            }
+            for tag in entity.tags
+            if tag.name
+        ],
+    }
+
+
 def _primary_genre(entity: QlooEntity) -> str | None:
     properties: dict[str, Any] = entity.properties or {}
     raw = properties.get("primary_genre")

@@ -23,7 +23,7 @@ from tastebound_api.llm.parsing import extract_json_object
 from tastebound_api.llm.prompts import load_prompt
 from tastebound_api.llm.provider import get_provider
 from tastebound_api.qloo.client import QlooClient
-from tastebound_api.qloo.service import QlooService
+from tastebound_api.qloo.service import QlooService, location_payload
 from tastebound_api.ratelimit import check, hash_identifier
 from tastebound_api.schemas import (
     DestinationCreateRequest,
@@ -372,6 +372,7 @@ async def qloo_search(
     request: Request,
     q: Annotated[str, Query(min_length=2, max_length=120)],
     entity_type: Annotated[str, Query(alias="type")] = "place",
+    limit: Annotated[int, Query(ge=1, le=25)] = 10,
 ) -> dict[str, Any]:
     if entity_type not in ALLOWED_SEARCH_TYPES:
         raise ValidationProblem(f"type must be one of {sorted(ALLOWED_SEARCH_TYPES)}")
@@ -385,27 +386,13 @@ async def qloo_search(
     try:
         service = QlooService(client)
         entities, call_id = await service.search_entities(
-            q, entity_type, run_id=None, step="search_proxy", take=10
+            q, entity_type, run_id=None, step="search_proxy", take=limit
         )
     finally:
         await client.aclose()
-    return {
-        "call_id": call_id,
-        "entities": [
-            {
-                "entity_id": entity.entity_id,
-                "name": entity.name,
-                "type": entity.type,
-                "tags": [
-                    {
-                        "id": tag.id or tag.tag_id or "",
-                        "label": tag.name,
-                        "type": tag.type or "",
-                    }
-                    for tag in entity.tags
-                    if tag.name
-                ],
-            }
-            for entity in entities
-        ],
-    }
+    locations = [
+        payload
+        for entity in entities
+        if (payload := location_payload(entity, entity_type)) is not None
+    ]
+    return {"call_id": call_id, "entities": locations}

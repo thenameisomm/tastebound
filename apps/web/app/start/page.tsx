@@ -342,7 +342,7 @@ export default function StartPage() {
             required={true}
             showMap={true}
             mapHeight={300}
-            searchType="place"
+            searchType="destination"
           />
 
           <label className="field">
