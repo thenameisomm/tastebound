@@ -58,6 +58,13 @@ def test_accepts_rounded_and_percentage_forms() -> None:
     assert validate_draft(draft, _context()) == []
 
 
+def test_accepts_common_sentence_words() -> None:
+    draft = _draft(
+        "Please note that Cartagena has a taste score of 99.26. Finally, the gap is 98.17 points."
+    )
+    assert validate_draft(draft, _context()) == []
+
+
 def test_rejects_an_invented_number() -> None:
     draft = _draft("Cartagena has a taste score of 12.34.")
     violations = validate_draft(draft, _context())
