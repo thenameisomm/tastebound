@@ -1,6 +1,6 @@
 # Progress
 
-Updated 2026-10-20. Phases per `docs/11-plan.md`.
+Updated 2026-10-25. Phases per `docs/11-plan.md`.
 
 ## Completed
 
@@ -31,20 +31,23 @@ Updated 2026-10-20. Phases per `docs/11-plan.md`.
 | SUB | API/LLM cleanup: Ollama base URL corrected to `https://ollama.com/v1` (`ollama.ai` redirects and returns 405), unreachable iterative-agent scaffolding removed; live probe reached the API but hit the free-limit 429; docs updated | `settings.py`, `.env.example`, `docs/18-risks-and-decisions.md`, `docs/llm-contract.md`; ruff/format/mypy clean, pytest 48 passed |
 | SUB | Kill-switch rehearsal verified: invalid QLOO_API_KEY → run fails with `qloo_auth`, zero counters, empty shortlist; pre-demo checks all ticked | docs/14-checks.md Pre-demo |
 | SUB | README beautified in the current Anton/Inter/mint system: new pure-SVG hero, scrolled gap-quadrant capture, trace proof, accurate image text, tightened copy; skill audit and Prettier pass | `README.md`, `assets/readme/hero.svg`, `assets/readme/02-results.png`, `scripts/readme-shots.mjs` |
+| DEPLOY | Hosted demo live: Vercel web + Render API; fixed API CORS origin; `/health` ok; workspace sessions, location search, destination creation, and a full Toronto run `1c9ce9d7-86bc-433e-9186-682eea097983` reach `done` | https://tastebound-three.vercel.app, https://tastebound-api.onrender.com |
+| DEPLOY | Fixed location autocomplete reset/value loss; search response now includes id, country, coordinates and type; destination search uses the destination type; invalid coordinates rejected | commits `5f67d9a`, `7915d07` |
+| DEPLOY | Fixed `profile_entities` duplicate crash: destination-locality matches skipped, profile matches deduped by Qloo entity id, executor insert guarded; regression test | commit `438cbef`, `apps/api/tests/unit/test_profile_persistence.py` |
+| DEPLOY | Fixed `GET /v1/runs/{id}/profile` 500: structured run warnings now match the response schema; OpenAPI/contracts regenerated | commit `9d57e7e`, `apps/api/tests/api/test_api.py` |
 
 ## Acceptance status (live-verified, not yet test-coded)
 
 - Intake with manual fallback; workspace sessions; presets; arrivals upload; run lifecycle to `done`; SSE events; deep dive; briefs list/patch/export; CSV export; trace — all exercised via curl on port 8020.
-- Qloo calls spent: 152 live + 100 cached in the demo run; ~90 during spikes; 80 live for the Kyoto verification. Budget well under the monthly cap.
+- Qloo calls spent: 152 live + 100 cached in the demo run; ~90 during spikes; 80 live for the Kyoto verification; one additional 3-market hosted verification run on 2026-10-25 (counters not captured). Budget well under the monthly cap.
 - UI-01..UI-06: screens follow `docs/DESIGN.md`; gap quadrant and table with accessible equivalents; states implemented (loading, live, partial, failure, no arrivals, thin data, empty filters, reconnect, 404); tooltips and source chips; copy rules respected. Lighthouse accessibility 100; smoke 6/6 with 0 console errors.
 
 ## Blockers
 
 - **Ollama Cloud free tier exhausted** → tool calling remains unverified and LLM-written briefs fall back to templates. The free key is authenticated but returns 429; there is no paid plan. This is a documented limitation, not a submission blocker: `LLM_TOOL_CALLING` stays `false`, the deterministic planner runs, and no tool-choice claim is made.
-- **External deployment intentionally skipped** → the user chose “Skip deployment for now” on 2026-10-20. No hosted demo URL exists; the public repo and local sample are the submission surface. Revisit only if the user reverses this decision.
 - **No Supabase CLI locally** → local runs use SQLite; a future hosted deploy would target Supabase Cloud.
 
 ## Next
 
-1. User-side: file the Devpost entry with the public repo URL and the local-sample instructions; confirm the licence is visible. Hosted deployment is intentionally skipped. Video is not required by the rules.
+1. User-side: start a fresh hosted run with at least 3 specific signature items (the old failed run cannot be repaired retroactively); confirm the hosted demo URL and README screenshots in the Devpost entry. Video is not required by the rules.
 2. If the free quota resets or a paid key is provided: verify tool calling, record it in `docs/llm-contract.md`, then (only then) consider enabling `LLM_TOOL_CALLING`. Otherwise submit with deterministic orchestration, as documented.
