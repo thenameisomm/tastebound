@@ -7,8 +7,9 @@ import httpx
 import pytest
 from httpx import ASGITransport
 
-from tastebound_api.db.database import dispose_db, init_db
+from tastebound_api.db.database import dispose_db, get_session_factory, init_db
 from tastebound_api.db.demo_seed import seed_demo
+from tastebound_api.db.tables import Run
 from tastebound_api.main import app
 from tastebound_api.settings import get_settings
 
@@ -221,3 +222,24 @@ async def test_demo_is_public_and_read_only(client: httpx.AsyncClient) -> None:
         json={"market_ids": ["co-cartagena", "jp-tokyo", "my-kuala-lumpur"]},
     )
     assert deep_dive.status_code == 403
+
+
+async def test_demo_profile_returns_structured_warnings(client: httpx.AsyncClient) -> None:
+    token = await _token(client)
+    headers = {"X-Workspace-Token": token}
+    session_factory = get_session_factory()
+    async with session_factory() as session:
+        run = await session.get(Run, "demo-e5b2b8fd")
+        assert run is not None
+        settings = dict(run.settings or {})
+        settings["warnings"] = [
+            {"code": "no_arrivals", "message": "No arrivals uploaded; gap view disabled."}
+        ]
+        run.settings = settings
+        await session.commit()
+
+    response = await client.get("/v1/runs/demo-e5b2b8fd/profile", headers=headers)
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["warnings"][0]["code"] == "no_arrivals"
+    assert len(payload["entities"]) > 0

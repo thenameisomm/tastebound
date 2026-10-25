@@ -1066,7 +1066,9 @@ export interface components {
                 [key: string]: unknown;
             }[];
             /** Warnings */
-            warnings: string[];
+            warnings: {
+                [key: string]: unknown;
+            }[];
         };
         /** SignatureItemInput */
         SignatureItemInput: {
@@ -1434,6 +1436,7 @@ export interface operations {
             query: {
                 q: string;
                 type?: string;
+                limit?: number;
                 token?: string | null;
             };
             header?: {

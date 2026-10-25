@@ -240,7 +240,7 @@ class RunProfileResponse(BaseModel):
     destination_entity_id: str | None
     entities: list[ProfileEntityOut]
     tags: list[dict[str, Any]]
-    warnings: list[str]
+    warnings: list[dict[str, Any]]
 
 
 class MarketRow(BaseModel):

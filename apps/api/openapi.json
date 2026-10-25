@@ -566,6 +566,18 @@
       }
      },
      {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 25,
+       "minimum": 1,
+       "default": 10,
+       "title": "Limit"
+      }
+     },
+     {
       "name": "token",
       "in": "query",
       "required": false,
@@ -4024,7 +4036,8 @@
      },
      "warnings": {
       "items": {
-       "type": "string"
+       "additionalProperties": true,
+       "type": "object"
       },
       "type": "array",
       "title": "Warnings"
