@@ -13,7 +13,7 @@
 | S7 | Media partners per market (podcasts, artists, films, books) | F07 |
 | S8 | Budget allocator with slider | F09 |
 | S9 | Market briefs and CSV export | F10 |
-| S10 | Agent orchestration, live progress, full trace | F11 |
+| S10 | Deterministic orchestration, live progress, full trace | F11 |
 | S11 | Demo mode, cache and budget guard | F12 |
 
 ## Stretch (only after every MVP criterion passes)
@@ -23,7 +23,7 @@
 | X1 | Competitor positioning: compare our destination's profile with a rival destination | F08 |
 | X2 | Backtest page showing the year Y−3 gap versus later growth | `15-evaluation-and-backtest.md` |
 | X3 | Trending entities per market for timing (only if the endpoint is verified) | F06 |
-| X4 | Second LLM provider (Gemini) shown working in the video | `05-agent-and-llm.md` |
+| X4 | Second LLM provider (Gemini) documented and exercisable by env change | `05-agent-and-llm.md` |
 
 ## Out of scope
 

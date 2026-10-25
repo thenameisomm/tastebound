@@ -28,7 +28,20 @@ build
 dist
 
 
-.opencode
+.opencode/
+
+# Local agent instructions and scratch notes (not published)
+AGENTS.md
+CLAUDE.md
+START_PROMPT.md
+JUDGING_REPORT.md
+docs/IMPLEMENTATION_PROGRESS.md
+docs/progress.md
+docs/todo.md
+docs/judge.md
+docs/11-plan.md
+docs/14-checks.md
+docs/17-judging.md
 
 # Python
 __pycache__/

@@ -79,9 +79,9 @@ The app never needs the key in the browser: it is read only by the FastAPI proce
    ```
 
    The model must be available on Ollama Cloud for your account. `gemma4:31b-cloud` is the project default.
-4. Restart the API. With a working key, the wizard suggests signature items and briefs are written by the model (still checked by the grounding validator). Without it, you type items manually and briefs are labelled `template` — runs still complete.
+4. Restart the API. With a working key, the wizard suggests signature items. Briefs remain deterministic templates unless the gated model-writing path is explicitly enabled. Without a key, you type items manually and briefs are labelled `template` — runs still complete.
 5. Ollama's free quota can return `401`/`429` or run out mid-demo. That is not fatal: the app falls back to templates. Check the run trace for the LLM status.
-6. Leave `LLM_TOOL_CALLING=false`. The LLM tool-choice loop is disabled until live tool calling is verified; `/health` reports `tools_ok: false` accordingly.
+6. Leave `LLM_TOOL_CALLING=false`. No LLM tool-choice loop is shipped; `/health` reports `tools_ok: false` accordingly.
 
 ### 2.3 App-generated secrets and connections (no signup)
 
@@ -118,7 +118,7 @@ DATABASE_URL=postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/
 | `OLLAMA_BASE_URL` | `https://ollama.com/v1` | OpenAI-compatible endpoint; do not use the redirecting `ollama.ai` host |
 | `OLLAMA_MODEL` | `gemma4:31b-cloud` | Model name on Ollama Cloud |
 | `LLM_PROVIDER` | `ollama_cloud` | Provider adapter; this project uses Ollama only |
-| `LLM_TOOL_CALLING` | `false` | Tool-choice loop switch; keep false until live tool calling is verified |
+| `LLM_TOOL_CALLING` | `false` | Enables the gated model-writing path; no tool-choice loop is shipped. Keep false unless you verify the model path live |
 
 Do not add OpenRouter or another gateway, and do not put any key in a `NEXT_PUBLIC_*` variable.
 
@@ -175,7 +175,7 @@ NEXT_PUBLIC_API_URL=http://127.0.0.1:8020 pnpm --filter web dev
 
 ```bash
 (cd apps/api && uv run ruff format --check . && uv run ruff check . && uv run mypy src)
-(cd apps/api && uv run pytest -m "not live")        # 48 tests, no network
+(cd apps/api && uv run pytest -m "not live")        # no network
 pnpm turbo lint build check-types                    # 12 tasks
 
 # With both servers running:
