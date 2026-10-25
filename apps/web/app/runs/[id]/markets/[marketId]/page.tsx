@@ -182,7 +182,7 @@ export default function MarketDetailPage() {
             <dt title="Share of your uploaded arrivals in this market">Arrivals share</dt>
             <dd className="num">{formatShare(score.arrivals_share)}</dd>
             <dt title="Percentile of arrivals share across markets with arrivals">Arrivals percentile</dt>
-            <dd className="num">{score.arrivals_pct === null ? "—" : score.arrivals_pct.toFixed(1)}</dd>
+            <dd className="num">{score.arrivals_pct === null ? "—" : (score.arrivals_pct * 100).toFixed(1)}</dd>
             <dt title="Taste percentile minus arrivals percentile">Gap</dt>
             <dd className="num">
               {score.gap === null ? "—" : `${score.gap >= 0 ? "+" : ""}${(score.gap * 100).toFixed(1)} points`}
