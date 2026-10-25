@@ -1,128 +1,131 @@
-# Judging report: TasteBound (2026-10-19)
+# Judging report: TasteBound (2026-10-21)
 
-**Status update 2026-10-20:** Public repo live at https://github.com/thenameisomm/tastebound. Frontend rebuilt and re-verified (smoke 6/6, axe 0 violations, production build pass); wrapped hero highlight and stale terminal "streaming" badge fixed; README screenshots refreshed. External deployment remains the only Stage 1 blocker; Ollama tool calling remains unverified because the free-tier quota is exhausted.
+Protocol: `docs/judge.md`. Live rules re-checked at `https://qloo.devpost.com/` and `/rules` on 2026-10-21: externally hosted demo required; demo video not required; current field 2,083 participants. No new live Qloo calls were made for this review; evidence is code, the stored fixture, the local stack, tests, and prior recorded live runs.
 
-Protocol: `docs/judge.md`. Inputs reviewed: repository at `/Users/ombadgujar/Development/TasteBound`, README, `docs/`, running local stack (API `:8020`, web `:3000`). Updated against the live Devpost page (fetched Oct 19, 2026): a hosted demo is required, a video is **not**; the public repo now exists, the hosted demo does not — recorded as Stage 1 findings. Independent J5 (impact/novelty) and J6 (engineering/trust) audits were run in parallel; J1, J2, J3, J4 and J7 were run by the lead judge. No team code was modified by the judging sub-agents; fixes listed in section 9 were made by the team after the findings.
+**This supersedes the 2026-10-19 report.** The earlier report marked Stage 1 AT RISK and marked the per-market audience claim VERIFIED. Code review shows there is no agent loop/framework, and the audience rows are one global demographic result duplicated across every market. Those findings change the verdict.
 
 ## Verdict
 
-**Stage 1: AT RISK.** The Qloo integration, licence, working app and public repo pass; the externally hosted demo does not exist yet (video: not required). The agentic criterion is met only as a deterministic tool pipeline with an LLM in the loop for item proposals and grounded briefs — not as an LLM tool-choice loop, and the copy now says so.
+**Stage 1: FAIL.**
 
-**Scores: C1 4/5 · C2 4/5 · C3 4/5 · C4 4/5 · Total 16/20**
+- No hosted demo URL exists. Local-only does not qualify (`docs/17-judging.md`; live Devpost page).
+- The agentic requirement is not met on a strict reading. There is no agent framework, no LLM tool-choice loop, no planning loop. The run is a fixed deterministic sequence with two fixed LLM writing calls. The protocol explicitly says a single fixed LLM call is not agentic.
+- Two material claims are not true as written: audiences are not per-market/location-aware, and the product copy says the tool-calling loop is "spec'd behind the provider layer" when `docs/18-risks-and-decisions.md:60` says the unreachable iterative-agent scaffolding was removed.
 
-**Placement estimate: credible top-3 contender if the live demo and video land as well as the local product; mid-field if the demo link is missing or the agentic story is oversold.** It is not the favourite: there is no backtest showing that gap markets convert, and the investor-style pick rewards a sharper agentic narrative.
+**Scores: C1 4.0/5 · C2 4.0/5 · C3 3.5/5 · C4 4.0/5 · Total 15.5/20.**
+
+**Placement estimate: cannot place as submitted.** Stage 1 fails before Stage 2 scoring. If the team ships a hosted demo and a real, working agent loop, this is a credible top-3 contender, not the favourite: the Qloo chain and product are strong, but there is no validation that gap markets convert, the core lift move is shared with Transplant, and 15.5 is below the 16+ likely-winner band. No precise probability is justified.
 
 ## Stage 1 checklist
 
 | # | Requirement | Result | Evidence |
 |---|---|---|---|
-| 1 | Working software integrating the Qloo API | **PASS** | Live Lisbon run (68 markets, 252 Qloo calls in fixture); live Kyoto run `f29c1697…` done with 80 live + 13 cached calls; `apps/api/src/tastebound_api/qloo/` |
-| 2 | (a) agentic tool, (b) agent framework, or (c) existing-agent integration | **AT RISK (a)** | Phase executor calls guarded tools, records orchestration, falls back deterministically (`agent/executor.py:376-397`); LLM proposes items (`routes/destinations.py:128`) and writes grounded briefs (`executor.py:1215,1244`). No LLM tool-choice loop and no agent framework; `LLM_TOOL_CALLING=false`; copy corrected to match |
-| 3 | Hosted, fully published demo (external hosting required; local-only does not qualify) | **FAIL (not yet)** | Local app works end to end; no deployment URL. Team action required |
-| 4 | Public repo with open-source licence | **PASS** | https://github.com/thenameisomm/tastebound — public, MIT, clean history; licence visible in About |
-| 5 | Text description | **PASS** | `README.md`; `docs/` pack; Devpost text skeleton in `docs/17-judging.md` |
-| 6 | Demo video | **N/A — not required** | Live Devpost page (Oct 19, 2026): "Demo videos are *not* required." Run-through script remains in `docs/17-judging.md` |
-| 7 | Free, unrestricted testing for judges | **PASS locally** | No login; keyless read-only `/sample` spends no Qloo quota (`test_api.py::test_demo_is_public_and_read_only`); must be re-verified on the deployment |
-| 8 | Functions as depicted | **AT RISK** | README/docs overclaims found and corrected during judging (section 9); description must match the deployed demo |
-| 9 | New work / significant update in period | **PASS** | Built 2026-10-19–20; public history |
+| 1 | Working software integrating Qloo | **PASS** | Qloo chain in `apps/api/src/tastebound_api/qloo/`; local `/health` returns `qloo: configured`; stored live fixture; 48 tests pass |
+| 2 | (a) agentic tool, (b) agent framework, or (c) existing-agent integration | **FAIL** | No framework dependency (`pyproject.toml`, `package.json`); no `agent/loop.py` (commit `9def945` removed it); `PlanGuard` used only in tests; fixed sequence `executor.py:403-425`; `_tool` is an internal method, not LLM-chosen (`executor.py:427-444`); `LLM_TOOL_CALLING=false` (`settings.py:53`); LLM only proposes item names (`destinations.py:104-149`) and writes briefs (`executor.py:1156`) |
+| 3 | Hosted, fully published demo | **FAIL** | No URL in README, docs, or repo; `docs/progress.md` records "External deployment intentionally skipped"; local `:3000` is not a submission |
+| 4 | Public repo with visible OSI licence | **PASS** | `https://github.com/thenameisomm/tastebound`; MIT `LICENSE`; public history |
+| 5 | Text description | **PASS** | `README.md`; `docs/` pack |
+| 6 | Demo video | **N/A** | Live Devpost page: videos are not required |
+| 7 | Free, unrestricted testing | **PASS locally / UNKNOWN deployed** | Keyless read-only `/sample`; no login; live run needs the server Qloo key; must be re-verified on a deployment |
+| 8 | Functions as depicted | **FAIL (material claim mismatch)** | Per-market audience claim is false; trace/counter claims are partly misleading; "tool-calling loop spec'd" is false |
+| 9 | New work during submission period | **PASS** | Public history from 2026-10-19 onward |
 
 ## What Qloo wants vs what this project provides
 
 | Qloo wants | This project provides | Evidence | Gap |
 |---|---|---|---|
-| Thorough, skilful Qloo use | Five capabilities in a dependent chain: entity search, tags, location-scoped profile insights, per-market target + baseline insights, demographics, cross-domain partners; 4 rps, cache, per-run/monthly budgets | `qloo/client.py`, `qloo/service.py:640-676`; trace 252 Qloo calls | Chain is a fixed plan; Qloo's recommendation surface is not used |
-| Impossible without Qloo | Kill switch: no ranking without Qloo; no other source maps cross-domain taste to origin markets | `test_api.py:122-157` asserts `qloo_unconfigured`, `qloo_live==0` | None |
-| Agentic | Run executor plans phases, calls guarded tools, retries, grounds and repairs briefs, records every step; LLM proposes items and writes prose | `executor.py`, `/trace`, run `orchestration` field | LLM does not choose tools — theme risk, now stated honestly |
-| Complete product | Intake → profile → quadrant → deep dive → budget → briefs → exports, seven routes | Smoke 6/6 routes, 0 console errors | One polished demo destination; live deployment pending |
-| Real problem, real audience | DMO marketing director choosing 3–6 origin markets; verified $1.77M median budget / 92% public; Brand USA $100M → $20M | `docs/00-product-brief.md` with source links | No proof that taste-gap markets convert |
-| Non-obvious use | Destination → origin markets, taste lift vs per-market baseline, arrivals-gap quadrant | `scoring/gap.py`; Lisbon and Kyoto rankings | Taste lift over popularity also appears in a 2026 cohort entry (Transplant) |
-| Genuine understanding | Destination entity excluded from interests; raw lift beats percentile differences; brands global; demographics need signals; silent-200 guard | `docs/qloo-contract.md:34-90`; `docs/18-risks-and-decisions.md` | Coverage outside the US is thinner and flagged, not solved |
+| Thorough, skilful Qloo use | Dependent chain: search, tags, per-market target + baseline insights, explainability, demographics, cross-domain partners, global brands; cache, 4 rps, budgets, fail-closed | `qloo/service.py:416-858`; `executor.py:448-1049`; trace | Audience is one global call duplicated; no evaluation; chain is fixed |
+| Impossible without Qloo | No ranking without Qloo; kill switch fails closed | `test_api.py:122-157`; `docs/04-qloo-integration.md` | Strong |
+| Agentic | Fixed pipeline; LLM writes item names and briefs; no tool choice | `executor.py:403-444`; `destinations.py:104-149` | Fails the theme requirement |
+| Complete product | Seven routes, full states, exports, accessibility, responsive | smoke 6/6; axe 0; `apps/web` | No hosted demo; one polished destination |
+| Real problem, real audience | DMO marketing director; sourced budget pressure | `docs/00-product-brief.md` | No DMO interview, pilot, or conversion evidence |
+| Non-obvious use | Destination → origin markets + arrivals gap + cross-domain partners | `scoring/gap.py`; fixture | Core lift shared with Transplant; gap is an overlay |
+| Genuine understanding | Baseline, coverage, brands-global handling, limits | `docs/qloo-contract.md`; UI labels | Some copy overstates what was built |
 
 ## Qloo integration audit
 
-**Inventory:** `GET /search` (destination, items), `GET /tags`, `POST /v2/insights` for profile affinity and demographics, per-market target insights and per-market baseline insights (same market, destination signals omitted), cross-domain insights for partners, brand insights (global, no location filter). Cache key is `sha256(method, path, params)` with 168 h TTL; retries only on 429/5xx/timeouts; 4 rps spacing; per-run live budget 200; monthly guard at 80% of 10,000.
+**Inventory:** `GET /search` for destination and items; `/v2/tags`; `POST /v2/insights` for per-market target and baseline, profile demographics, cross-domain partners, and global brands. Explainability is requested on the target call. Six capabilities in a dependent chain.
 
-**Call chain (run):** destination search → item searches → tags → profile insights (per market) → target insights (per market) → baseline insights (per market) → demographics (shortlist) → partner cross-domain calls (shortlist) → brand calls. Scores are pure functions of the stored JSON.
+**Call chain:** destination search → item search/resolve → tags → per-market target insight → per-market baseline insight → lift/percentile score → arrivals gap → demographics → angle evidence from explainability → per-market partners → global brands → briefs.
 
-**Decision trace:** `/v1/runs/{id}/trace` returns Qloo, LLM and tool rows. Sample fix during judging: the demo fixture seeded no `QlooCall` rows, so the sample trace returned 0 Qloo items while counters showed 252. Seeding now reconstructs calls from the fixture's `qloo_call` events, deleted by call id on reseed; live check returned 252 Qloo + 16 tool items, and a regression test asserts it.
+**Decision weight:** Scores and gaps are pure functions over stored Qloo affinities (`scoring/markets.py`, `scoring/gap.py`). Angles are deterministic templates over Qloo explainability/tags. Partners are Qloo rows. Briefs are template or validated LLM prose; the LLM cannot change numbers. Audience is Qloo, but **one global demographics call is copied to every shortlisted market**.
 
-**Swap test:** removing Qloo is not a configuration swap — the run fails closed with `qloo_unconfigured`, zero partial ranking and no briefs. This is the strongest possible answer to "would it work without Qloo?" (verified by test and by the keyless run test).
+**Audience finding (material):** `tool_market_audience` calls `service.demographics(...)` once without market coordinates, then writes the same rows for every market (`executor.py:787-826`). The fixture has 48 audience rows = 6 markets × 8 identical bands, all with source call `5eea55aa-bf53-4514-9da0-727f07c4eedb`. Cartagena, Tokyo, and Seattle show identical age/gender values. `service.demographics` supports `market_lat`/`market_lon` (`qloo/service.py:811-858`), but the executor does not pass them. This contradicts "audiences per market" and "location-aware Qloo calls."
 
-**Kill switch:** invalid key → typed `QlooAuthError`, no retry, run `failed`; the demo script rehearses it with an invalid key and restores the real key.
+**Source attribution finding:** Angle tag evidence takes `tag.entity_count` from the profile build but stamps it with the per-market target call id (`executor.py:828-955`). That call did not produce the tag count. The claim "every number links back to the Qloo call that produced it" is therefore only partly true.
 
-**Judging budget:** the Kyoto verification run (80 live calls) was executed by the team on the team's key, not by the judging sub-agents; the sub-agents made no Qloo calls.
+**Swap test:** Strong. Removing Qloo fails closed with `qloo_unconfigured` and zero partial ranking; the test asserts zero live calls. This is the best possible answer to "would this work without Qloo?"
+
+**Kill switch:** Code and API test pass. I did not run a live invalid-key run to avoid touching the team key/state.
+
+**Verification:** Stored fixture and `docs/qloo-contract.md` record live parameters and results; 48 tests; no evaluation script/results.
+
+**C1 score: 4.0.** The Qloo chain is deep, guarded, cached, budgeted, and traced, which is exactly the "Qloo drives most decisions through a dependent chain" anchor. It is not 4.5/5 because the audience chain is not per-market, tag evidence attribution is wrong, and there is no evaluation or live agent-tool verification.
 
 ## Claims tested
 
-| # | Claim | Source | Result | Evidence |
-|---|---|---|---|---|
-| 1 | Scores come from Qloo, not the LLM | README, docs | **VERIFIED** | `scoring/markets.py`; kill-switch test; run trace |
-| 2 | Taste score is percentile of lift over a per-market popularity baseline | README §How it works, §Limits | **VERIFIED** | `scoring/markets.py:47-63,81`; baseline call in `qloo/service.py:640-676`; demo population corr 0.026 |
-| 3 | Different destinations produce different rankings | README, docs | **VERIFIED live** | Kyoto/APAC-15 top five: Mumbai 96.7, Delhi 90.0, Kuala Lumpur 83.3, Sydney 76.7, Auckland 70.0; Lisbon: Cartagena 99.26, Tokyo 97.8, Kuala Lumpur 96.3, San Diego 94.9, Seattle 93.4 |
-| 4 | Gap combines taste with real arrivals | README | **VERIFIED, with honesty caveat** | `scoring/gap.py`; arrival source notes shown; bundled sample is `is_illustrative: true` |
-| 5 | Audiences, angles, partners per market come from location-aware Qloo calls | docs | **VERIFIED** | Audience `source_call_id`; angle evidence chips; partner rows in `market_partners`; partner lists differ by market |
-| 6 | Brands are global and labelled | docs | **VERIFIED** | `qloo/service.py` brand calls without location; UI "global brands" tab |
-| 7 | Briefs contain only grounded numbers/names | README | **VERIFIED (mechanical)** | `grounding.py:203-244`; repair + template fallback; semantic entailment is not checked — labelled `template`/`model-written` |
-| 8 | The agent chooses tools | README (before fix), `docs/judge.md` claim 8 | **FALSE (copy corrected)** | `executor.py:376-397` always deterministic; `orchestration` records `deterministic_fallback`; `LLM_TOOL_CALLING=false`; no fake-provider run exists |
-| 9 | Ollama Cloud only, no local models, provider swappable | README, docs | **VERIFIED** | `llm/provider.py`; `LLM_PROVIDER` env; no other gateway in code |
-| 10 | Sample works without keys | README | **VERIFIED** | `GET /v1/demo` unauthenticated; demo tests pass with blank keys; `/sample` exercised |
-| 11 | Quoted evaluation numbers are reproducible | README/video | **N/A** | No evaluation-results file or quoted results; `docs/15-evaluation-and-backtest.md` is a plan only |
+| Claim | Source | Result | Evidence |
+|---|---|---|---|
+| Scores come from Qloo, not the LLM | README, docs | **VERIFIED** | `scoring/markets.py`; LLM has no score path; kill-switch test |
+| Taste score is percentile of lift over a per-market baseline | README §How it works | **VERIFIED** | Target vs no-interest baseline in `qloo/service.py:627-685`; raw lift in `scoring/markets.py`; fixture population corr `0.026` |
+| Different destinations produce different rankings | README, docs | **VERIFIED** | Prior live Lisbon vs Kyoto/APAC-15 runs; top fives differ |
+| Gap combines taste with real arrivals | README | **VERIFIED with caveat** | `scoring/gap.py`; fixture arrivals are explicitly illustrative; country split by population band |
+| Audiences, angles and partners per market come from location-aware Qloo calls | README, docs, `docs/judge.md` claim 5 | **FALSE for audiences; PARTLY overall** | Audience duplicated across all 6 markets from one no-location call; partners are location-scoped; angles use per-market explainability |
+| Brands are global and labelled | docs | **VERIFIED** | `global_brands` has no location filter; UI labels global |
+| Briefs contain only grounded numbers/names | README | **PARTLY** | `grounding.py` is mechanical: numbers, names, evidence ids; no semantic entailment; template fallback; LLM path unexercised live |
+| The agent chooses tools | README before correction, `docs/judge.md` claim 8 | **FALSE** | Fixed sequence; no tool loop; `LLM_TOOL_CALLING=false`; `PlanGuard` unused outside tests |
+| Ollama Cloud, no local model, provider swappable | README, docs | **PARTLY** | Provider isolation is real; `/health` shows Ollama configured; tool calling unverified; live brief path not exercised |
+| Sample works without keys | README | **VERIFIED locally** | `/sample` 200; smoke 6/6; read-only tests; hosted URL unknown |
+| Evaluation numbers are quoted and reproducible | README/docs | **N/A / UNSUPPORTED** | No `docs/evaluation-results.md`; no `scripts/evaluate.py` or `backtest.py`; `docs/15` is a plan |
+| Every number links back to the Qloo call that produced it | README | **PARTLY** | Audience and tag evidence source ids are misleading; cache vs live counts not distinguished in copy |
+| Trace shows 252 Qloo calls, 16 tools, 0 LLM, 268 total | README alt text, UI | **PARTLY** | Trace items = 268 (252 Qloo + 16 tool); fixture counters = 152 live + 100 cached Qloo, 12 tools; `run_events` total 291, including 4 `failed` events; trace API hides non-qloo/llm/tool events |
+| Tool-calling loop is "spec'd behind the provider layer" | README | **FALSE** | `docs/18:60` says the iterative-agent scaffolding was removed; no loop exists |
+| "Deterministic agent tools" | Trace UI | **MISLEADING** | They are deterministic pipeline steps; no LLM chooses them |
 
 ## Design walkthrough
 
-Journeys checked: landing → wizard (destination, items, profile resolution, markets + arrivals) → live run with SSE progress and Qloo counter → results (quadrant, table, shortlist, deep dive, CSV) → market detail (score, gap, audience, angle evidence, partners) → plan (budget, locks, editable briefs, Markdown/CSV export) → trace. States implemented: loading, live, partial, failed, no arrivals, thin data, empty filters, reconnect, 404, demo read-only.
+Automated verification passed: `48 passed`, smoke 6/6 routes, axe 0 violations on all six routes, 360 px screenshots generated. The seven-route flow (landing → wizard → results → market → plan → trace → sample) is coherent and the market screen is visually strong. The audience screen is the weak point: it presents the same global demographic bars under every market, with a note that says the baseline is not location-supported but not that the rows are identical across markets. The trace screen calls 16 internal steps "Deterministic agent tools," which invites the agentic question.
 
-Screenshots: `assets/readme/01-landing.png` … `06-wizard.png`. Verification: `scripts/smoke-web.mjs` (6/6 routes, 0 console errors), `scripts/a11y-check.mjs` (axe: 0 violations), Lighthouse accessibility **100** on results and market detail; 360 px layout verified (table becomes cards, quadrant scrolls). Lighthouse performance 48 was measured against the dev server and is not representative of production.
-
-Weaknesses: only one polished demo destination in-app (Lisbon); the Kyoto run was verified via API, not surfaced as a second sample; no dark mode (not required); the sample's illustrative arrivals are prominent and must be explained in the video.
+**C2 score: 4.0.** Complete, coherent, accessible product experience; deductions for the misleading audience presentation, the unhosted state, and one polished destination.
 
 ## Impact and idea
 
-User: marketing director at a city/regional DMO, choosing which 3–6 origin markets get next year's budget (`docs/00-product-brief.md:20`). Problem statistics were independently checked: median budget $1,772,250 and 92% public funding (Destinations International, Mar 8, 2022); Brand USA federal matching funds $100M → $20M (Brand USA statement, Jul 3, 2025; PAX News, Jul 4, 2025). Both now carry source links in `docs/00-product-brief.md`.
+**User:** marketing director at a city/regional DMO choosing 3–6 origin markets for the next campaign budget. This is specific and costly. The budget-pressure statistics are sourced in `docs/00-product-brief.md`; the bundled arrivals are illustrative and labelled. There is no DMO interview, pilot, letter, or backtest showing that taste-gap markets convert. The closest commercial tools (Zartico, Arrivalist, Mabrian, ForwardKeys) measure observed behaviour; TasteBound is a credible complement, not a replacement.
 
-Nearest projects (searched Oct 19, 2026): GeoTaste (2025 grand prize, location → business insight, https://devpost.com/software/geotaste-your-agentic-qloo-taste-business-consultant); Transplant (2026 cohort, person → neighbourhood taste lift, https://github.com/mukeshkbj/transplant); Taste Transplant (2026 cohort, taste-matched places, https://devpost.com/software/taste-transplant-pfzsda); Cross Cultura Pro (2025, personas for marketers); commercial visitor-intelligence tools Arrivalist, Zartico, Mabrian, which measure observed behaviour rather than latent taste. No project found in the 120 gallery entries reviewed that combines cross-domain taste with DMO origin-market selection and an arrivals gap.
+**Novelty:** GeoTaste (2025 grand prize) analysed a location for a business; TasteBound reverses to destination → origin markets and adds an arrivals gap. Transplant (2026 cohort) already uses taste lift over popularity. The reversal and gap are non-obvious; the core statistical move is not unique. No project found in the reviewed gallery combines this exact DMO workflow.
 
-Novelty verdict: genuinely non-obvious B2B direction with a clear differentiator (the arrivals gap), but the core statistical move (taste lift over popularity) is shared with Transplant, and the gap hypothesis is unvalidated. Idea scores 4, not 5.
+**C3 score: 3.5.** Specific role and sourced problem, but no evidence the target user wants this or that the gap predicts anything. The illustrative arrivals and missing validation keep it below 4.0.
+
+**C4 score: 4.0.** Creative B2B use with genuine Qloo understanding (baseline, coverage, brands-global, limits). Not 5: shared lift core, simple gap overlay, unvalidated central hypothesis.
 
 ## Engineering and trust
 
-- Build: `pnpm turbo lint build check-types` — 12/12 tasks. API: ruff, mypy strict (42 files), pytest **48 passed**; a dead-proxy run also passes 48 (no network).
-- Secrets: clean working tree and history (no key-prefix hits); `.env` untracked and mode 600; browser bundle contains no Qloo/Ollama strings; browser calls only the API.
-- Security: HMAC workspace tokens, constant-time compare, ownership checks, demo read-only 403s; arrivals 1 MB/500 rows; items ≤ 15; website reader blocks private hosts and re-validates every redirect (new test: redirect → 127.0.0.1 is blocked); rate limits per IP/workspace. Residual: DNS-rebinding TOCTOU, in-memory rate limiter, `Retry-After` ignored, limiter per client process.
-- AI grounding: item names resolved through Qloo; unresolved items listed; briefs validated for numbers/names/evidence IDs with one repair then template fallback; source labelled. Residual: semantic entailment not checked; LLM path not exercised live (quota).
-- Reliability: typed errors, retries with backoff, cache, budgets, fail-closed; `LLM_TOOL_CALLING` now separates "provider configured" from "tool calling enabled", and `/health` reports it.
-- Honesty fixes during judging: sample trace now matches counters; README lift formula corrected; tool-choice overclaims removed from README, docs/03 and docs/17; novelty absolutes softened and dated; 40-market cap enforced in schema and route (was documented but unused).
+- Build/tests: `48 passed`; smoke 6/6; axe 0; prior `pnpm turbo lint check-types build` pass. Tests do not cover location-aware audiences or a real agent loop, because neither exists.
+- Secrets: prior audit found no key-prefix hits in working tree/history; `.env` untracked; browser bundle clean. I did not re-scan secrets.
+- Security/reliability: typed errors, retries, cache, budgets, SSRF guard, HMAC workspace tokens, demo read-only. Residual: in-memory rate limiter, DNS-rebinding TOCTOU, `Retry-After` ignored.
+- Demo fixture quality: 291 run events include four `failed` events (`internal_error`, `Deep dive failed` twice, `AssertionError`) from a retried run. The trace API filters them out, so the "audit every call" screen hides failures. Counters say 12 tools; trace says 16. The stored fixture should be regenerated from a clean run or the retries should be shown and explained.
+- Acceptance gaps: `AGT-01/02/03/06` (agent loop, step limit, fallback, identical paths), `LLM-06` (real tool-calling exchange), `EVL-01` (evaluation), `REP-04` (hosted demo) are not met. The 48 green tests do not change that.
+- AI trust: grounding is mechanical and useful, but not semantic; `template`/`model-written` labels are honest. The LLM path is unexercised live.
 
 ## Devil's advocate and answers
 
-| Criterion | Strongest case for −1 | Lead answer |
+| Criterion | Strongest case for lower | Lead answer |
 |---|---|---|
-| C1 | "Thorough" Qloo use is a fixed chain; the theme is agentic, and the LLM never chooses a tool. Transplant used the same lift move. | The chain is dependent, contract quirks were discovered live and corrected, and every call is traced, cached and budgeted; the agentic gap is real but disclosed, and C1 asks about Qloo skill foremost. Keep 4. |
-| C2 | One demo destination and no deployment; judges only see a local app or screenshots. | Seven complete routes, every failure state, exports, 100 accessibility, responsive layout. Deployment is a Stage 1 item, not a product gap. Keep 4. |
-| C3 | No evidence that untapped markets convert; arrivals are illustrative; budget stats prove pressure, not the solution. | Specific role, costly recurring decision, verified statistics, and a credible complement to observed-behaviour tools; the backtest is specified but unrun. Keep 4, fragile. |
-| C4 | Taste lift over popularity is not unique in the 2026 cohort, and "gap" is a simple overlay. | Direction reversal plus arrivals overlay plus cross-domain partner planning is a non-obvious B2B use; the team records and reacts to Qloo's real limits. Keep 4. |
+| C1 | Fixed chain, no agent, global audience, no evaluation | Chain depth, baseline, guards, cache, budgets, and fail-closed justify 4.0; not 4.5+ |
+| C2 | No hosted demo, one destination, misleading audience screen | Seven coherent routes, states, exports, accessibility justify 4.0; deployment is Stage 1, not design |
+| C3 | No proof of demand or conversion, illustrative arrivals | Named DMO role and sourced budget pressure justify 3.5; not 4.0 |
+| C4 | Transplant shares lift; gap is a simple overlay | Reversal, arrivals overlay, and cross-domain partner planning justify 4.0; not 5 |
 
 ## Fix list (ranked by score gain per hour)
 
-1. **Deploy the demo** to a public URL (Fly/Render/Vercel + API host, SQLite volume) and verify the keyless `/sample` and a live run there. Stage 1 blocker; 2–4 h.
-2. **Publish the repo** to a public GitHub remote; confirm LICENSE renders and no `.env` is tracked. Stage 1 blocker; 15 min. **DONE 2026-10-20.**
-3. **Rehearse the run-through on the deployed URL** (sample logged out, one live run, kill switch); record it only if you want a video for the Devpost gallery. Optional; 1–2 h.
-4. **Get an Ollama Cloud key with quota, verify tool calling, then enable `LLM_TOOL_CALLING`** and only then claim LLM tool choice. Raises the theme fit (C1) and removes the biggest honesty risk; 4–8 h plus key.
-5. **Run one small validation** (blind review with 3 DMO-style judges or a holdout on one market) and quote it; otherwise keep every evaluation statement as a plan. Raises C3/C4 confidence; 4–6 h.
-6. **Devpost text** with the two sourced statistics, the chain diagram and the limits section; 1 h.
+1. **Ship the hosted demo.** Deploy web + API (Fly/Render/Vercel + managed Postgres or persistent SQLite), verify `/sample` logged out with no keys, then run one live flow and the invalid-key kill switch on the deployed URL. Stage 1 pass/fail; 2–4 h. Without this, nothing else matters.
+2. **Build a real agent loop.** Wire the existing `ToolSpec`/`ToolCall` types, `PlanGuard`, and agent prompts into a genuine LLM tool-choice loop; record each step; test with `FakeProvider`; then verify live with Ollama Cloud. Stage 1 + C1 (+0.5); 4–8 h plus a working quota/key. Do not claim it until it runs. If quota is impossible, Stage 1 remains failed.
+3. **Fix per-market audiences or stop claiming them.** Pass `market.lat`/`market.lon` to `service.demographics` per shortlisted market and store separate rows; if Qloo returns identical/unsupported data, label the chart "global profile audience, not market-specific" and remove "per market" from README/docs. C1/C2 honesty (+0.25–0.5); 1–2 h.
+4. **Clean the trace and claims.** Regenerate the demo fixture from a clean run; reconcile 12 vs 16 tools; show or explain the four failed events; label 252 Qloo trace rows as 152 live + 100 cached; fix tag evidence source ids; change "agent tools" to "pipeline steps" unless the loop is real. C1/C2 trust (+0.25); 1–2 h.
+5. **Run one small validation.** Add `scripts/evaluate.py` and at minimum report sensitivity (Lisbon vs Kyoto top-10 Jaccard), population correlation, and a blind review or holdout. Quote the result honestly, including if it is weak. C3 (+0.5) and C4 (+0.25); 4–6 h.
 
-## Rewritten one-line pitch and 20-second video opener
+Do 1, 2, 3, and 4 first. Skip 5 only if you also remove every implied validation claim.
 
-**Pitch:** TasteBound shows destination marketers which origin markets already share their destination's taste but are not visiting yet — Qloo supplies the taste, their arrivals supply the gap, and every campaign angle, partner and budget line is grounded in a Qloo call.
+## Rewritten one-line pitch
 
-**20-second opener:** "Every tourism board can see who already visited. None can see who would love the place but has never considered it. TasteBound builds a taste profile of your destination with Qloo, finds the origin markets that over-index on it, and subtracts your real arrivals to show the untapped ones. Here is Lisbon."
-
-## Five highest-leverage fixes
-
-| Fix | Criterion | Expected gain | Hours |
-|---|---|---|---|
-| Public deployment + keyless sample verification | Stage 1 (eligibility) | Pass/fail | 2–4 |
-| Public repo remote + licence check | Stage 1 | Pass/fail | Done — https://github.com/thenameisomm/tastebound |
-| End-to-end rehearsal on the deployed demo (video optional) | Stage 1 + C2 | Pass/fail + polish | 1–2 |
-| Verify Ollama tool calling; enable and demonstrate the tool-choice loop honestly | C1 | +0.5 | 4–8 |
-| One validation result (blind review/holdout) quoted in README and video | C3/C4 | +0.5 | 4–6 |
+TasteBound shows destination marketers which origin markets already share their destination's taste but are not visiting yet — Qloo supplies the taste, their arrivals supply the gap, and every campaign angle, partner, and budget line is grounded in a Qloo call.
