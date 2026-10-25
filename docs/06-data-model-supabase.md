@@ -1,5 +1,7 @@
 # 06. Data model (Supabase Postgres)
 
+**Status:** this document describes the target Postgres schema. The current local and demo database is created from the SQLAlchemy metadata in `apps/api/src/tastebound_api/db/tables.py`; versioned migrations and RLS policies are not present in this repository snapshot. Add them before a production deployment.
+
 ## Principles
 
 - Schema only through SQL migrations in `supabase/migrations/` (`supabase migration new`, `supabase db reset` locally, `supabase db push` to cloud).
@@ -264,7 +266,7 @@ do $$ declare t text; begin
 end $$;
 ```
 
-## Retention (`scripts/cleanup.py`, daily)
+## Retention (planned)
 
 Website text 30 days; raw responses nulled 7 days after `expires_at` (trace rows stay); inactive anonymous workspaces deleted after 60 days (cascade); demo workspace kept; uploaded arrivals deleted with their workspace.
 

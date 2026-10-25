@@ -12,7 +12,7 @@
 | `/start` step 3 | Taste profile | Resolved entities, unresolved list, tag cloud, add-from-Qloo search |
 | `/start` step 4 | Markets and arrivals | Preset groups, region filters, search to add, 20–40 selected; arrivals CSV upload or sample; Start |
 | `/runs/[id]` | Run and results | Live progress with Qloo call counter → **gap quadrant** + market table; shortlist checkboxes; "Deep dive" |
-| `/runs/[id]/markets/[marketId]` | Market detail | Taste score, lift, coverage, confidence explainer; arrivals and gap; audience chart; angle with evidence; partners tabs; global brands |
+| `/runs/[id]/markets/[marketId]` | Market detail | Taste score, lift, coverage, confidence explainer; arrivals and gap; demographic signal chart (currently one destination-level Qloo aggregate); angle with evidence; partners tabs; global brands |
 | `/runs/[id]/plan` | Plan | Budget input, mode toggle, sliders with locks; briefs (editable) with evidence chips; exports |
 | `/runs/[id]/trace` | Trace | Ordered LLM steps, tool calls, Qloo calls; filters; params collapsed |
 | `/sample` | Demo | Stored run, read-only, label with date |
@@ -22,7 +22,7 @@
 1. **Gap quadrant:** x = arrivals share percentile, y = taste score percentile; labelled points; quadrant names (Untapped, Core, Habit, Low priority); hover details; click opens market; keyboard-focusable points with text alternatives; a table equivalent below.
 2. **Market table:** rank, market, taste score, lift ("+0.18 vs typical"), coverage, confidence badge (text + colour), arrivals share, gap, quadrant; sortable; filters by region, confidence, quadrant.
 
-Every number has a one-sentence tooltip. Every claim has source chips linking to the trace.
+Every number has a one-sentence tooltip. Every claim has source chips linking to the trace. Demographic charts are labelled as a directional Qloo aggregate, not per-market census data.
 
 ## States (all required)
 

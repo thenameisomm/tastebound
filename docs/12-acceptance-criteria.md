@@ -1,6 +1,8 @@
 # 12. Acceptance criteria
 
-Priority **MVP** must pass before submission; **Stretch** only if time allows. Record each result in `docs/progress.md` with the date and the test or evidence.
+These are the target acceptance criteria used to design the build, not a claim that every item is shipped in this repository snapshot. See `docs/03-architecture.md` for the implemented system and `docs/13-test-plan.md` for the checks that exist. Items marked **Deferred** are not claimed as complete.
+
+Priority **MVP** means the criterion is required for the intended product scope; **Stretch** is optional. Record results with the date and the test or evidence.
 
 ## Intake (F01)
 
@@ -83,12 +85,12 @@ Priority **MVP** must pass before submission; **Stretch** only if time allows. R
 
 | ID | Criterion | Check | Priority |
 |---|---|---|---|
-| AGT-01 | Plan guard refuses unknown tools, wrong order, foreign ids, repeated identical calls | Unit tests | MVP |
-| AGT-02 | Each phase ends within `LLM_MAX_STEPS_PER_PHASE` | Unit test | MVP |
-| AGT-03 | Two invalid steps or provider failure switch to the deterministic plan; reason recorded | Integration test | MVP |
+| AGT-01 | Plan guard refuses unknown tools, wrong order, foreign ids, repeated identical calls | Unit tests | Deferred |
+| AGT-02 | Each phase ends within `LLM_MAX_STEPS_PER_PHASE` | Unit test | Deferred |
+| AGT-03 | Two invalid steps or provider failure switch to the deterministic plan; reason recorded | Integration test | Deferred |
 | AGT-04 | SSE streams all event types and replays from `Last-Event-ID` | API test | MVP |
 | AGT-05 | Trace lists LLM steps, tool calls and Qloo calls in order with no secrets | API test + string search | MVP |
-| AGT-06 | Agent, planner and deterministic paths give identical scores for the same inputs and cache | Integration test | MVP |
+| AGT-06 | Agent, planner and deterministic paths give identical scores for the same inputs and cache | Integration test | Deferred |
 
 ## Demo and budget (F12)
 
@@ -121,15 +123,15 @@ Priority **MVP** must pass before submission; **Stretch** only if time allows. R
 | LLM-03 | Ollama Cloud called at `OLLAMA_BASE_URL` with Bearer key; no local Ollama installed or required | Manual on a machine without Ollama | MVP |
 | LLM-04 | Invalid JSON → exactly one repair → documented fallback | Unit tests | MVP |
 | LLM-05 | LLM calls per run ≤ `LLM_MAX_CALLS_PER_RUN` | Integration test | MVP |
-| LLM-06 | `docs/llm-contract.md` records a real tool-calling exchange with the chosen model | Review | MVP |
+| LLM-06 | **Deferred.** `docs/llm-contract.md` records the verified transport; no tool-choice loop is shipped | Review | Deferred |
 | LLM-07 | Gemini (or another direct provider) works by env change only | Manual with a key, or mocked HTTP test | Stretch |
 
 ## Data, API, security, reliability
 
 | ID | Criterion | Check | Priority |
 |---|---|---|---|
-| DAT-01 | Migrations apply to an empty database | `supabase db reset` | MVP |
-| DAT-02 | RLS enabled on all tables, zero policies | SQL check | MVP |
+| DAT-01 | **Deferred in this snapshot.** Versioned migrations apply to an empty database | `supabase db reset` | Deferred |
+| DAT-02 | **Deferred in this snapshot.** RLS enabled on all tables, zero policies | SQL check | Deferred |
 | DAT-03 | Another workspace's run returns 404 | API test | MVP |
 | API-01 | `openapi.json` and `packages/contracts` up to date | CI diff check | MVP |
 | API-02 | Invalid input → 422 problem object | API tests | MVP |
@@ -155,11 +157,11 @@ Priority **MVP** must pass before submission; **Stretch** only if time allows. R
 
 | ID | Criterion | Check | Priority |
 |---|---|---|---|
-| EVL-01 | Evaluation metrics in `15-evaluation-and-backtest.md` computed and reported honestly | Review of `docs/evaluation-results.md` | MVP |
+| EVL-01 | Evaluation method documented; results are not claimed until the checks in `15-evaluation-and-backtest.md` are run | Review | Deferred |
 | EVL-02 | Backtest run if a multi-year arrivals series exists | Review | Stretch |
 | REP-01 | Public repo with open-source `LICENSE` | Review | MVP |
 | REP-02 | README: setup, architecture, Qloo chain, kill switch, evaluation, limits | Review | MVP |
 | REP-03 | Clean clone runs with documented commands | Fresh environment | MVP |
 | REP-04 | Demo URL works logged out, including `/sample` | Private window | MVP |
-| REP-05 | Video public and matches the working app | Review | MVP |
-| REP-06 | `docs/judge.md` run on the final build; report saved; top fixes applied or noted | `JUDGING_REPORT.md` | MVP |
+| REP-05 | If a video is published, it matches the working app | Review | Stretch |
+| REP-06 | Final internal review completed; no internal judging report is published | Repository history | Stretch |

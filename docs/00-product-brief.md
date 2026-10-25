@@ -26,7 +26,7 @@ Verify these sources again before quoting them in the demo.
 1. A **taste profile** of the destination built from Qloo entities (signature places, food, culture, events), editable.
 2. **Market scores** for 20–40 origin cities: taste lift over a popularity baseline, with confidence.
 3. A **gap view**: taste lift versus actual arrival share (from the DMO's own arrivals CSV or a public dataset). Markets with high taste fit and low arrivals are **untapped**.
-4. Per market: **audience** (age and gender skew from Qloo), **campaign angle** with the Qloo tags and explanations behind it, and **media partners** (podcasts, artists, films, books popular with that market's matching audience).
+4. Per market: a **demographic signal** (Qloo age and gender affinity), **campaign angle** with the Qloo tags and explanations behind it, and **media partners** (podcasts, artists, films, books popular with that market's matching audience). The current build uses one destination-level demographic aggregate and repeats it beside each shortlisted market; it is labelled as a directional signal, not per-market census data.
 5. A **budget split** across chosen markets with a live slider.
 6. **Market briefs** (one page per market) and a CSV export, every claim traced to a Qloo call.
 
@@ -37,7 +37,7 @@ Verify these sources again before quoting them in the demo.
 | Destination taste profile | Qloo entity search, tags | Generic adjectives |
 | Market taste lift | Qloo location-aware insights against a baseline | No dataset we found maps cross-domain taste to origin cities (Qloo 2025 gallery, Arrivalist, Zartico, Mabrian; checked Oct 19, 2026) |
 | Gap (taste vs arrivals) | Qloo lift minus arrivals share | Only arrivals, which shows existing visitors, not latent fans |
-| Audience per market | Qloo demographics | Census data, unrelated to taste |
+| Demographic signal | Qloo demographics | Census data, unrelated to taste |
 | Campaign angle evidence | Qloo tags and explanations | LLM guesswork |
 | Media partners per market | Qloo cross-domain insights with location | Generic "top podcasts" lists |
 

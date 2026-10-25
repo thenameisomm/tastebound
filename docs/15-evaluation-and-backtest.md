@@ -1,6 +1,8 @@
 # 15. Evaluation and backtest
 
-Judges ask how thoroughly Qloo is used, and Qloo says a submission that works the same without Qloo is the wrong thing. These checks show whether Qloo changes and improves the market plan. Report results honestly, including where Qloo does not help.
+**Status: method, not results.** The scripts and result tables described below are not present in this repository snapshot. Do not quote evaluation numbers until these checks are implemented and run. The method remains useful for validating whether Qloo changes and improves the market plan.
+
+Qloo's guidance is that a submission which works the same without Qloo is the wrong thing. These checks are designed to show whether Qloo changes the decision, including where it does not help.
 
 ## 1. Sensitivity (does taste change the answer?)
 
@@ -31,15 +33,9 @@ If the demo destination has arrivals by origin for year Y−3 and year Y:
 2. Compare arrivals growth from Y−3 to Y for **Untapped** markets versus the rest.
 3. Report median growth for each group and the difference. If untapped markets did not grow faster, say so; the claim becomes "taste-informed shortlist", not "predicts growth".
 
-## Procedure
+## Procedure (planned)
 
-```bash
-uv run python scripts/evaluate.py --destinations <id1>,<id2> --markets preset:europe20,preset:na15 --out ../../docs/evaluation-results.md
-uv run python scripts/evaluate.py --score blind_pairs.csv
-uv run python scripts/backtest.py --destination <id> --arrivals-old <csv> --arrivals-new <csv> --out ../../docs/evaluation-results.md
-```
-
-Results are also saved in the `evaluations` table and quoted in the README and video.
+When these checks are implemented, export a reproducible result file next to the test fixtures and commit the exact command used. The planned entry points are an evaluation script with destination/market presets, a blind-pair scorer and a backtest that takes two arrivals snapshots. No `evaluations` table or `scripts/evaluate.py` exists in this snapshot.
 
 ## Limits to state
 

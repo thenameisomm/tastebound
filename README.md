@@ -3,19 +3,24 @@
 </p>
 
 <p align="center">
-  <sub><strong>Qloo Agentic Hackathon 2026</strong> · Next.js · FastAPI · Supabase · Ollama Cloud · MIT</sub>
+  <sub><strong>Qloo Agentic Hackathon 2026</strong> · Next.js · FastAPI · SQLite/Postgres · Ollama Cloud · MIT</sub>
 </p>
 
-**TasteBound** finds the origin markets that already share a destination's taste but are not visiting yet. It builds a Qloo taste profile, scores every origin market by **taste lift over a popularity baseline**, subtracts **your visitor arrivals**, and turns the gap into audiences, campaign angles, media partners, a budget split and grounded briefs.
+**TasteBound** finds the origin markets that already share a destination's taste but are not visiting yet. It builds a Qloo taste profile, scores every origin market by **taste lift over a popularity baseline**, compares that with **your visitor arrivals**, and turns the gap into audiences, campaign angles, media partners, a budget split and grounded briefs.
 
-**Taste fit, not a visitor forecast.** Qloo decides; the LLM narrates. Scores, gaps, audiences, angle evidence and partners are pure functions over Qloo responses. The LLM only proposes item names and writes prose that passes a grounding validator, and every fallback is labelled.
+**Taste fit, not a visitor forecast.** Qloo decides. Scores, gaps, audience signals, angle evidence and partners are computed in code from Qloo responses. The LLM may suggest destination items; any model-written prose must pass a grounding validator, and fallbacks are labelled.
 
 <p align="center">
-  <a href="#quickstart"><strong>Run the local sample</strong></a> ·
-  <a href="docs/17-judging.md">Judging notes</a> ·
-  <a href="docs/16-runbook.md">Runbook</a> ·
+  <a href="#quickstart"><strong>Quickstart</strong></a> ·
+  <a href="#the-gap-quadrant"><strong>See the results</strong></a> ·
+  <a href="#how-it-works"><strong>How it works</strong></a> ·
+  <a href="docs/03-architecture.md">Architecture</a> ·
   <a href="docs/DESIGN.md">Design system</a>
 </p>
+
+| In                                                 | Out                                                                                                                                         | Try it                                                               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| A destination, signature items and an arrivals CSV | Ranked origin markets, an untapped-market quadrant, audience signals, campaign angles, media partners, a budget split and exportable briefs | `/sample` runs the stored Lisbon demo with no keys and no Qloo spend |
 
 ## The gap quadrant
 
@@ -29,7 +34,7 @@ Taste score on one axis, arrivals share on the other. **Untapped** markets sit t
 
 ## What a market gives you
 
-Taste score, lift, coverage and a plain-language confidence explainer; arrivals share, percentile and gap; a Qloo demographics audience chart; a campaign angle where each claim carries an evidence chip; partner tabs; global brands.
+Taste score, lift, coverage and a plain-language confidence explainer; arrivals share, percentile and gap; a Qloo demographic signal; a campaign angle where each claim carries an evidence chip; partner tabs; global brands.
 
 <p align="center">
   <img src="assets/readme/03-market.png" alt="Cartagena market brief: taste score 99.26, lift +0.0299, 100% coverage, high confidence, an arrivals gap of +98.2 points, and a Qloo audience breakdown." width="900">
@@ -45,7 +50,7 @@ Split a budget across markets with locks; each market's share is weighted by tas
 
 ## Audit every call
 
-Every run writes an ordered, timestamped trace of Qloo, tool and LLM rows, with parameters and cache status; every number links back to the Qloo calls that produced it. The stored demo is deterministic, so its 268 events are Qloo and tool calls; live runs record LLM rows when quota is available.
+Every run writes an ordered, timestamped trace of Qloo calls and internal tool steps, with parameters and cache status; every number links back to the Qloo calls that produced it. Live runs also record LLM rows when a model call is made.
 
 <p align="center">
   <img src="assets/readme/05-trace.png" alt="Trace audit log for the Lisbon demo: 252 Qloo calls, 16 tool calls, 0 LLM calls, 268 total events, with filterable rows showing build_profile and destination_search." width="900">
@@ -56,17 +61,32 @@ Every run writes an ordered, timestamped trace of Qloo, tool and LLM rows, with 
 1. **Profile** — name a destination and add its signature items, or let TasteBound suggest them from the official website. Each item resolves to a real Qloo entity; unresolved items are listed, not hidden.
 2. **Score** — for each origin market, fetch Qloo affinity for the destination's entity and its top explainability entities, then query the same markets again **without** the destination signals to get a per-market baseline. **Lift = target affinity − baseline affinity.** The taste score is the percentile of lift across the run — a ranking, not an absolute.
 3. **Gap** — match your arrivals CSV (or the bundled sample) to markets. The gap quadrant and table compare taste percentile against arrivals percentile. Population correlation is checked and flagged when the ranking may track market size.
-4. **Deep dive** — build audiences, angle evidence and media partners for the shortlist, then split a budget weighted by taste score, confidence and the untapped gap.
+4. **Deep dive** — build audience signals, angle evidence and media partners for the shortlist, then split a budget weighted by taste score, confidence and the untapped gap.
+5. **Explain** — every score, angle and partner links back to its Qloo evidence, and briefs expose their source and citations.
 
-> **Qloo decides; the LLM narrates.** Scores, gaps, audiences, angle evidence and partners are pure functions over Qloo responses. The LLM proposes item names and writes prose that passes a grounding validator.
+```mermaid
+flowchart LR
+  A[Destination + signature items] --> B[Qloo profile]
+  B --> C[Target affinity per market]
+  B --> D[Baseline affinity per market]
+  C --> E[Lift = target − baseline]
+  D --> E
+  E --> F[Taste percentile]
+  R[Arrivals CSV] --> G[Gap quadrant]
+  F --> G
+  G --> H[Audience / angle / partners]
+  H --> I[Budget + briefs]
+```
+
+> **Qloo decides; the LLM narrates.** Scores, gaps, audience signals, angle evidence and partners come from Qloo through deterministic code. The LLM proposes item names; model-written prose is gated and validated.
 >
-> **Verify before building.** Every Qloo parameter and response field was recorded from live calls in Phase 0 (`docs/qloo-contract.md`), not guessed.
+> **Verify before building.** Every Qloo parameter and response field used by the app is recorded from live calls in Phase 0 (`docs/qloo-contract.md`), not guessed.
 >
-> **Fail closed.** Without Qloo the run fails with `qloo_unconfigured` and zero partial ranking — a tested feature, not an error path.
+> **Fail closed.** Without Qloo a live run fails with `qloo_unconfigured` and zero partial ranking — a tested feature, not an error path.
 
 ## Quickstart
 
-Requires Node 24+, pnpm, Python 3.12+ and uv, plus a Qloo key for live runs.
+Requires Node 24+, pnpm, Python 3.12 or 3.13 and uv, plus a Qloo key for live runs.
 
 ```bash
 pnpm install
@@ -76,7 +96,7 @@ pnpm install
 #   QLOO_API_KEY=...            # required for real runs
 #   OLLAMA_API_KEY=...          # optional; without quota, briefs stay labelled templates
 
-pnpm turbo dev                   # web :3000, api :8000 (SQLite, auto-migrated and seeded)
+pnpm turbo dev                   # web :3000, api :8000 (SQLite schema created and demo seeded)
 ```
 
 Open **http://localhost:3000/sample** — a stored, read-only Lisbon run that needs no keys and spends no Qloo quota. Or start a live run at `/start`.
@@ -84,47 +104,53 @@ Open **http://localhost:3000/sample** — a stored, read-only Lisbon run that ne
 Key-by-key setup, run and deploy instructions: [`docs/19-setup.md`](docs/19-setup.md).
 
 ```bash
-(cd apps/api && uv run pytest -m "not live")   # 48 tests, no network
+(cd apps/api && uv run pytest -m "not live")   # no network
 pnpm turbo lint check-types build
 ```
 
 ## Project layout
 
 ```
-apps/api            FastAPI: Qloo client (rate limit, cache, budgets), scoring, arrivals, agent, HTTP API
+apps/api            FastAPI: Qloo client (rate limit, cache, budgets), scoring, arrivals, executor, HTTP API
 apps/web            Next.js: landing, 4-step wizard, results, market detail, plan, trace, sample
 packages/contracts  TypeScript types generated from the API's OpenAPI schema
 assets/readme       README hero and screenshots
-docs/               the full documentation pack (product, Qloo integration, API, tests, runbook)
+docs/               product, Qloo integration, API, frontend, security, tests and runbook
 scripts/            screenshot, smoke and accessibility checks (Playwright + axe)
 ```
 
 ## Honest by default
 
 - "Taste fit", never "demand" or "will visit".
-- Arrivals source notes are shown wherever arrivals appear; bundled samples are labelled.
-- Briefs carry their source: `template` when the LLM is unavailable, `model-written` when it is.
+- Arrivals source notes are shown wherever arrivals appear; bundled samples are labelled illustrative.
+- Briefs carry their source: `template` when the model is unavailable, `model-written` when the gated model path is used and passes grounding.
 - Thin-data markets are flagged, not dropped; coverage and confidence are always visible.
-- The trace page lists every LLM step, tool call and Qloo call in order, parameters included.
+- Audience rows are a destination-level Qloo demographic aggregate repeated beside each shortlisted market. They are affinity signals, not per-market census data or demand.
+- Orchestration is deterministic: the LLM does not choose tools. `LLM_TOOL_CALLING` stays `false`, and `/health` reports `tools_ok` from that switch.
+- The trace page lists Qloo calls, internal tool steps and LLM calls in order, without keys or prompt text.
 
 ## Documentation
 
-| Start here                                                                   | Then                                                        |
-| ---------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [Product brief](docs/00-product-brief.md)                                    | Problem, users, value, metrics                              |
-| [Qloo integration](docs/04-qloo-integration.md)                              | Multi-call chain, strategies, baseline, budget, kill switch |
-| [Agent & LLM](docs/05-agent-and-llm.md)                                      | Agent tools, Ollama Cloud, provider portability             |
-| [API & frontend](docs/07-api-spec.md) · [screens](docs/08-frontend-spec.md)  | Endpoints · screens and states                              |
-| [Acceptance](docs/12-acceptance-criteria.md) · [tests](docs/13-test-plan.md) | Numbered criteria · how they are tested                     |
-| [Runbook](docs/16-runbook.md) · [judging](docs/17-judging.md)                | Setup, run, deploy · judging rules and demo script          |
-| [Status](docs/progress.md) · [decisions](docs/18-risks-and-decisions.md)     | Live status · decisions and risks                           |
+| Start here                                                                             | Then                                                          |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| [Product brief](docs/00-product-brief.md)                                              | Problem, users, value and metrics                             |
+| [Architecture](docs/03-architecture.md)                                                | Runtime components, run phases and configuration              |
+| [Qloo integration](docs/04-qloo-integration.md)                                        | Multi-call chain, baseline, guards, budget and kill switch    |
+| [LLM and grounding](docs/05-agent-and-llm.md)                                          | Provider layer, what the LLM may write, validation and limits |
+| [Data model](docs/06-data-model-supabase.md) · [data sources](docs/09-data-sources.md) | Tables and provenance · arrivals and market data              |
+| [API](docs/07-api-spec.md) · [frontend](docs/08-frontend-spec.md)                      | Endpoints and errors · screens and states                     |
+| [Security](docs/10-security-and-privacy.md)                                            | Tokens, secrets, SSRF, retention and abuse limits             |
+| [Acceptance](docs/12-acceptance-criteria.md) · [tests](docs/13-test-plan.md)           | Numbered criteria · how the code is checked                   |
+| [Runbook](docs/16-runbook.md) · [setup](docs/19-setup.md)                              | Operate and troubleshoot · keys and local setup               |
+| [Decisions](docs/18-risks-and-decisions.md) · [design system](docs/DESIGN.md)          | Trade-offs and risks · the visual language                    |
+| [Qloo contract](docs/qloo-contract.md) · [LLM contract](docs/llm-contract.md)          | Verified request/response notes · verified provider behaviour |
 
 ## Limits
 
 - Taste scores rank markets **within a run**; they are percentiles of Qloo affinity lift, not calibrated demand estimates.
 - Audience demographics come from Qloo and need a taste signal; they are affinity deltas, not census data.
 - The bundled arrivals sample is illustrative (Statista/INE-informed), labelled as such everywhere it appears.
-- Orchestration is deterministic by design: tool choice stays in code, and the LLM proposes item names and writes grounded briefs when quota is available. The Ollama Cloud tool-calling loop is spec'd behind the provider layer but disabled (`LLM_TOOL_CALLING=false`) until tool calling is verified live; `/health` reports `tools_ok` accordingly.
+- Qloo coverage varies by market; thin markets are flagged with lower confidence.
 - The free Ollama key hit its quota during the build, so the stored demo's briefs are templates. The sample remains fully usable without keys.
 
 ## License

@@ -53,7 +53,7 @@ Every step after 1 depends on earlier Qloo outputs; steps 5–6 are deterministi
 
 **Strategy D: destination affinity per market.** For each origin market, query insights with `filter.type=urn:entity:destination` (or `urn:entity:locality`) and `signal.location` set to the market (point + radius), and read the rank/affinity of our destination among results. Baseline: the same destination's global rank without location. Simple and direct, **if** destinations are entities and our destination appears in results.
 
-**Strategy P: profile affinity per market.** For each market, query insights for the entity types in the profile (places, artists, films, books), with `signal.location` = market and `signal.interests.entities` = profile entities, restricted to the profile's own entities if the API supports filtering to specific ids (verify), and aggregate their affinity. Baseline: the same query without `signal.interests`. Lift = target percentile − baseline percentile, aggregated across entities.
+**Strategy P: profile affinity per market.** For each market, query insights for the entity types in the profile (places, artists, films, books), with `signal.location` = market and `signal.interests.entities` = profile entities, restricted to the profile's own entities if the API supports filtering to specific ids (verify), and aggregate their affinity. Baseline: the same query without `signal.interests`. Lift = target affinity − baseline affinity, aggregated across entities.
 
 **Strategy H: heatmap.** One heatmap query with the profile as signal; aggregate heat inside each market's radius; divide by a baseline heatmap (no signal or generic signal) to remove population. Cheapest in calls, but heatmaps track popularity strongly, so the baseline division is mandatory.
 
@@ -62,7 +62,7 @@ Every step after 1 depends on earlier Qloo outputs; steps 5–6 are deterministi
 ## Normalisation and scores (in `scoring/`)
 
 - Convert each query's ranking field to a **percentile within that query** (0–1). If only order is returned: `pct = 1 − (rank − 1)/n`.
-- **Lift** per market = `target_pct − baseline_pct` (Strategy D/P) or `log(target_heat / baseline_heat)` rescaled to percentile (Strategy H).
+- **Lift** per market = `target_affinity − baseline_affinity` (Strategy D/P) or `log(target_heat / baseline_heat)` (Strategy H). Percentiles of target and baseline are kept for display, but subtracting percentiles collapses the signal because both are rank-identical within a response.
 - **Taste score** = percentile of lift across the run's markets (0–100).
 - **Confidence:** High if the market has results for ≥ 70% of profile entities and lift is stable when any single profile entity is dropped (leave-one-out change in rank ≤ 3); Medium if ≥ 40% coverage; Low otherwise. Leave-one-out uses stored responses only where the strategy allows; otherwise use coverage only and say so.
 - **Gap** (only with arrivals) = taste percentile − arrivals-share percentile, across matched markets. Quadrants by thresholds 0.5/0.5 (configurable).

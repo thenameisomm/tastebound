@@ -53,7 +53,7 @@
 | 2026-10-19 | Demo run is seeded from an exported fixture and is read-only for non-demo workspaces | Free logged-out demo must not spend Qloo calls or mutate demo data |
 | 2026-10-19 | SQLite locally (`aiosqlite`), Postgres/Supabase unchanged for deploy | Docker unavailable on the build machine; SQLAlchemy layer stays portable |
 | 2026-10-19 | Sample trace seeds `QlooCall` rows from fixture `qloo_call` events, deleted by call id on reseed | Judge audit: `/trace` showed 0 Qloo rows while counters said 252, and score `source_call_ids` resolved nowhere |
-| 2026-10-19 | Tool-choice loop stays disabled (`LLM_TOOL_CALLING=false`); README, docs/03 and docs/17 copy corrected | Live tool calling is unverified (quota exhausted) and rule 2 forbids shipping guessed tool-calling; `/health` now reports `tools_ok` from this flag |
+| 2026-10-19 | Tool-choice loop stays disabled (`LLM_TOOL_CALLING=false`); README and architecture copy corrected | Live tool calling is unverified (quota exhausted) and the project rules forbid shipping guessed tool-calling; `/health` reports `tools_ok` from this flag |
 | 2026-10-19 | 40-market cap enforced in the request schema and the create route | `MAX_MARKETS_PER_RUN` was documented but unused; the API accepted 68 |
 | 2026-10-19 | README lift definition corrected to `target − baseline`; novelty claims softened and sourced | Judge audit: "run's typical affinity" described the wrong baseline; absolute novelty wording was unsupportable |
 | 2026-10-19 | Second live destination verified: Kyoto/APAC-15 (Mumbai 96.7, Delhi 90.0, Kuala Lumpur 83.3) vs Lisbon (Cartagena 99.26, Tokyo 97.8) | Claim "different destinations → different rankings" is now verified live; 80 live Qloo calls spent |
