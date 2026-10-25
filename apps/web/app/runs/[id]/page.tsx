@@ -8,6 +8,7 @@ import { useRunStream } from "@/lib/useRunStream";
 import { formatDate } from "@/lib/format";
 import { Banner } from "@/components/Banner";
 import { CallCounter } from "@/components/CallCounter";
+import { AssistantButton } from "@/components/assistant/AssistantButton";
 import { EmptyState } from "@/components/EmptyState";
 import { ErrorPanel } from "@/components/ErrorPanel";
 import { GapQuadrant } from "@/components/GapQuadrant";
@@ -139,7 +140,14 @@ export default function RunPage() {
             {run.finished_at ? <span>Finished {formatDate(run.finished_at)}</span> : null}
           </p>
         </div>
-        <CallCounter run={run} events={events} />
+        <div className="stackSm" style={{ alignItems: "flex-end" }}>
+          <CallCounter run={run} events={events} />
+          {scored ? (
+            <AssistantButton prompt="Which market should we prioritise, and why?">
+              Ask about this run
+            </AssistantButton>
+          ) : null}
+        </div>
       </div>
 
       <div className="stack sectionSm">
@@ -214,7 +222,7 @@ export default function RunPage() {
       </div>
 
       {scored && markets ? (
-        <section className="section">
+        <section className="section" id="results">
           <div className="resultsBand">
             <div className="stackSm">
               <span className="eyebrow eyebrowOnDark">The short answer</span>
@@ -315,6 +323,20 @@ export default function RunPage() {
               })}
             </div>
           ) : null}
+          </div>
+        </section>
+      ) : null}
+
+      {scored && markets ? (
+        <section className="section" id="method">
+          <div className="cardTint stackSm">
+            <span className="kindTag">Method</span>
+            <h2 className="headingSm">Taste fit, not a visitor forecast</h2>
+            <p className="muted">
+              Taste score is a percentile of target affinity across this run&apos;s markets. Lift is
+              target affinity minus baseline. Gap compares the taste percentile with the arrivals
+              percentile. Confidence and coverage describe how much signal sits behind the number.
+            </p>
           </div>
         </section>
       ) : null}

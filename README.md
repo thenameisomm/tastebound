@@ -56,6 +56,22 @@ Every run writes an ordered, timestamped trace of Qloo calls and internal tool s
   <img src="assets/readme/05-trace.png" alt="Trace audit log for the Lisbon demo: 252 Qloo calls, 16 tool calls, 0 LLM calls, 268 total events, with filterable rows showing build_profile and destination_search." width="900">
 </p>
 
+## Ask the run
+
+A read-only assistant answers questions about a completed run: why a market ranks where it does, what the arrivals gap means, who the audience is, which evidence supports an angle and where the caveats are. It is available from the results header, each market brief and the floating launcher.
+
+The model never sees the database or chooses a tool. For every question the API rebuilds a bounded context from the stored run, asks for JSON, then validates the answer against that context: every cited number must exist, every evidence ID must resolve, and every answer must cite at least one item. Invalid output gets one repair attempt; otherwise the assistant returns a clear "could not verify" error. It cannot change a run, call Qloo or forecast visitors.
+
+<p align="center">
+  <sub><strong>Read-only. Grounded. No tools.</strong> Requires <code>OLLAMA_API_KEY</code>; without it the drawer says the assistant is unavailable and the rest of the app still works.</sub>
+</p>
+
+Conversations are kept in memory for 60 minutes and are scoped to the workspace and run. They are not written to the database or the run trace; an API restart clears them. The default limits are 30 messages/hour per IP, 60/hour per workspace and 800 characters per message.
+
+<p align="center">
+  <img src="assets/readme/07-assistant.png" alt="The TasteBound results assistant drawer open over the Lisbon demo results, with suggested questions and a grounded Q&A composer." width="900">
+</p>
+
 ## How it works
 
 1. **Profile** — name a destination and add its signature items, or let TasteBound suggest them from the official website. Each item resolves to a real Qloo entity; unresolved items are listed, not hidden.
@@ -94,7 +110,7 @@ pnpm install
 
 # apps/api/.env
 #   QLOO_API_KEY=...            # required for real runs
-#   OLLAMA_API_KEY=...          # optional; without quota, briefs stay labelled templates
+#   OLLAMA_API_KEY=...          # optional; enables item suggestions, gated briefs and the results assistant
 
 pnpm turbo dev                   # web :3000, api :8000 (SQLite schema created and demo seeded)
 ```
@@ -104,15 +120,15 @@ Open **http://localhost:3000/sample** — a stored, read-only Lisbon run that ne
 Key-by-key setup, run and deploy instructions: [`docs/19-setup.md`](docs/19-setup.md).
 
 ```bash
-(cd apps/api && uv run pytest -m "not live")   # no network
+pnpm test                                     # API + web tests, no network
 pnpm turbo lint check-types build
 ```
 
 ## Project layout
 
 ```
-apps/api            FastAPI: Qloo client (rate limit, cache, budgets), scoring, arrivals, executor, HTTP API
-apps/web            Next.js: landing, 4-step wizard, results, market detail, plan, trace, sample
+apps/api            FastAPI: Qloo client (rate limit, cache, budgets), scoring, arrivals, executor, results assistant, HTTP API
+apps/web            Next.js: landing, 4-step wizard, results, market detail, plan, trace, sample, assistant drawer
 packages/contracts  TypeScript types generated from the API's OpenAPI schema
 assets/readme       README hero and screenshots
 docs/               product, Qloo integration, API, frontend, security, tests and runbook
@@ -131,19 +147,20 @@ scripts/            screenshot, smoke and accessibility checks (Playwright + axe
 
 ## Documentation
 
-| Start here                                                                             | Then                                                          |
-| -------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| [Product brief](docs/00-product-brief.md)                                              | Problem, users, value and metrics                             |
-| [Architecture](docs/03-architecture.md)                                                | Runtime components, run phases and configuration              |
-| [Qloo integration](docs/04-qloo-integration.md)                                        | Multi-call chain, baseline, guards, budget and kill switch    |
-| [LLM and grounding](docs/05-agent-and-llm.md)                                          | Provider layer, what the LLM may write, validation and limits |
-| [Data model](docs/06-data-model-supabase.md) · [data sources](docs/09-data-sources.md) | Tables and provenance · arrivals and market data              |
-| [API](docs/07-api-spec.md) · [frontend](docs/08-frontend-spec.md)                      | Endpoints and errors · screens and states                     |
-| [Security](docs/10-security-and-privacy.md)                                            | Tokens, secrets, SSRF, retention and abuse limits             |
-| [Acceptance](docs/12-acceptance-criteria.md) · [tests](docs/13-test-plan.md)           | Numbered criteria · how the code is checked                   |
-| [Runbook](docs/16-runbook.md) · [setup](docs/19-setup.md)                              | Operate and troubleshoot · keys and local setup               |
-| [Decisions](docs/18-risks-and-decisions.md) · [design system](docs/DESIGN.md)          | Trade-offs and risks · the visual language                    |
-| [Qloo contract](docs/qloo-contract.md) · [LLM contract](docs/llm-contract.md)          | Verified request/response notes · verified provider behaviour |
+| Start here                                                                             | Then                                                                |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [Product brief](docs/00-product-brief.md)                                              | Problem, users, value and metrics                                   |
+| [Architecture](docs/03-architecture.md)                                                | Runtime components, run phases and configuration                    |
+| [Qloo integration](docs/04-qloo-integration.md)                                        | Multi-call chain, baseline, guards, budget and kill switch          |
+| [LLM and grounding](docs/05-agent-and-llm.md)                                          | Provider layer, what the LLM may write, validation and limits       |
+| [Results assistant](docs/features/F13-results-assistant.md)                            | Grounded Q&A, evidence, limits and the in-memory conversation store |
+| [Data model](docs/06-data-model-supabase.md) · [data sources](docs/09-data-sources.md) | Tables and provenance · arrivals and market data                    |
+| [API](docs/07-api-spec.md) · [frontend](docs/08-frontend-spec.md)                      | Endpoints and errors · screens and states                           |
+| [Security](docs/10-security-and-privacy.md)                                            | Tokens, secrets, SSRF, retention and abuse limits                   |
+| [Acceptance](docs/12-acceptance-criteria.md) · [tests](docs/13-test-plan.md)           | Numbered criteria · how the code is checked                         |
+| [Runbook](docs/16-runbook.md) · [setup](docs/19-setup.md)                              | Operate and troubleshoot · keys and local setup                     |
+| [Decisions](docs/18-risks-and-decisions.md) · [design system](docs/DESIGN.md)          | Trade-offs and risks · the visual language                          |
+| [Qloo contract](docs/qloo-contract.md) · [LLM contract](docs/llm-contract.md)          | Verified request/response notes · verified provider behaviour       |
 
 ## Limits
 
@@ -151,7 +168,8 @@ scripts/            screenshot, smoke and accessibility checks (Playwright + axe
 - Audience demographics come from Qloo and need a taste signal; they are affinity deltas, not census data.
 - The bundled arrivals sample is illustrative (Statista/INE-informed), labelled as such everywhere it appears.
 - Qloo coverage varies by market; thin markets are flagged with lower confidence.
-- The free Ollama key hit its quota during the build, so the stored demo's briefs are templates. The sample remains fully usable without keys.
+- The free Ollama key hit its quota during the build, so the stored demo's briefs are templates. The sample remains fully usable without keys, and the assistant reports when no model is configured.
+- Assistant conversations are process memory, not durable data. A restart or TTL expiry clears them; a multi-instance API needs a shared conversation store and rate limiter.
 
 ## License
 

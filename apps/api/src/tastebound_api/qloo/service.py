@@ -646,8 +646,7 @@ class QlooService:
             unique.append(item)
         if duplicate_names:
             warnings.append(
-                "Merged duplicate profile matches: "
-                + ", ".join(dict.fromkeys(duplicate_names))
+                "Merged duplicate profile matches: " + ", ".join(dict.fromkeys(duplicate_names))
             )
         if len(unique) < 3:
             warnings.append("Fewer than 3 signature items resolved.")

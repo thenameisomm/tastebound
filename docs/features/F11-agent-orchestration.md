@@ -6,18 +6,18 @@
 
 The shipped executor is a fixed pipeline in `agent/executor.py`:
 
-| Step | Phase | Does | Feature |
-|---|---|---|---|
-| `build_profile` | scoring | Resolve destination items, collect tags | F02 |
-| `score_markets` | scoring | Target + baseline affinity per market; lift, percentile, confidence | F03 |
-| `compute_gaps` | scoring | Join arrivals, gaps, quadrants | F04 |
-| `market_audience` | deep dive | Qloo demographic signal for the shortlist | F05 |
-| `market_angles` | deep dive | Angle evidence per market | F06 |
-| `media_partners` | deep dive | Cross-domain partners per market | F07 |
-| `write_briefs` | deep dive | Deterministic template briefs; optional gated model prose | F10 |
-| `finish_phase` | both | Records the phase summary | — |
+| Step              | Phase     | Does                                                                | Feature |
+| ----------------- | --------- | ------------------------------------------------------------------- | ------- |
+| `build_profile`   | scoring   | Resolve destination items, collect tags                             | F02     |
+| `score_markets`   | scoring   | Target + baseline affinity per market; lift, percentile, confidence | F03     |
+| `compute_gaps`    | scoring   | Join arrivals, gaps, quadrants                                      | F04     |
+| `market_audience` | deep dive | Qloo demographic signal for the shortlist                           | F05     |
+| `market_angles`   | deep dive | Angle evidence per market                                           | F06     |
+| `media_partners`  | deep dive | Cross-domain partners per market                                    | F07     |
+| `write_briefs`    | deep dive | Deterministic template briefs; optional gated model prose           | F10     |
+| `finish_phase`    | both      | Records the phase summary                                           | —       |
 
-Intake item suggestions are one LLM prompt-and-validate call before the run. Allocation is pure code.
+Intake item suggestions are one LLM prompt-and-validate call before the run. Allocation is pure code. The post-run results assistant is a separate read-only surface (F13): it does not execute tools, call Qloo or write run events.
 
 ## Safety boundaries
 
@@ -28,7 +28,7 @@ Intake item suggestions are one LLM prompt-and-validate call before the run. All
 
 ## Events and trace
 
-The run event stream carries phase/tool/Qloo/warning/progress events over SSE. The trace page lists Qloo calls (endpoint, parameters without keys, cache hit, status, duration) and tool steps in order. Model-written brief rows also record provider, model and prompt version when that gated path is used.
+The run event stream carries phase/tool/Qloo/warning/progress events over SSE. The trace page lists Qloo calls (endpoint, parameters without keys, cache hit, status, duration) and tool steps in order. Model-written brief rows also record provider, model and prompt version when that gated path is used. Results-assistant calls are intentionally not part of the run trace and are documented in F13.
 
 Replay uses the stored event sequence rather than re-running Qloo. The demo fixture seeds Qloo trace rows so `/trace` and the call counters agree.
 

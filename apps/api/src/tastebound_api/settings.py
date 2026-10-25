@@ -60,6 +60,14 @@ class Settings(BaseSettings):
     max_signature_items: int = 15
     max_markets_per_run: int = 40
     max_shortlist: int = 6
+    assistant_enabled: bool = True
+    assistant_messages_per_ip_per_hour: int = 30
+    assistant_messages_per_workspace_per_hour: int = 60
+    assistant_max_message_chars: int = 800
+    assistant_max_history_messages: int = 8
+    assistant_max_context_chars: int = 30_000
+    assistant_conversation_ttl_minutes: int = 60
+    assistant_max_conversations: int = 256
 
     @field_validator("app_env")
     @classmethod

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatDate } from "@/lib/format";
 import type { TraceItem } from "@/lib/types";
 
@@ -18,9 +18,21 @@ const KIND_CLASS: Record<string, string> = {
   event: "pill pillMuted",
 };
 
-export function TraceTable({ items }: { items: TraceItem[] }) {
+export function TraceTable({
+  items,
+  highlightCallId,
+}: {
+  items: TraceItem[];
+  highlightCallId?: string | null;
+}) {
   const [kind, setKind] = useState("all");
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    if (!highlightCallId) return;
+    const row = document.getElementById(`call-${highlightCallId}`);
+    row?.scrollIntoView({ block: "center" });
+  }, [highlightCallId, items.length]);
 
   const visible = useMemo(
     () =>
@@ -62,19 +74,29 @@ export function TraceTable({ items }: { items: TraceItem[] }) {
         <div className="empty">Nothing matches these filters.</div>
       ) : (
         <div className="stackSm">
-          {visible.map((item, index) => (
-            <details key={`${item.at}-${index}`} className="traceCard">
-              <summary>
-                <span className={KIND_CLASS[item.kind] ?? "pill"}>
-                  {KIND_LABELS[item.kind] ?? item.kind}
-                </span>
-                <strong className="traceStep">{item.step}</strong>
-                <span className="traceSummary">{item.summary}</span>
-                <span className="caption traceTime">{formatDate(item.at)}</span>
-              </summary>
-              <pre>{JSON.stringify(item.detail, null, 2)}</pre>
-            </details>
-          ))}
+          {visible.map((item, index) => {
+            const callId =
+              typeof item.detail.call_id === "string" ? item.detail.call_id : null;
+            const highlighted = Boolean(callId && callId === highlightCallId);
+            return (
+              <details
+                key={`${item.at}-${index}`}
+                id={callId ? `call-${callId}` : undefined}
+                className={highlighted ? "traceCard traceCardHighlight" : "traceCard"}
+                open={highlighted || undefined}
+              >
+                <summary>
+                  <span className={KIND_CLASS[item.kind] ?? "pill"}>
+                    {KIND_LABELS[item.kind] ?? item.kind}
+                  </span>
+                  <strong className="traceStep">{item.step}</strong>
+                  <span className="traceSummary">{item.summary}</span>
+                  <span className="caption traceTime">{formatDate(item.at)}</span>
+                </summary>
+                <pre>{JSON.stringify(item.detail, null, 2)}</pre>
+              </details>
+            );
+          })}
         </div>
       )}
     </div>

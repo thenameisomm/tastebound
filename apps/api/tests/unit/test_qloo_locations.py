@@ -35,9 +35,7 @@ def test_location_payload_maps_place_geocode() -> None:
     assert payload["lat"] == 38.7098339
     assert payload["lon"] == -9.1329535
     assert payload["type"] == "place"
-    assert payload["tags"] == [
-        {"id": "tag-1", "label": "Cathedral", "type": "urn:tag:genre:place"}
-    ]
+    assert payload["tags"] == [{"id": "tag-1", "label": "Cathedral", "type": "urn:tag:genre:place"}]
 
 
 def test_location_payload_maps_destination_country() -> None:

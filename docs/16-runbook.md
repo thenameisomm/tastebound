@@ -5,7 +5,7 @@
 - Node.js 24+ and pnpm (the repo pins pnpm 11.25.0)
 - Python 3.12 or 3.13 and `uv`
 - A Qloo hackathon key for live runs
-- Optional: an Ollama Cloud key for item suggestions and gated model-written briefs
+- Optional: an Ollama Cloud key for item suggestions, gated model-written briefs and the read-only results assistant
 - Optional: `pnpm exec playwright install chromium` for screenshot, smoke and axe scripts
 
 ## Local setup
@@ -23,12 +23,12 @@ echo "NEXT_PUBLIC_API_URL=http://127.0.0.1:8000" > apps/web/.env.local
 pnpm turbo dev
 ```
 
-| Service | URL |
-|---|---|
-| Web | http://localhost:3000 |
-| API | http://127.0.0.1:8000 |
-| API docs | http://127.0.0.1:8000/docs |
-| Health | http://127.0.0.1:8000/health |
+| Service  | URL                          |
+| -------- | ---------------------------- |
+| Web      | http://localhost:3000        |
+| API      | http://127.0.0.1:8000        |
+| API docs | http://127.0.0.1:8000/docs   |
+| Health   | http://127.0.0.1:8000/health |
 
 On first boot the API creates the SQLite schema, loads the 68-market catalogue and seeds the read-only Lisbon demo from `apps/api/data/demo/lisbon-run.json`.
 
@@ -63,6 +63,7 @@ It spends real Qloo calls and requires `QLOO_API_KEY`. Recorded findings live in
 ```bash
 (cd apps/api && uv run ruff check . && uv run ruff format --check . && uv run mypy src)
 (cd apps/api && uv run pytest -m "not live")       # no network
+pnpm test                                           # API + web tests, no network
 pnpm turbo lint check-types build
 
 # With both servers running:
@@ -71,6 +72,8 @@ node scripts/a11y-check.mjs
 ```
 
 Live Qloo checks are opt-in and never run in CI: `(cd apps/api && uv run pytest -m live)`.
+
+Assistant conversations are not in SQLite. Restarting the API clears them; the web app clears a stale `sessionStorage` pointer after a 404. To test the assistant locally without a real model, use the fake provider from the test suite rather than a production env switch.
 
 If a schema or route changes, export the OpenAPI document and regenerate the TypeScript contracts:
 
@@ -104,24 +107,28 @@ limit 10;
 
 ## Deploy
 
-| Part | Where | Notes |
-|---|---|---|
-| Database | Supabase Cloud (optional) | Set `DATABASE_URL`; create the schema through `init_db` or your own migrations, then seed the demo |
-| API | Render / Railway / Fly.io, **one instance** | `uv run uvicorn tastebound_api.main:app --host 0.0.0.0 --port $PORT`; all secrets as server-side env vars; in-process rate limits and budgets |
-| Web | Vercel, root `apps/web` | `NEXT_PUBLIC_API_URL` = API URL; add the web origin to `CORS_ORIGINS` |
+| Part     | Where                                       | Notes                                                                                                                                         |
+| -------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Database | Supabase Cloud (optional)                   | Set `DATABASE_URL`; create the schema through `init_db` or your own migrations, then seed the demo                                            |
+| API      | Render / Railway / Fly.io, **one instance** | `uv run uvicorn tastebound_api.main:app --host 0.0.0.0 --port $PORT`; all secrets as server-side env vars; in-process rate limits and budgets |
+| Web      | Vercel, root `apps/web`                     | `NEXT_PUBLIC_API_URL` = API URL; add the web origin to `CORS_ORIGINS`                                                                         |
 
 After deploying, open `/sample` in a private window, start one live run, and confirm `/health`. For a production deployment, add versioned migrations and backups first.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| `prepared statement ... does not exist` | Transaction pooler + asyncpg | Use a direct/session connection; the engine already sets `statement_cache_size=0` |
-| Qloo 401 | Key, header or base URL | Check `QLOO_API_KEY`, the `X-Api-Key` header and `QLOO_BASE_URL=https://hackathon.api.qloo.com` |
-| Market results identical for every market | Location parameter ignored (silent 200) | Re-check `docs/qloo-contract.md`; guards should warn |
-| Most non-US markets empty | Coverage | Switch strategy, enlarge radius, drop thin markets and state the limit |
-| Ollama 401/404 | Key or model name | Fix `OLLAMA_API_KEY`; choose a name available in the account's Ollama library |
-| Briefs say `template` | LLM unavailable, quota exhausted, or grounding rejected the output | Expected fallback; check `/health` and the trace |
-| CORS error | Missing origin | Add the web origin to `CORS_ORIGINS` |
-| Empty `/sample` | Demo fixture missing or seed failed | Confirm `apps/api/data/demo/lisbon-run.json` exists and restart the API |
-| `database is locked` | Concurrent SQLite writers | WAL and a 30 s timeout are configured; run one API instance |
+| Symptom                                      | Cause                                                                | Fix                                                                                             |
+| -------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `prepared statement ... does not exist`      | Transaction pooler + asyncpg                                         | Use a direct/session connection; the engine already sets `statement_cache_size=0`               |
+| Qloo 401                                     | Key, header or base URL                                              | Check `QLOO_API_KEY`, the `X-Api-Key` header and `QLOO_BASE_URL=https://hackathon.api.qloo.com` |
+| Market results identical for every market    | Location parameter ignored (silent 200)                              | Re-check `docs/qloo-contract.md`; guards should warn                                            |
+| Most non-US markets empty                    | Coverage                                                             | Switch strategy, enlarge radius, drop thin markets and state the limit                          |
+| Ollama 401/404                               | Key or model name                                                    | Fix `OLLAMA_API_KEY`; choose a name available in the account's Ollama library                   |
+| Briefs say `template`                        | LLM unavailable, quota exhausted, or grounding rejected the output   | Expected fallback; check `/health` and the trace                                                |
+| Assistant says “No model configured”         | `OLLAMA_API_KEY` missing or provider construction failed             | Add the key and restart the API; the rest of the app is unaffected                              |
+| Assistant says it could not verify an answer | Model output had an unknown number/name/evidence ID after one repair | Rephrase or ask a narrower question; check the provider model, not the run scores               |
+| Assistant rate-limited                       | 30/hour/IP or 60/hour/workspace reached                              | Wait for the window to pass; limits are in-process and reset on restart                         |
+| Conversation disappeared                     | TTL expired or API restarted                                         | Expected; conversations are not durable                                                         |
+| CORS error                                   | Missing origin                                                       | Add the web origin to `CORS_ORIGINS`                                                            |
+| Empty `/sample`                              | Demo fixture missing or seed failed                                  | Confirm `apps/api/data/demo/lisbon-run.json` exists and restart the API                         |
+| `database is locked`                         | Concurrent SQLite writers                                            | WAL and a 30 s timeout are configured; run one API instance                                     |

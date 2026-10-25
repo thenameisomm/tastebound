@@ -387,3 +387,62 @@ class DemoResponse(BaseModel):
     shortlist: list[str]
     headline: str
     sample: bool = True
+
+
+AssistantRole = Literal["user", "assistant"]
+
+
+class AssistantEvidenceOut(BaseModel):
+    id: str
+    kind: str
+    label: str
+    detail: str
+    href: str
+    source_call_id: str | None = None
+
+
+class AssistantMessageOut(BaseModel):
+    id: str
+    role: AssistantRole
+    content: str
+    evidence: list[AssistantEvidenceOut] = Field(default_factory=list)
+    created_at: datetime
+
+
+class AssistantBootstrapResponse(BaseModel):
+    enabled: bool
+    ready: bool
+    model: str | None
+    focus_market_id: str | None
+    suggested_questions: list[str]
+    notice: str | None
+    max_message_chars: int
+    conversation_ttl_minutes: int
+
+
+class AssistantConversationCreate(StrictModel):
+    focus_market_id: str | None = None
+
+
+class AssistantConversationResponse(BaseModel):
+    conversation_id: str
+    run_id: str
+    focus_market_id: str | None
+    messages: list[AssistantMessageOut]
+    created_at: datetime
+    updated_at: datetime
+
+
+class AssistantMessageRequest(StrictModel):
+    message: str = Field(min_length=1, max_length=800)
+    focus_market_id: str | None = None
+
+
+class AssistantAnswerResponse(BaseModel):
+    conversation_id: str
+    message_id: str
+    answer: str
+    evidence: list[AssistantEvidenceOut]
+    followups: list[str]
+    model: str
+    created_at: datetime

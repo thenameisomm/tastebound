@@ -27,10 +27,11 @@
 │     │  ├─ arrivals/                       # CSV parsing and market matching
 │     │  ├─ external/website_reader.py      # SSRF-safe page reader
 │     │  ├─ agent/                          # deterministic executor + plan guard helpers
+│     │  ├─ assistant/                      # run context, evidence validation, in-memory conversations
 │     │  ├─ llm/                            # provider port, OpenAI-compatible adapter, prompts
 │     │  ├─ data/                           # market catalogue and sample arrivals
 │     │  └─ routes/                         # health, workspaces, markets, destinations,
-│     │                                      arrivals, runs, demo
+│     │                                      arrivals, runs, demo, assistant
 │     ├─ scripts/                           # phase-0 spikes, demo export, OpenAPI export
 │     └─ tests/                             # unit, contract, API and opt-in live tests
 ├─ packages
@@ -59,19 +60,23 @@ flowchart LR
     SC[Scoring: lift, percentile, gap, allocation]
     AR[Arrivals parser + matcher]
     GR[Grounding validator]
+    AS[Results assistant: context, validation, TTL store]
     LP[LLM provider port]
     DB[(SQLite or Postgres)]
   end
   Q[(Qloo API)]
   O[(Ollama Cloud or compatible API)]
   W -- HTTPS + SSE --> R --> EX
+  W -- HTTPS --> R --> AS
   EX --> QC --> Q
   EX --> SC
   EX --> AR
   EX --> GR
   EX --> LP --> O
   R --> DB
+  AS --> DB
   EX --> DB
+  AS --> LP
 ```
 
 The browser talks only to FastAPI. Qloo and LLM keys never leave the API. SSE is used for run progress; the stored demo can render without a live connection.
@@ -81,7 +86,7 @@ The browser talks only to FastAPI. Qloo and LLM keys never leave the API. SSE is
 1. **Scoring phase** — `build_profile` → `score_markets` → `compute_gaps` → `finish_phase`. The executor runs this fixed sequence in code. `score_markets` fetches a target and a baseline affinity for each market; `compute_gaps` joins the run's arrivals dataset and ranks the quadrant.
 2. **Deep-dive phase** — after the user selects a shortlist, `market_audience` → `market_angles` → `media_partners` → `write_briefs` → `finish_phase`.
 3. **Allocation** — pure code, recalculated immediately when the user moves budget sliders or changes locks. No model call.
-4. **Trace** — every Qloo call, tool step, warning and optional LLM call is stored as an ordered run event. The trace page can replay a run from these rows.
+4. **Trace** — every Qloo call, tool step, warning and optional run-path LLM call is stored as an ordered run event. The trace page can replay a run from these rows. Post-run assistant calls are not written to the run trace.
 
 ```mermaid
 sequenceDiagram
@@ -112,6 +117,18 @@ The shipped executor is a fixed pipeline, not an LLM tool-choice loop:
 - The model-writing path for briefs is behind `LLM_TOOL_CALLING=false` and is disabled in the shipped configuration. Template briefs are the default and are labelled as such.
 - `agent/plan_guard.py` contains ordering and argument checks used by tests and by the executor's validation boundary. The model does not select or order tools.
 - `/health` reports `tools_ok: false` while tool calling is disabled. Live tool calling is not claimed.
+
+## Post-run results assistant
+
+The assistant is a separate, read-only surface after scoring:
+
+- `routes/assistant.py` checks workspace ownership, provider readiness and per-IP/per-workspace message limits.
+- `assistant/context.py` rebuilds a bounded evidence bundle from stored run rows on every message. The browser never supplies scores or evidence.
+- `assistant/service.py` calls the configured provider with the system prompt, run context and bounded history. It is non-streaming and asks for JSON.
+- `assistant/validation.py` verifies JSON shape, answer length, 1–6 known evidence IDs, numbers and names against the context, with exactly one repair attempt.
+- `assistant/store.py` keeps conversations in process memory with a TTL and a one-message-per-conversation lock. Nothing is written to SQLite/Postgres, `llm_calls` or the run trace.
+
+The assistant has no Qloo access, tools, SQL, URL fetches or mutation endpoints. If the model is unconfigured, bootstrap returns `enabled=false`; message creation returns `assistant_unavailable`. A multi-instance deployment would need a shared conversation store and rate limiter. See `features/F13-results-assistant.md`.
 
 ## Identity and access
 
@@ -161,6 +178,15 @@ LLM_TEMPERATURE_WRITING=0.7
 LLM_MAX_CALLS_PER_RUN=40
 LLM_TOOL_CALLING=false
 
+ASSISTANT_ENABLED=true
+ASSISTANT_MESSAGES_PER_IP_PER_HOUR=30
+ASSISTANT_MESSAGES_PER_WORKSPACE_PER_HOUR=60
+ASSISTANT_MAX_MESSAGE_CHARS=800
+ASSISTANT_MAX_HISTORY_MESSAGES=8
+ASSISTANT_MAX_CONTEXT_CHARS=30000
+ASSISTANT_CONVERSATION_TTL_MINUTES=60
+ASSISTANT_MAX_CONVERSATIONS=256
+
 DEMO_MODE_ENABLED=true
 DEMO_RUN_ID=
 PUBLIC_RUNS_PER_IP_PER_DAY=30
@@ -173,13 +199,13 @@ MAX_SHORTLIST=6
 
 ## Stack
 
-| Layer | Choice |
-|---|---|
-| Frontend | Next.js 16 App Router, React 19, TypeScript; flat brutalist design system in `DESIGN.md` |
-| Backend | FastAPI, Uvicorn, httpx, Pydantic v2, pydantic-settings, SQLAlchemy async |
-| Database | SQLite locally; Postgres/Supabase optional via `DATABASE_URL` |
-| LLM | Ollama Cloud (Gemma 4 31B default) through an OpenAI-compatible provider port; optional Gemini/OpenAI-compatible endpoints, no gateways |
-| Taste data | Qloo Taste AI hackathon API |
-| Tests | pytest + respx; opt-in live tests; Playwright + axe for browser checks |
-| Types | openapi-typescript → `packages/contracts` |
-| Deploy | Vercel for web; one API instance on Render/Railway/Fly; Supabase for managed Postgres |
+| Layer      | Choice                                                                                                                                  |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend   | Next.js 16 App Router, React 19, TypeScript; flat brutalist design system in `DESIGN.md`                                                |
+| Backend    | FastAPI, Uvicorn, httpx, Pydantic v2, pydantic-settings, SQLAlchemy async                                                               |
+| Database   | SQLite locally; Postgres/Supabase optional via `DATABASE_URL`                                                                           |
+| LLM        | Ollama Cloud (Gemma 4 31B default) through an OpenAI-compatible provider port; optional Gemini/OpenAI-compatible endpoints, no gateways |
+| Taste data | Qloo Taste AI hackathon API                                                                                                             |
+| Tests      | pytest + respx; Vitest + Testing Library; opt-in live tests; Playwright + axe for browser checks                                        |
+| Types      | openapi-typescript → `packages/contracts`                                                                                               |
+| Deploy     | Vercel for web; one API instance on Render/Railway/Fly; Supabase for managed Postgres                                                   |

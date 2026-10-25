@@ -2037,6 +2037,356 @@
     }
    }
   },
+  "/v1/runs/{run_id}/assistant": {
+   "get": {
+    "tags": [
+     "assistant"
+    ],
+    "summary": "Assistant Bootstrap",
+    "operationId": "assistant_bootstrap_v1_runs__run_id__assistant_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "focus_market_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Focus Market Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssistantBootstrapResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/assistant/conversations": {
+   "post": {
+    "tags": [
+     "assistant"
+    ],
+    "summary": "Create Conversation",
+    "operationId": "create_conversation_v1_runs__run_id__assistant_conversations_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AssistantConversationCreate"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssistantConversationResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/assistant/conversations/{conversation_id}": {
+   "get": {
+    "tags": [
+     "assistant"
+    ],
+    "summary": "Get Conversation",
+    "operationId": "get_conversation_v1_runs__run_id__assistant_conversations__conversation_id__get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "conversation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Conversation Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssistantConversationResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/runs/{run_id}/assistant/conversations/{conversation_id}/messages": {
+   "post": {
+    "tags": [
+     "assistant"
+    ],
+    "summary": "Send Message",
+    "operationId": "send_message_v1_runs__run_id__assistant_conversations__conversation_id__messages_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "conversation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Conversation Id"
+      }
+     },
+     {
+      "name": "token",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Token"
+      }
+     },
+     {
+      "name": "X-Workspace-Token",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-Workspace-Token"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AssistantMessageRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssistantAnswerResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/v1/demo": {
    "get": {
     "tags": [
@@ -2389,6 +2739,307 @@
      "notes"
     ],
     "title": "ArrivalsSampleOut"
+   },
+   "AssistantAnswerResponse": {
+    "properties": {
+     "conversation_id": {
+      "type": "string",
+      "title": "Conversation Id"
+     },
+     "message_id": {
+      "type": "string",
+      "title": "Message Id"
+     },
+     "answer": {
+      "type": "string",
+      "title": "Answer"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/AssistantEvidenceOut"
+      },
+      "type": "array",
+      "title": "Evidence"
+     },
+     "followups": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Followups"
+     },
+     "model": {
+      "type": "string",
+      "title": "Model"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "conversation_id",
+     "message_id",
+     "answer",
+     "evidence",
+     "followups",
+     "model",
+     "created_at"
+    ],
+    "title": "AssistantAnswerResponse"
+   },
+   "AssistantBootstrapResponse": {
+    "properties": {
+     "enabled": {
+      "type": "boolean",
+      "title": "Enabled"
+     },
+     "ready": {
+      "type": "boolean",
+      "title": "Ready"
+     },
+     "model": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model"
+     },
+     "focus_market_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Focus Market Id"
+     },
+     "suggested_questions": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Suggested Questions"
+     },
+     "notice": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Notice"
+     },
+     "max_message_chars": {
+      "type": "integer",
+      "title": "Max Message Chars"
+     },
+     "conversation_ttl_minutes": {
+      "type": "integer",
+      "title": "Conversation Ttl Minutes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "enabled",
+     "ready",
+     "model",
+     "focus_market_id",
+     "suggested_questions",
+     "notice",
+     "max_message_chars",
+     "conversation_ttl_minutes"
+    ],
+    "title": "AssistantBootstrapResponse"
+   },
+   "AssistantConversationCreate": {
+    "properties": {
+     "focus_market_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Focus Market Id"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "AssistantConversationCreate"
+   },
+   "AssistantConversationResponse": {
+    "properties": {
+     "conversation_id": {
+      "type": "string",
+      "title": "Conversation Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "focus_market_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Focus Market Id"
+     },
+     "messages": {
+      "items": {
+       "$ref": "#/components/schemas/AssistantMessageOut"
+      },
+      "type": "array",
+      "title": "Messages"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "conversation_id",
+     "run_id",
+     "focus_market_id",
+     "messages",
+     "created_at",
+     "updated_at"
+    ],
+    "title": "AssistantConversationResponse"
+   },
+   "AssistantEvidenceOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "detail": {
+      "type": "string",
+      "title": "Detail"
+     },
+     "href": {
+      "type": "string",
+      "title": "Href"
+     },
+     "source_call_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source Call Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "label",
+     "detail",
+     "href"
+    ],
+    "title": "AssistantEvidenceOut"
+   },
+   "AssistantMessageOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "user",
+       "assistant"
+      ],
+      "title": "Role"
+     },
+     "content": {
+      "type": "string",
+      "title": "Content"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/AssistantEvidenceOut"
+      },
+      "type": "array",
+      "title": "Evidence"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "role",
+     "content",
+     "created_at"
+    ],
+    "title": "AssistantMessageOut"
+   },
+   "AssistantMessageRequest": {
+    "properties": {
+     "message": {
+      "type": "string",
+      "maxLength": 800,
+      "minLength": 1,
+      "title": "Message"
+     },
+     "focus_market_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Focus Market Id"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "message"
+    ],
+    "title": "AssistantMessageRequest"
    },
    "AudienceRow": {
     "properties": {

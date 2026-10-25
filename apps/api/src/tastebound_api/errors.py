@@ -163,3 +163,61 @@ class DestinationNotFound(AppError):
             f"Qloo could not resolve '{name}' as a destination. "
             "Check the spelling or add a nearby major city.",
         )
+
+
+class AssistantError(AppError):
+    pass
+
+
+class AssistantUnavailable(AssistantError):
+    def __init__(
+        self, detail: str = "The results assistant needs a configured model provider."
+    ) -> None:
+        super().__init__("assistant_unavailable", 503, "Assistant unavailable", detail)
+
+
+class AssistantTimeout(AssistantError):
+    def __init__(self, detail: str = "The model took too long to answer.") -> None:
+        super().__init__("assistant_timeout", 504, "Assistant timed out", detail)
+
+
+class AssistantRateLimited(AssistantError):
+    def __init__(self, detail: str = "Too many assistant messages. Try again later.") -> None:
+        super().__init__("assistant_rate_limited", 429, "Assistant rate limited", detail)
+
+
+class AssistantBadResponse(AssistantError):
+    def __init__(self, detail: str = "The model returned an unusable answer.") -> None:
+        super().__init__("assistant_bad_response", 502, "Assistant returned a bad response", detail)
+
+
+class AssistantUngrounded(AssistantError):
+    def __init__(
+        self, detail: str = "The answer could not be verified against this run's data."
+    ) -> None:
+        super().__init__("assistant_ungrounded", 502, "Assistant answer not grounded", detail)
+
+
+class AssistantBusy(AssistantError):
+    def __init__(self, detail: str = "This conversation is already waiting for an answer.") -> None:
+        super().__init__("assistant_busy", 409, "Assistant is busy", detail)
+
+
+class ConversationNotFound(AssistantError):
+    def __init__(self) -> None:
+        super().__init__(
+            "conversation_not_found",
+            404,
+            "Conversation not found",
+            "This conversation expired or belongs to another run. Start a new one.",
+        )
+
+
+class AssistantNotReady(AssistantError):
+    def __init__(self) -> None:
+        super().__init__(
+            "assistant_not_ready",
+            409,
+            "Assistant is not ready",
+            "Market results are not available for this run yet.",
+        )

@@ -430,6 +430,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/runs/{run_id}/assistant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Assistant Bootstrap */
+        get: operations["assistant_bootstrap_v1_runs__run_id__assistant_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/runs/{run_id}/assistant/conversations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Conversation */
+        post: operations["create_conversation_v1_runs__run_id__assistant_conversations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/runs/{run_id}/assistant/conversations/{conversation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Conversation */
+        get: operations["get_conversation_v1_runs__run_id__assistant_conversations__conversation_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/runs/{run_id}/assistant/conversations/{conversation_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send Message */
+        post: operations["send_message_v1_runs__run_id__assistant_conversations__conversation_id__messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/demo": {
         parameters: {
             query?: never;
@@ -572,6 +640,112 @@ export interface components {
             level: string;
             /** Notes */
             notes: string;
+        };
+        /** AssistantAnswerResponse */
+        AssistantAnswerResponse: {
+            /** Conversation Id */
+            conversation_id: string;
+            /** Message Id */
+            message_id: string;
+            /** Answer */
+            answer: string;
+            /** Evidence */
+            evidence: components["schemas"]["AssistantEvidenceOut"][];
+            /** Followups */
+            followups: string[];
+            /** Model */
+            model: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** AssistantBootstrapResponse */
+        AssistantBootstrapResponse: {
+            /** Enabled */
+            enabled: boolean;
+            /** Ready */
+            ready: boolean;
+            /** Model */
+            model: string | null;
+            /** Focus Market Id */
+            focus_market_id: string | null;
+            /** Suggested Questions */
+            suggested_questions: string[];
+            /** Notice */
+            notice: string | null;
+            /** Max Message Chars */
+            max_message_chars: number;
+            /** Conversation Ttl Minutes */
+            conversation_ttl_minutes: number;
+        };
+        /** AssistantConversationCreate */
+        AssistantConversationCreate: {
+            /** Focus Market Id */
+            focus_market_id?: string | null;
+        };
+        /** AssistantConversationResponse */
+        AssistantConversationResponse: {
+            /** Conversation Id */
+            conversation_id: string;
+            /** Run Id */
+            run_id: string;
+            /** Focus Market Id */
+            focus_market_id: string | null;
+            /** Messages */
+            messages: components["schemas"]["AssistantMessageOut"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** AssistantEvidenceOut */
+        AssistantEvidenceOut: {
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Label */
+            label: string;
+            /** Detail */
+            detail: string;
+            /** Href */
+            href: string;
+            /** Source Call Id */
+            source_call_id?: string | null;
+        };
+        /** AssistantMessageOut */
+        AssistantMessageOut: {
+            /** Id */
+            id: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+            /** Content */
+            content: string;
+            /** Evidence */
+            evidence?: components["schemas"]["AssistantEvidenceOut"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** AssistantMessageRequest */
+        AssistantMessageRequest: {
+            /** Message */
+            message: string;
+            /** Focus Market Id */
+            focus_market_id?: string | null;
         };
         /** AudienceRow */
         AudienceRow: {
@@ -2081,6 +2255,157 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    assistant_bootstrap_v1_runs__run_id__assistant_get: {
+        parameters: {
+            query?: {
+                focus_market_id?: string | null;
+                token?: string | null;
+            };
+            header?: {
+                "X-Workspace-Token"?: string | null;
+            };
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantBootstrapResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_conversation_v1_runs__run_id__assistant_conversations_post: {
+        parameters: {
+            query?: {
+                token?: string | null;
+            };
+            header?: {
+                "X-Workspace-Token"?: string | null;
+            };
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantConversationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantConversationResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_conversation_v1_runs__run_id__assistant_conversations__conversation_id__get: {
+        parameters: {
+            query?: {
+                token?: string | null;
+            };
+            header?: {
+                "X-Workspace-Token"?: string | null;
+            };
+            path: {
+                run_id: string;
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantConversationResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    send_message_v1_runs__run_id__assistant_conversations__conversation_id__messages_post: {
+        parameters: {
+            query?: {
+                token?: string | null;
+            };
+            header?: {
+                "X-Workspace-Token"?: string | null;
+            };
+            path: {
+                run_id: string;
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantMessageRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantAnswerResponse"];
                 };
             };
             /** @description Validation Error */

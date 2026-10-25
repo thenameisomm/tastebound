@@ -31,3 +31,11 @@ export type ProfileEntityOut = components["schemas"]["ProfileEntityOut"];
 export type ItemKind = SignatureItemInput["kind"];
 export type ItemOrigin = SignatureItemInput["origin"];
 export type Quadrant = NonNullable<MarketRow["quadrant"]>;
+
+export type AssistantBootstrap = components["schemas"]["AssistantBootstrapResponse"];
+export type AssistantConversation = components["schemas"]["AssistantConversationResponse"];
+export type AssistantConversationCreate = components["schemas"]["AssistantConversationCreate"];
+export type AssistantMessage = components["schemas"]["AssistantMessageOut"];
+export type AssistantMessageRequest = components["schemas"]["AssistantMessageRequest"];
+export type AssistantAnswer = components["schemas"]["AssistantAnswerResponse"];
+export type AssistantEvidence = components["schemas"]["AssistantEvidenceOut"];

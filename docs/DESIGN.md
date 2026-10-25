@@ -182,6 +182,12 @@ SuisseIntl 450 at 40px, uppercase, line-height 1.1, letter-spacing -0.02em. Ligh
 
 SuisseIntlMono 400 at 12px, letter-spacing -0.03em. Used for 'Slide 1/2/3' indicators, metadata, and system labels. The monospace creates a technical/editorial counterpoint to the neo-grotesque body.
 
+### Assistant Drawer
+
+**Role:** Read-only results Q&A
+
+A full-height right-side panel on desktop and bottom sheet on small screens, using the white card surface against a translucent black backdrop. Header, messages, evidence links and composer use the existing type scale and button variants; evidence IDs use the mint mono tag. No shadow or gradient. Focus is trapped inside the dialog, the panel closes on Escape/backdrop, and reduced-motion users see no panel transition. The assistant is content-first: no avatar, no fake chat chrome, no streaming shimmer — just messages, citations and a clear unavailable/error state.
+
 ## Do's and Don'ts
 
 ### Do

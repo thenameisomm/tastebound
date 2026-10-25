@@ -266,6 +266,10 @@ do $$ declare t text; begin
 end $$;
 ```
 
+## Results assistant
+
+The results assistant has no tables. Conversations and message history live in process memory with a TTL and are scoped by workspace and run. Questions, answers and evidence are not persisted in `llm_calls`, `run_events` or any other table. A multi-instance deployment would need a shared store before conversations could span instances.
+
 ## Retention (planned)
 
 Website text 30 days; raw responses nulled 7 days after `expires_at` (trace rows stay); inactive anonymous workspaces deleted after 60 days (cascade); demo workspace kept; uploaded arrivals deleted with their workspace.

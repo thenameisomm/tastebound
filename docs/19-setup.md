@@ -4,12 +4,12 @@ Verified against the repository on 2026-10-19. Local mode needs **no Docker, no 
 
 ## 1. Prerequisites
 
-| Tool | Version | Check |
-|---|---|---|
-| Node.js | ≥ 24 | `node -v` |
-| pnpm | 11.x (repo pins 11.25.0) | `pnpm -v` |
-| Python | 3.12 or 3.13 | `python3 --version` |
-| uv | latest | `uv --version` |
+| Tool    | Version                  | Check               |
+| ------- | ------------------------ | ------------------- |
+| Node.js | ≥ 24                     | `node -v`           |
+| pnpm    | 11.x (repo pins 11.25.0) | `pnpm -v`           |
+| Python  | 3.12 or 3.13             | `python3 --version` |
+| uv      | latest                   | `uv --version`      |
 
 Optional for the verification scripts: `pnpm exec playwright install chromium`.
 
@@ -17,11 +17,11 @@ Optional for the verification scripts: `pnpm exec playwright install chromium`.
 
 There are only **two service keys**, and only one is strictly required. Everything else is a secret or a connection string you generate yourself.
 
-| What you want to do | `QLOO_API_KEY` | `OLLAMA_API_KEY` |
-|---|---|---|
-| Browse the read-only sample (`/sample`) | Not needed | Not needed |
-| Start a live run locally | **Required** | Optional (better item suggestions and model-written briefs) |
-| Judge-facing deployed demo | **Required** (server-side env var) | Optional |
+| What you want to do                     | `QLOO_API_KEY`                     | `OLLAMA_API_KEY`                                                                   |
+| --------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------- |
+| Browse the read-only sample (`/sample`) | Not needed                         | Not needed                                                                         |
+| Start a live run locally                | **Required**                       | Optional (better item suggestions, model-written briefs and the results assistant) |
+| Judge-facing deployed demo              | **Required** (server-side env var) | Optional                                                                           |
 
 All values go in **`apps/api/.env`** (server-side only). Create it once and lock it down:
 
@@ -55,6 +55,7 @@ Every other variable in `.env.example` already has a safe default.
    ```
 
    Keep `QLOO_BASE_URL=https://hackathon.api.qloo.com` — the key only works on the hackathon host.
+
 6. **Test the key before starting the app** (replace the value in the command, not in a file that gets committed):
 
    ```bash
@@ -63,6 +64,7 @@ Every other variable in `.env.example` already has a safe default.
    ```
 
    JSON results mean the key works. `401` means a wrong key/header; `403` means the key is valid but lacks permission — take that back to the organizers.
+
 7. Restart the API and open `/health`: `"qloo": "configured"`. The first live run will start spending calls (the counter is visible in the run and trace).
 
 The app never needs the key in the browser: it is read only by the FastAPI process.
@@ -79,18 +81,20 @@ The app never needs the key in the browser: it is read only by the FastAPI proce
    ```
 
    The model must be available on Ollama Cloud for your account. `gemma4:31b-cloud` is the project default.
-4. Restart the API. With a working key, the wizard suggests signature items. Briefs remain deterministic templates unless the gated model-writing path is explicitly enabled. Without a key, you type items manually and briefs are labelled `template` — runs still complete.
-5. Ollama's free quota can return `401`/`429` or run out mid-demo. That is not fatal: the app falls back to templates. Check the run trace for the LLM status.
+
+4. Restart the API. With a working key, the wizard suggests signature items and the results assistant becomes available. Briefs remain deterministic templates unless the gated model-writing path is explicitly enabled. Without a key, you type items manually, briefs are labelled `template` and the assistant shows an unavailable notice — runs still complete.
+5. Ollama's free quota can return `401`/`429` or run out mid-demo. That is not fatal: briefs fall back to templates and the assistant reports that the model is unavailable. Check `/health` and the run trace for the run-path LLM status.
 6. Leave `LLM_TOOL_CALLING=false`. No LLM tool-choice loop is shipped; `/health` reports `tools_ok: false` accordingly.
+7. The assistant reuses `OLLAMA_API_KEY` and `OLLAMA_MODEL`. Conversations are in-memory for 60 minutes; restarting the API clears them. No extra key or database table is needed.
 
 ### 2.3 App-generated secrets and connections (no signup)
 
-| Variable | Required? | What it is | How to create it |
-|---|---|---|---|
-| `SESSION_SECRET` | Change before deploying | Signs workspace tokens; the default is local-only | `openssl rand -hex 32` |
-| `DATABASE_URL` | Optional | Postgres/Supabase DSN. Empty = SQLite at `apps/api/data/tastebound.db` | Supabase project → Database → connection string |
-| `CORS_ORIGINS` | Change before deploying | Browser origins allowed to call the API | `https://your-web.vercel.app` |
-| `NEXT_PUBLIC_API_URL` | Web env, not a secret | Where the Next.js app finds the API | `http://127.0.0.1:8000` locally |
+| Variable              | Required?               | What it is                                                             | How to create it                                |
+| --------------------- | ----------------------- | ---------------------------------------------------------------------- | ----------------------------------------------- |
+| `SESSION_SECRET`      | Change before deploying | Signs workspace tokens; the default is local-only                      | `openssl rand -hex 32`                          |
+| `DATABASE_URL`        | Optional                | Postgres/Supabase DSN. Empty = SQLite at `apps/api/data/tastebound.db` | Supabase project → Database → connection string |
+| `CORS_ORIGINS`        | Change before deploying | Browser origins allowed to call the API                                | `https://your-web.vercel.app`                   |
+| `NEXT_PUBLIC_API_URL` | Web env, not a secret   | Where the Next.js app finds the API                                    | `http://127.0.0.1:8000` locally                 |
 
 Never put `QLOO_API_KEY`, `OLLAMA_API_KEY` or `SESSION_SECRET` in a `NEXT_PUBLIC_*` variable: those are inlined into the browser bundle.
 
@@ -106,19 +110,27 @@ DATABASE_URL=postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/
 
 ### Optional tuning (defaults are fine)
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `QLOO_RPS` | `4` | Request spacing; keep ≤ 4 for the hackathon key |
-| `QLOO_MAX_CALLS_PER_RUN` | `200` | Per-run live-call budget |
-| `QLOO_MONTHLY_CALL_LIMIT` | `10000` | Monthly guard (stops at 80%) |
-| `QLOO_CACHE_TTL_HOURS` | `168` | Qloo response cache TTL |
-| `MAX_MARKETS_PER_RUN` | `40` | Hard cap on selected origin markets |
-| `MAX_SIGNATURE_ITEMS` | `15` | Cap on destination items |
-| `PUBLIC_RUNS_PER_IP_PER_DAY` | `30` | Abuse limit on run creation |
-| `OLLAMA_BASE_URL` | `https://ollama.com/v1` | OpenAI-compatible endpoint; do not use the redirecting `ollama.ai` host |
-| `OLLAMA_MODEL` | `gemma4:31b-cloud` | Model name on Ollama Cloud |
-| `LLM_PROVIDER` | `ollama_cloud` | Provider adapter; this project uses Ollama only |
-| `LLM_TOOL_CALLING` | `false` | Enables the gated model-writing path; no tool-choice loop is shipped. Keep false unless you verify the model path live |
+| Variable                                    | Default                 | Purpose                                                                                                                |
+| ------------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `QLOO_RPS`                                  | `4`                     | Request spacing; keep ≤ 4 for the hackathon key                                                                        |
+| `QLOO_MAX_CALLS_PER_RUN`                    | `200`                   | Per-run live-call budget                                                                                               |
+| `QLOO_MONTHLY_CALL_LIMIT`                   | `10000`                 | Monthly guard (stops at 80%)                                                                                           |
+| `QLOO_CACHE_TTL_HOURS`                      | `168`                   | Qloo response cache TTL                                                                                                |
+| `MAX_MARKETS_PER_RUN`                       | `40`                    | Hard cap on selected origin markets                                                                                    |
+| `MAX_SIGNATURE_ITEMS`                       | `15`                    | Cap on destination items                                                                                               |
+| `PUBLIC_RUNS_PER_IP_PER_DAY`                | `30`                    | Abuse limit on run creation                                                                                            |
+| `OLLAMA_BASE_URL`                           | `https://ollama.com/v1` | OpenAI-compatible endpoint; do not use the redirecting `ollama.ai` host                                                |
+| `OLLAMA_MODEL`                              | `gemma4:31b-cloud`      | Model name on Ollama Cloud                                                                                             |
+| `LLM_PROVIDER`                              | `ollama_cloud`          | Provider adapter; this project uses Ollama only                                                                        |
+| `LLM_TOOL_CALLING`                          | `false`                 | Enables the gated model-writing path; no tool-choice loop is shipped. Keep false unless you verify the model path live |
+| `ASSISTANT_ENABLED`                         | `true`                  | Turns the results-assistant endpoints/drawer on; still requires a configured provider                                  |
+| `ASSISTANT_MESSAGES_PER_IP_PER_HOUR`        | `30`                    | Assistant message limit per IP hash                                                                                    |
+| `ASSISTANT_MESSAGES_PER_WORKSPACE_PER_HOUR` | `60`                    | Assistant message limit per workspace                                                                                  |
+| `ASSISTANT_MAX_MESSAGE_CHARS`               | `800`                   | Maximum question length                                                                                                |
+| `ASSISTANT_MAX_HISTORY_MESSAGES`            | `8`                     | Prior messages included in a request                                                                                   |
+| `ASSISTANT_MAX_CONTEXT_CHARS`               | `30000`                 | Run-context cap; focus market is retained                                                                              |
+| `ASSISTANT_CONVERSATION_TTL_MINUTES`        | `60`                    | In-memory conversation lifetime                                                                                        |
+| `ASSISTANT_MAX_CONVERSATIONS`               | `256`                   | Process-wide in-memory conversation cap                                                                                |
 
 Do not add OpenRouter or another gateway, and do not put any key in a `NEXT_PUBLIC_*` variable.
 
@@ -136,12 +148,12 @@ echo "NEXT_PUBLIC_API_URL=http://127.0.0.1:8000" > apps/web/.env.local
 pnpm turbo dev
 ```
 
-| Service | URL |
-|---|---|
-| Web | http://localhost:3000 |
-| API | http://127.0.0.1:8000 |
-| API docs | http://127.0.0.1:8000/docs |
-| Health | http://127.0.0.1:8000/health |
+| Service  | URL                          |
+| -------- | ---------------------------- |
+| Web      | http://localhost:3000        |
+| API      | http://127.0.0.1:8000        |
+| API docs | http://127.0.0.1:8000/docs   |
+| Health   | http://127.0.0.1:8000/health |
 
 On first boot the API creates the SQLite tables, loads the 68-market catalogue and seeds the read-only Lisbon demo. The first request may take a few seconds while this finishes.
 
@@ -176,14 +188,15 @@ NEXT_PUBLIC_API_URL=http://127.0.0.1:8020 pnpm --filter web dev
 ```bash
 (cd apps/api && uv run ruff format --check . && uv run ruff check . && uv run mypy src)
 (cd apps/api && uv run pytest -m "not live")        # no network
-pnpm turbo lint build check-types                    # 12 tasks
+pnpm test                                            # API + web tests, no network
+pnpm turbo lint build check-types
 
 # With both servers running:
 node scripts/smoke-web.mjs                           # 6 routes, console errors
 node scripts/a11y-check.mjs                          # axe, 0 violations
 ```
 
-Live Qloo checks are opt-in and never run in CI: `(cd apps/api && uv run pytest -m live)`.
+Live Qloo checks are opt-in and never run in CI: `(cd apps/api && uv run pytest -m live)`. Assistant tests use a fake provider and never call Ollama.
 
 ## 5. Key handling rules
 
@@ -195,25 +208,29 @@ Live Qloo checks are opt-in and never run in CI: `(cd apps/api && uv run pytest 
 
 ## 6. Troubleshooting
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| Web shows network errors, API is up | Wrong API URL or CORS | Set `NEXT_PUBLIC_API_URL` to the API origin; add the web origin to `CORS_ORIGINS`; restart the web dev server |
-| `localhost` fails but `127.0.0.1` works | IPv6 resolution mismatch | Use `127.0.0.1` in both URLs |
-| Live run fails `qloo_unconfigured` | No key, or `.env` not loaded | Key in `apps/api/.env`; restart the API |
-| Qloo 401 | Key/base URL/header | Check `QLOO_API_KEY` and `QLOO_BASE_URL=https://hackathon.api.qloo.com` |
-| Qloo 429 or slow runs | Rate limit or budget | Keep `QLOO_RPS=4`; check the run counters and cache; cached calls are free |
-| Ollama 401/404 or quota exhausted | Key or model name | Fix `OLLAMA_API_KEY` / `OLLAMA_MODEL`; without quota the app still completes with templates |
-| Briefs say `template` | LLM unavailable or grounding rejected the output | Expected fallback; check `/health` and the run trace |
-| `database is locked` | Concurrent SQLite writers | Already mitigated with WAL + 10 s busy timeout; run one API instance |
-| `/sample` empty | Demo fixture missing or seed failed | Confirm `apps/api/data/demo/lisbon-run.json` exists and restart the API |
-| `demo_read_only` 403 | Mutating the sample run | Expected; start your own run at `/start` |
+| Symptom                                 | Cause                                                    | Fix                                                                                                           |
+| --------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Web shows network errors, API is up     | Wrong API URL or CORS                                    | Set `NEXT_PUBLIC_API_URL` to the API origin; add the web origin to `CORS_ORIGINS`; restart the web dev server |
+| `localhost` fails but `127.0.0.1` works | IPv6 resolution mismatch                                 | Use `127.0.0.1` in both URLs                                                                                  |
+| Live run fails `qloo_unconfigured`      | No key, or `.env` not loaded                             | Key in `apps/api/.env`; restart the API                                                                       |
+| Qloo 401                                | Key/base URL/header                                      | Check `QLOO_API_KEY` and `QLOO_BASE_URL=https://hackathon.api.qloo.com`                                       |
+| Qloo 429 or slow runs                   | Rate limit or budget                                     | Keep `QLOO_RPS=4`; check the run counters and cache; cached calls are free                                    |
+| Ollama 401/404 or quota exhausted       | Key or model name                                        | Fix `OLLAMA_API_KEY` / `OLLAMA_MODEL`; without quota the app still completes with templates                   |
+| Briefs say `template`                   | LLM unavailable or grounding rejected the output         | Expected fallback; check `/health` and the run trace                                                          |
+| Assistant says “No model configured”    | `OLLAMA_API_KEY` missing or provider construction failed | Add the key and restart the API; scores and run pages are unaffected                                          |
+| Assistant could not verify an answer    | Unknown number/name/evidence after one repair            | Rephrase or ask a narrower question; check the configured model                                               |
+| Assistant rate-limited                  | In-process 30/hour/IP or 60/hour/workspace limit         | Wait for the window; restarting the API resets the limiter                                                    |
+| Assistant conversation vanished         | TTL expired or API restarted                             | Expected; conversations are not durable                                                                       |
+| `database is locked`                    | Concurrent SQLite writers                                | Already mitigated with WAL + 10 s busy timeout; run one API instance                                          |
+| `/sample` empty                         | Demo fixture missing or seed failed                      | Confirm `apps/api/data/demo/lisbon-run.json` exists and restart the API                                       |
+| `demo_read_only` 403                    | Mutating the sample run                                  | Expected; start your own run at `/start`                                                                      |
 
 ## 7. Deploying (short version)
 
-| Part | Where | Notes |
-|---|---|---|
-| API | Render / Railway / Fly.io, **one instance** | `uv run uvicorn tastebound_api.main:app --host 0.0.0.0 --port $PORT`; set every key as a server-side env var; rate limits and budgets are in-process |
-| Web | Vercel, root `apps/web` | `NEXT_PUBLIC_API_URL` = public API URL; add the web origin to `CORS_ORIGINS` |
-| DB | Supabase Cloud (optional) | Set `DATABASE_URL`; tables and the catalogue are created at startup; then seed the demo and set `DEMO_RUN_ID` if needed |
+| Part | Where                                       | Notes                                                                                                                                                                         |
+| ---- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API  | Render / Railway / Fly.io, **one instance** | `uv run uvicorn tastebound_api.main:app --host 0.0.0.0 --port $PORT`; set every key as a server-side env var; rate limits, budgets and assistant conversations are in-process |
+| Web  | Vercel, root `apps/web`                     | `NEXT_PUBLIC_API_URL` = public API URL; add the web origin to `CORS_ORIGINS`                                                                                                  |
+| DB   | Supabase Cloud (optional)                   | Set `DATABASE_URL`; tables and the catalogue are created at startup; then seed the demo and set `DEMO_RUN_ID` if needed                                                       |
 
 After deploying, open `/sample` in a private window (must work logged out), start one live run, and confirm `/health` before recording the demo.
