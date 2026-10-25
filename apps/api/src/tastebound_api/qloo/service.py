@@ -554,6 +554,10 @@ class QlooService:
                         continue
                     if entity.entity_id == destination.entity_id:
                         continue
+                    if entity_type in {"destination", "locality"} and normalize_name(
+                        entity.name
+                    ) == normalize_name(destination.name):
+                        continue
                     if entity_type in {"place", "locality"} and not place_genre_allowed(
                         kind, entity
                     ):
@@ -630,12 +634,27 @@ class QlooService:
     ) -> ProfileBuild:
         warnings: list[str] = []
         resolved = [item for item in resolved_items if item.status == "resolved"]
-        if len(resolved) < 3:
+        unique: list[ResolvedItem] = []
+        seen_entity_ids: set[str] = set()
+        duplicate_names: list[str] = []
+        for item in resolved:
+            if item.entity_id and item.entity_id in seen_entity_ids:
+                duplicate_names.append(item.name)
+                continue
+            if item.entity_id:
+                seen_entity_ids.add(item.entity_id)
+            unique.append(item)
+        if duplicate_names:
+            warnings.append(
+                "Merged duplicate profile matches: "
+                + ", ".join(dict.fromkeys(duplicate_names))
+            )
+        if len(unique) < 3:
             warnings.append("Fewer than 3 signature items resolved.")
         tag_counter: Counter[str] = Counter()
         tag_meta: dict[str, dict[str, str]] = {}
         tag_sources: dict[str, set[str]] = {}
-        for item in resolved:
+        for item in unique:
             for tag in item.tags:
                 if not tag_is_meaningful(tag):
                     continue
@@ -666,7 +685,7 @@ class QlooService:
         )
         does_not_exist = [item.name for item in resolved_items if item.status == "unresolved"]
         return ProfileBuild(
-            entities=resolved,
+            entities=unique,
             tags=tags,
             unresolved=does_not_exist,
             warnings=warnings,

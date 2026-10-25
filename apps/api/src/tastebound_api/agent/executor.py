@@ -497,9 +497,15 @@ class RunExecutor:
                     tags=match.tags,
                 )
             )
-            for resolved_item in resolved:
-                if resolved_item.status != "resolved" or not resolved_item.entity_id:
+            seen_entity_ids = {match.entity_id}
+            for resolved_item in profile.entities:
+                if (
+                    resolved_item.status != "resolved"
+                    or not resolved_item.entity_id
+                    or resolved_item.entity_id in seen_entity_ids
+                ):
                     continue
+                seen_entity_ids.add(resolved_item.entity_id)
                 session.add(
                     ProfileEntity(
                         id=str(uuid.uuid4()),
