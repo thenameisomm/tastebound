@@ -36,6 +36,11 @@ await shot(`/runs/${DEMO_RUN}/markets/co-cartagena`, "03-market.png");
 await shot(`/runs/${DEMO_RUN}/plan`, "04-plan.png");
 await shot(`/runs/${DEMO_RUN}/trace`, "05-trace.png");
 await shot("/start", "06-wizard.png");
+await shot(`/runs/${DEMO_RUN}`, "07-assistant.png", async (page) => {
+  await page.getByRole("button", { name: "Ask TasteBound" }).click();
+  await page.getByRole("dialog").waitFor({ state: "visible" });
+  await page.waitForTimeout(700);
+});
 
 await browser.close();
 console.log("done");

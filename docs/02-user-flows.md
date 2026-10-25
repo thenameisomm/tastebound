@@ -26,14 +26,15 @@ flowchart TD
 3. **Markets.** The user picks 20–40 candidate origin cities from the catalogue (preset groups: "Europe top 20", "North America top 15", "Asia-Pacific top 15") or adds cities by search.
 4. **Arrivals (optional but needed for the gap view).** Upload a CSV `origin_city_or_country, arrivals, year` or choose a bundled public sample for the demo destination.
 5. **Scoring run.** The executor builds the profile, runs baseline and taste queries per market, computes lift and confidence, joins arrivals and computes gaps. Progress and Qloo calls stream live.
-6. **Results.** A ranked market table and a **gap quadrant** (x = arrivals share, y = taste lift). Quadrants: *Untapped* (high taste, low arrivals), *Core* (high, high), *Saturated or habit* (low taste, high arrivals), *Low priority*.
+6. **Results.** A ranked market table and a **gap quadrant** (x = arrivals share, y = taste lift). Quadrants: _Untapped_ (high taste, low arrivals), _Core_ (high, high), _Saturated or habit_ (low taste, high arrivals), _Low priority_.
 7. **Shortlist** 3–6 markets, start the **deep-dive run**: audience, angles, media partners per market.
 8. **Budget.** Enter a total budget; the allocator proposes shares; the user adjusts with sliders; shares re-normalise.
 9. **Briefs.** One brief per market (angle, audience, partners, evidence chips), editable, export as Markdown, print view, and CSV of the table.
+10. **Ask.** Open the results assistant from the run header or a market brief, ask about a score, gap, audience, angle, partner or caveat, and follow the evidence links back to the underlying section or trace row. The assistant is read-only and answers only from the stored run context.
 
 ## Flow B: Judge or visitor (demo mode)
 
-Landing → "See a sample run" → the stored run for the demo destination: all pages, trace and briefs, no keys needed. A live run is allowed with daily limits.
+Landing → "See a sample run" → the stored run for the demo destination: all pages, trace, briefs and the results assistant when a model is configured. The same questions can be explored without a model because the underlying scores and evidence remain visible. A live run is allowed with daily limits.
 
 ## Flow C: No arrivals data
 
@@ -41,12 +42,14 @@ The scoring run completes without the gap view. The quadrant is replaced by the 
 
 ## Error flows
 
-| Situation | Behaviour |
-|---|---|
-| Website unreadable | Continue with the name; the app proposes items from the name only, clearly labelled |
-| Fewer than 3 signature items resolve | Run blocked: "Qloo doesn't know enough about this destination; add better-known items" |
-| Qloo key missing or invalid | Scoring fails with a clear error and retry; no scores from any other source |
-| A market returns too little data | Shown with `low` confidence and a "thin data" flag |
-| Arrivals CSV invalid | Row-level errors listed; valid rows kept; gap view only for matched markets |
-| LLM unavailable | Scores, gaps, audiences and partners still work; briefs use the template and are labelled |
-| Budget cap reached | Run stops, partial results kept, notice shown |
+| Situation                              | Behaviour                                                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Website unreadable                     | Continue with the name; the app proposes items from the name only, clearly labelled                                                  |
+| Fewer than 3 signature items resolve   | Run blocked: "Qloo doesn't know enough about this destination; add better-known items"                                               |
+| Qloo key missing or invalid            | Scoring fails with a clear error and retry; no scores from any other source                                                          |
+| A market returns too little data       | Shown with `low` confidence and a "thin data" flag                                                                                   |
+| Arrivals CSV invalid                   | Row-level errors listed; valid rows kept; gap view only for matched markets                                                          |
+| LLM unavailable                        | Scores, gaps, audiences and partners still work; briefs use the template and are labelled; the assistant shows an unavailable notice |
+| Assistant rate limit or invalid answer | The drawer explains the limit or verification failure, restores the question and keeps prior validated messages                      |
+| Assistant conversation expired         | The next send starts a fresh conversation; no stale history is shown                                                                 |
+| Budget cap reached                     | Run stops, partial results kept, notice shown                                                                                        |

@@ -15,6 +15,12 @@ export default function TracePage() {
 
   const [trace, setTrace] = useState<TraceResponse | null>(null);
   const [error, setError] = useState<unknown>(null);
+  const [highlightCall, setHighlightCall] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setHighlightCall(params.get("call"));
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -63,6 +69,11 @@ export default function TracePage() {
           <p className="pageLead">
             Every LLM step, tool call and Qloo call in order. Expand a row for the full parameters.
           </p>
+          {highlightCall ? (
+            <p className="pageMeta">
+              <span>Highlighting evidence call {highlightCall}</span>
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -107,7 +118,7 @@ export default function TracePage() {
         ) : trace.items.length === 0 ? (
           <EmptyState title="Nothing traced yet">Events appear here as the run progresses.</EmptyState>
         ) : (
-          <TraceTable items={trace.items} />
+          <TraceTable items={trace.items} highlightCallId={highlightCall} />
         )}
       </section>
     </main>

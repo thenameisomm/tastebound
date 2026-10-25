@@ -4,11 +4,12 @@
 
 TasteBound is deliberately not a model-ranked product. Qloo supplies the taste data, and the scoring, gap, audience, angle, allocation and partner logic is deterministic code. The model has two narrow jobs:
 
-| Use | Shipped behaviour | Can change numbers? |
-|---|---|---|
-| Destination item suggestions | One prompt-and-validate call; Qloo resolves or rejects each proposed name | No |
-| Market brief prose | Gated behind `LLM_TOOL_CALLING=false`; the shipped demo and default path use templates | No; the grounding validator rejects unsupported numbers/names |
-| Tool selection | **Not used.** The executor runs a fixed sequence | No |
+| Use                          | Shipped behaviour                                                                      | Can change numbers?                                           |
+| ---------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Destination item suggestions | One prompt-and-validate call; Qloo resolves or rejects each proposed name              | No                                                            |
+| Market brief prose           | Gated behind `LLM_TOOL_CALLING=false`; the shipped demo and default path use templates | No; the grounding validator rejects unsupported numbers/names |
+| Results assistant            | Read-only Q&A over a server-built run context; JSON validated and evidence-cited       | No; it cannot change a run or use tools                       |
+| Tool selection               | **Not used.** The executor runs a fixed sequence                                       | No                                                            |
 
 If the model is unavailable, intake still works with manual items and briefs remain labelled `template`.
 
@@ -42,12 +43,12 @@ class LLMProvider(Protocol):
     async def aclose(self) -> None: ...
 ```
 
-| Component | File | Notes |
-|---|---|---|
-| Factory | `llm/provider.py` | Builds the configured provider once; returns `None` when unconfigured |
+| Component                 | File                   | Notes                                                                             |
+| ------------------------- | ---------------------- | --------------------------------------------------------------------------------- |
+| Factory                   | `llm/provider.py`      | Builds the configured provider once; returns `None` when unconfigured             |
 | OpenAI-compatible adapter | `llm/openai_compat.py` | Used for Ollama Cloud, Gemini's OpenAI-compatible endpoint and custom direct APIs |
-| Fake adapter | `llm/fake.py` | Scripted replies for tests; never used in production |
-| Parsing | `llm/parsing.py` | Extracts and validates JSON without trusting fences or extra text |
+| Fake adapter              | `llm/fake.py`          | Scripted replies for tests; never used in production                              |
+| Parsing                   | `llm/parsing.py`       | Extracts and validates JSON without trusting fences or extra text                 |
 
 Switching providers means changing `LLM_PROVIDER` plus that provider's base URL, key and model. Prompts contain no provider-specific syntax. Provider errors are normalised to `LLMAuthError`, `LLMRateLimitError`, `LLMTimeoutError`, `LLMBadResponseError` and `LLMUnavailable`.
 
@@ -58,15 +59,17 @@ The model never supplies Qloo IDs, scores, gaps, audience numbers or partner ran
 - Destination items are names only. Qloo search resolves them, and unresolved names are returned to the user with a reason.
 - Brief output is checked against the evidence bundle: every number must occur in the supplied evidence, every cited name must come from the bundle, and evidence IDs must be known.
 - Invalid brief output gets one repair attempt. If it still fails, the deterministic template brief is used and labelled `template`.
+- Assistant output is checked separately against a per-request context: answer length, known evidence IDs, numbers and names. It gets one repair attempt; a second failure returns `assistant_ungrounded` and stores no assistant message. See `features/F13-results-assistant.md`.
 
 ## Prompts
 
-| File | Output | Used |
-|---|---|---|
-| `destination_items.md` | `{"items":[{"name": str, "kind": enum}]}` | Yes |
-| `market_brief.md` | Brief JSON with cited evidence IDs | Only when the gated model-writing path is enabled |
-| `repair_json.md` | Corrected JSON after a validation failure | Yes, for briefs |
-| `agent_scoring.md`, `agent_deep_dive.md` | Legacy tool-choice instructions | No; the shipped executor is deterministic |
+| File                                     | Output                                                   | Used                                              |
+| ---------------------------------------- | -------------------------------------------------------- | ------------------------------------------------- |
+| `destination_items.md`                   | `{"items":[{"name": str, "kind": enum}]}`                | Yes                                               |
+| `market_brief.md`                        | Brief JSON with cited evidence IDs                       | Only when the gated model-writing path is enabled |
+| `results_assistant.md`                   | Grounded answer JSON `{answer, evidence_ids, followups}` | Yes, when the results assistant is configured     |
+| `repair_json.md`                         | Corrected JSON after a validation failure                | Yes, for briefs                                   |
+| `agent_scoring.md`, `agent_deep_dive.md` | Legacy tool-choice instructions                          | No; the shipped executor is deterministic         |
 
 All prompts wrap untrusted website or user text in clear delimiters and instruct the model to ignore embedded instructions. Prompt text is not logged or traced.
 
@@ -74,7 +77,8 @@ All prompts wrap untrusted website or user text in clear delimiters and instruct
 
 - `LLM_TIMEOUT_SECONDS` (90), `LLM_MAX_CALLS_PER_RUN` (40), one repair attempt and bounded output.
 - `LLM_TOOL_CALLING` stays `false`; `/health` reports `tools_ok` from this switch.
-- Every model call is recorded in `llm_calls` with purpose, provider, model, prompt version, status, duration and token counts — never prompt text.
+- Run-path model calls are recorded in `llm_calls` with purpose, provider, model, prompt version, status, duration and token counts — never prompt text. Results-assistant calls are not added to `llm_calls` or the run trace; they are read-only post-run Q&A. Prompt text, completions and keys are never logged or traced.
+- Assistant limits: 30 messages/hour/IP, 60/hour/workspace, 800 characters/message, 8 history messages and a 30,000-character context cap (all configurable).
 - Keys are read only by the API process and are never returned, traced, logged or bundled into the browser.
 
 ## Current limitations
@@ -82,3 +86,5 @@ All prompts wrap untrusted website or user text in clear delimiters and instruct
 - Live tool calling on Ollama Cloud was not verified because the free key exhausted its quota. No tool-choice loop is shipped.
 - The model-writing path is disabled by default. Template briefs are the reliable, tested output.
 - Model output is prose. All quantitative claims in the product come from deterministic code and stored Qloo evidence.
+- The assistant is non-streaming, server-owned and in-memory only. It does not persist conversations or survive a restart, and a multi-instance deployment needs shared state.
+- Provider output is validated, not trusted. A model that is unavailable, slow or ungrounded degrades to a clear assistant error; scores and run pages are unaffected.

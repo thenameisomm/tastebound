@@ -2,31 +2,31 @@
 
 ## Status of facts
 
-| Fact | Status |
-|---|---|
-| Base URL `https://hackathon.api.qloo.com`, header `X-Api-Key`, 5 req/s, 10,000 calls/month | From hackathon materials and earlier research; verify |
-| Endpoints `/search`, `/v2/insights`, `/v2/tags`, `/v2/audiences`, `/v2/analysis/compare`, `/v2/trending` | Earlier research; verify each |
-| Parameters `filter.type`, `filter.location`, `filter.location.query`, `filter.location.radius`, `filter.tags`, `signal.interests.entities`, `signal.interests.tags`, `signal.location`, `signal.location.radius`, `signal.demographics.*`, `take` | Earlier research; verify each |
-| Entity types including `urn:entity:place`, `urn:entity:locality`, `urn:entity:destination`, `urn:entity:artist`, `urn:entity:podcast`, `urn:entity:movie`, `urn:entity:book`, `urn:entity:brand`; demographics and heatmap insight types | Earlier research; `destination` especially must be verified |
-| Quirks: brands ignore location; heatmaps track popularity closely (0.92–0.97 in earlier tests) so they need a baseline; invalid params can return 200 silently; tag search matches any word | Observed earlier; re-check |
-| Coverage outside the US | **Unknown; Phase 0 must measure it** |
-| Response field names (affinity, popularity, explainability output) | **Unknown until Phase 0** |
+| Fact                                                                                                                                                                                                                                              | Status                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Base URL `https://hackathon.api.qloo.com`, header `X-Api-Key`, 5 req/s, 10,000 calls/month                                                                                                                                                        | From hackathon materials and earlier research; verify       |
+| Endpoints `/search`, `/v2/insights`, `/v2/tags`, `/v2/audiences`, `/v2/analysis/compare`, `/v2/trending`                                                                                                                                          | Earlier research; verify each                               |
+| Parameters `filter.type`, `filter.location`, `filter.location.query`, `filter.location.radius`, `filter.tags`, `signal.interests.entities`, `signal.interests.tags`, `signal.location`, `signal.location.radius`, `signal.demographics.*`, `take` | Earlier research; verify each                               |
+| Entity types including `urn:entity:place`, `urn:entity:locality`, `urn:entity:destination`, `urn:entity:artist`, `urn:entity:podcast`, `urn:entity:movie`, `urn:entity:book`, `urn:entity:brand`; demographics and heatmap insight types          | Earlier research; `destination` especially must be verified |
+| Quirks: brands ignore location; heatmaps track popularity closely (0.92–0.97 in earlier tests) so they need a baseline; invalid params can return 200 silently; tag search matches any word                                                       | Observed earlier; re-check                                  |
+| Coverage outside the US                                                                                                                                                                                                                           | **Unknown; Phase 0 must measure it**                        |
+| Response field names (affinity, popularity, explainability output)                                                                                                                                                                                | **Unknown until Phase 0**                                   |
 
 Phase 0 records raw responses as fixtures and writes `docs/qloo-contract.md`. Pydantic models are built from fixtures. When this file disagrees with live behaviour, update this file.
 
 ## Capability → feature → decision
 
-| Qloo capability | Feature | Decision it drives |
-|---|---|---|
-| Entity search | F02 | Which entities represent the destination |
-| Tags (`/v2/tags`, tags on entities) | F02, F06 | The destination's taste vocabulary; angle evidence |
-| Location-aware insights / destination affinity / heatmap | F03 | How strongly each origin market likes the destination's taste |
-| Same queries without the taste signal (baseline) | F03 | Removes plain popularity and city size (lift) |
-| Demographics (`urn:demographics` or audiences) with location | F05 | Who in each market to target |
-| Explainability and shared tags | F06 | Why a market fits: the campaign angle evidence |
-| Cross-domain insights (podcasts, artists, films, books) with location | F07 | Media partners per market |
-| Compare (`/v2/analysis/compare`) | F08 (stretch) | Positioning against a rival destination |
-| Trending | X3 (stretch) | Timing, only if verified |
+| Qloo capability                                                       | Feature       | Decision it drives                                            |
+| --------------------------------------------------------------------- | ------------- | ------------------------------------------------------------- |
+| Entity search                                                         | F02           | Which entities represent the destination                      |
+| Tags (`/v2/tags`, tags on entities)                                   | F02, F06      | The destination's taste vocabulary; angle evidence            |
+| Location-aware insights / destination affinity / heatmap              | F03           | How strongly each origin market likes the destination's taste |
+| Same queries without the taste signal (baseline)                      | F03           | Removes plain popularity and city size (lift)                 |
+| Demographics (`urn:demographics` or audiences) with location          | F05           | Who in each market to target                                  |
+| Explainability and shared tags                                        | F06           | Why a market fits: the campaign angle evidence                |
+| Cross-domain insights (podcasts, artists, films, books) with location | F07           | Media partners per market                                     |
+| Compare (`/v2/analysis/compare`)                                      | F08 (stretch) | Positioning against a rival destination                       |
+| Trending                                                              | X3 (stretch)  | Timing, only if verified                                      |
 
 ## The multi-call chain
 
@@ -78,15 +78,17 @@ After each response: shape matches the fixture-built model; entity types match `
 
 ## Call budget per run (estimate; Phase 0 updates it)
 
-| Step | Calls |
-|---|---|
-| Resolve 12 signature items | 12 |
-| Tags | 2–4 |
-| Score 30 markets (target + baseline) | 60 (Strategy D/P) or 2–4 (Strategy H) |
-| Deep dive 5 markets × (demographics 1 + explanations 1–2 + partners 4) | 30–35 |
-| **Total** | about 50–115 |
+| Step                                                                   | Calls                                 |
+| ---------------------------------------------------------------------- | ------------------------------------- |
+| Resolve 12 signature items                                             | 12                                    |
+| Tags                                                                   | 2–4                                   |
+| Score 30 markets (target + baseline)                                   | 60 (Strategy D/P) or 2–4 (Strategy H) |
+| Deep dive 5 markets × (demographics 1 + explanations 1–2 + partners 4) | 30–35                                 |
+| **Total**                                                              | about 50–115                          |
 
 Cap `QLOO_MAX_CALLS_PER_RUN=200`. With caching and the demo run, 10,000 monthly calls are ample if tests never call live.
+
+The post-run results assistant makes **zero Qloo calls**. It reads stored run outputs and can only cite evidence already produced by the run; it cannot fetch new data or trigger a scoring phase.
 
 ## Kill switch (must pass, shown in the video)
 

@@ -14,7 +14,15 @@ from tastebound_api.db.database import dispose_db, get_engine, init_db
 from tastebound_api.db.demo_seed import seed_demo
 from tastebound_api.errors import AppError
 from tastebound_api.llm.provider import get_provider
-from tastebound_api.routes import arrivals, demo, destinations, markets, runs, workspaces
+from tastebound_api.routes import (
+    arrivals,
+    assistant,
+    demo,
+    destinations,
+    markets,
+    runs,
+    workspaces,
+)
 from tastebound_api.schemas import HealthResponse
 from tastebound_api.settings import get_settings
 
@@ -102,6 +110,7 @@ def create_app() -> FastAPI:
         arrivals.router,
         runs.router,
         runs.briefs_router,
+        assistant.router,
         demo.router,
     ):
         app.include_router(router)

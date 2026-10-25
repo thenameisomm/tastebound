@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anton, Inter, JetBrains_Mono } from "next/font/google";
+import { AssistantProvider } from "@/components/assistant/AssistantProvider";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
@@ -40,9 +41,11 @@ export default function RootLayout({
       className={`${anton.variable} ${inter.variable} ${jetBrainsMono.variable}`}
     >
       <body>
-        <Nav />
-        {children}
-        <Footer />
+        <AssistantProvider>
+          <Nav />
+          {children}
+          <Footer />
+        </AssistantProvider>
       </body>
     </html>
   );

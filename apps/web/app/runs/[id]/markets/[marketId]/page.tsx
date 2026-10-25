@@ -15,6 +15,7 @@ import {
   formatShare,
   quadrantClass,
 } from "@/lib/format";
+import { AssistantButton } from "@/components/assistant/AssistantButton";
 import { AudienceBars } from "@/components/AudienceBars";
 import { Banner } from "@/components/Banner";
 import { ConfidenceBadge } from "@/components/ConfidenceBadge";
@@ -112,10 +113,18 @@ export default function MarketDetailPage() {
             {score.rank !== null ? <span>Rank #{score.rank} in this run</span> : null}
             <span>Taste fit, not a visitor forecast</span>
           </p>
+          <div className="assistantContextActions">
+            <AssistantButton
+              focusMarketId={marketId}
+              prompt={`Explain ${market.city}'s taste score and what the evidence supports.`}
+            >
+              Ask about this market
+            </AssistantButton>
+          </div>
         </div>
       </div>
 
-      <div className="statGrid sectionSm">
+      <div className="statGrid sectionSm" id="score">
         <div className="stat statDark">
           <span className="statLabel">Taste score</span>
           <span
@@ -186,7 +195,7 @@ export default function MarketDetailPage() {
           )}
         </div>
 
-        <div className="card stack">
+        <div className="card stack" id="audience">
           <div className="spread">
             <div className="stackSm">
               <span className="kindTag">Signal</span>
@@ -198,7 +207,7 @@ export default function MarketDetailPage() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" id="angle">
         {angle ? (
           <div className="angleCard stack">
             <div className="spread">
@@ -223,7 +232,7 @@ export default function MarketDetailPage() {
       </section>
 
       <section className="section grid2">
-        <div className="card stack">
+        <div className="card stack" id="partners">
           <div className="stackSm">
             <span className="kindTag">Media</span>
             <h2 className="headingSm">Partners</h2>

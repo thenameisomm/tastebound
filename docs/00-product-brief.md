@@ -15,11 +15,11 @@ Verify these sources again before quoting them in the demo.
 
 ## Users
 
-| User | Decision | How often |
-|---|---|---|
+| User                                             | Decision                                                                                       | How often                              |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------- |
 | **Marketing director at a city or regional DMO** | Which 3–6 origin markets get next year's campaign budget, with what message and media partners | Annual planning plus quarterly reviews |
-| Marketing lead at a hotel group or resort | Which feeder markets to target for a property | Quarterly |
-| Tourism consultant or agency | Market-entry recommendations for clients | Per project |
+| Marketing lead at a hotel group or resort        | Which feeder markets to target for a property                                                  | Quarterly                              |
+| Tourism consultant or agency                     | Market-entry recommendations for clients                                                       | Per project                            |
 
 ## What the user gets
 
@@ -29,17 +29,18 @@ Verify these sources again before quoting them in the demo.
 4. Per market: a **demographic signal** (Qloo age and gender affinity), **campaign angle** with the Qloo tags and explanations behind it, and **media partners** (podcasts, artists, films, books popular with that market's matching audience). The current build uses one destination-level demographic aggregate and repeats it beside each shortlisted market; it is labelled as a directional signal, not per-market census data.
 5. A **budget split** across chosen markets with a live slider.
 6. **Market briefs** (one page per market) and a CSV export, every claim traced to a Qloo call.
+7. **Ask the run** — a read-only assistant that explains scores, gaps, audiences, angles, partners and caveats using a server-built evidence bundle. Every cited number and evidence ID is validated before display; it cannot call Qloo, change a run or forecast visitors.
 
 ## Why it is impossible without Qloo
 
-| Output | Source | Without Qloo |
-|---|---|---|
-| Destination taste profile | Qloo entity search, tags | Generic adjectives |
-| Market taste lift | Qloo location-aware insights against a baseline | No dataset we found maps cross-domain taste to origin cities (Qloo 2025 gallery, Arrivalist, Zartico, Mabrian; checked Oct 19, 2026) |
-| Gap (taste vs arrivals) | Qloo lift minus arrivals share | Only arrivals, which shows existing visitors, not latent fans |
-| Demographic signal | Qloo demographics | Census data, unrelated to taste |
-| Campaign angle evidence | Qloo tags and explanations | LLM guesswork |
-| Media partners per market | Qloo cross-domain insights with location | Generic "top podcasts" lists |
+| Output                    | Source                                          | Without Qloo                                                                                                                         |
+| ------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Destination taste profile | Qloo entity search, tags                        | Generic adjectives                                                                                                                   |
+| Market taste lift         | Qloo location-aware insights against a baseline | No dataset we found maps cross-domain taste to origin cities (Qloo 2025 gallery, Arrivalist, Zartico, Mabrian; checked Oct 19, 2026) |
+| Gap (taste vs arrivals)   | Qloo lift minus arrivals share                  | Only arrivals, which shows existing visitors, not latent fans                                                                        |
+| Demographic signal        | Qloo demographics                               | Census data, unrelated to taste                                                                                                      |
+| Campaign angle evidence   | Qloo tags and explanations                      | LLM guesswork                                                                                                                        |
+| Media partners per market | Qloo cross-domain insights with location        | Generic "top podcasts" lists                                                                                                         |
 
 With Qloo switched off, the app refuses to score markets (kill switch, tested).
 
@@ -50,14 +51,17 @@ With Qloo switched off, the app refuses to score markets (kill switch, tested).
 
 ## Success metrics (hackathon)
 
-| Metric | Target |
-|---|---|
-| Two different destinations produce clearly different market rankings | Top-10 Jaccard ≤ 0.5 |
-| Qloo lift ranking differs from population or arrivals ranking | Spearman with population ≤ 0.6 |
-| Backtest: gap markets in year Y−3 grew faster by year Y than non-gap markets | Reported honestly either way |
-| Every displayed claim traceable to a Qloo call or the arrivals file | 100% |
-| Time from destination input to market table | ≤ 90 s on a warm cache |
+| Metric                                                                       | Target                            |
+| ---------------------------------------------------------------------------- | --------------------------------- |
+| Two different destinations produce clearly different market rankings         | Top-10 Jaccard ≤ 0.5              |
+| Qloo lift ranking differs from population or arrivals ranking                | Spearman with population ≤ 0.6    |
+| Backtest: gap markets in year Y−3 grew faster by year Y than non-gap markets | Reported honestly either way      |
+| Every displayed claim traceable to a Qloo call or the arrivals file          | 100%                              |
+| Assistant answers cite valid run evidence and never invent a number          | 100% of accepted answers in tests |
+| Time from destination input to market table                                  | ≤ 90 s on a warm cache            |
 
 ## Non-goals
 
 Forecasting visitor numbers, flight routes or prices, booking, personal data, ad buying.
+
+A general-purpose chatbot, tool-using agent or assistant that can mutate a run.

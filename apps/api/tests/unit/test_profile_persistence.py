@@ -88,9 +88,7 @@ async def test_profile_insert_dedupes_duplicate_entity_ids(
                 country_code="CA",
             )
         )
-        session.add(
-            Run(id=run_id, workspace_id=workspace_id, destination_id=destination_id)
-        )
+        session.add(Run(id=run_id, workspace_id=workspace_id, destination_id=destination_id))
         for position, name in enumerate(item_names):
             session.add(
                 SignatureItem(
